@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { BookOpen, Ticket, Book, ImageIcon, Bookmark, MessageCircle, Camera, Sparkles, Rocket, Printer, Smile } from "lucide-react";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+import Slide from "./Slide";
 
 export default function HomePage() {
   // Service
@@ -364,6 +365,8 @@ export default function HomePage() {
         </div>
       </section>
       {/* Pub */}
+
+      <Slide />
 
 
       {/* Chat */}
