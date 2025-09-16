@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { BookOpen, Ticket, Book, ImageIcon, Bookmark, MessageCircle, Camera, Sparkles, Rocket, Printer, Smile } from "lucide-react";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
-import Slide from "./Slide";
+import Slide from "./Slide_home";
+import { Link } from "react-router-dom";
 
 export default function HomePage() {
   // Service
@@ -49,18 +50,26 @@ export default function HomePage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const imagess = [
     "https://contentful.helloprint.com/wm1n7oady8a5/6GF6VHqwxjUdUhEbYdahs8/5ae7618505438c941a540eb637d3a274/Corporate_Information_and_Marketing.png?q=75&h=600&w=600&fm=avif&fit=pad",
-
     "https://contentful.helloprint.com/wm1n7oady8a5/6WJ6WGava4AB3XdKctQg4w/4656354bd4f938b514212ee14a5f8489/Educational_Manuals_and_Employee_Handbook.png?q=75&h=600&w=600&fm=avif&fit=pad",
-
     "https://contentful.helloprint.com/wm1n7oady8a5/2R3oOrcpI9OGWTb0EOGtfH/6928e67a0db245d6e7acae7646462d4d/Branding_and_Portfolio_Showcases.png?q=75&h=600&w=600&fm=avif&fit=pad"
   ];
 
+  const texts = [
+    "Impression rapide et fiable",
+    "Solutions professionnelles de qualité",
+    "Créativité et innovation à votre service"
+  ];
+
+  // Changement automatique toutes les 5 secondes
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 6000); // change d’image toutes les 5 secondes
+    }, 5000);
+
     return () => clearInterval(interval);
-  }, []);
+  }, [imagess.length]);
+
+  // background image
 
 
   // </Pub>
@@ -88,27 +97,23 @@ export default function HomePage() {
 
       {/* Hero Section avec carosel en background */}
       <section className="relative w-full h-screen overflow-hidden">
-        <img
-          src={imagess[currentIndex]}
-          alt="Impression"
-          className="absolute w-full h-full object-cover transition-opacity duration-1000"
-        />
-
-        {/* Overlay pour rendre le texte lisible */}
-        <div className="absolute w-full h-full bg-black/40 flex flex-col justify-center items-center text-center px-4">
-          <h1 className="text-white text-3xl md:text-5xl font-bold uppercase mb-4 animate-pulse">
-            Impression rapide et fiable
-          </h1>
-          <p className="text-gray-200 text-sm md:text-lg mb-6">
-            Commandez vos impressions en ligne et recevez-les chez vous rapidement.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button className="btn bg-blue-500 text-white btn-lg">
-              Commander maintenant
-            </button>
-            <button className="btn btn-ghost text-white hover:text-black btn-lg">
-              En savoir plus
-            </button>
+        <div
+          className="w-full h-full bg-cover bg-center transition-all duration-1000 ease-in-out"
+          style={{ backgroundImage: `url(${imagess[currentIndex]})` }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/50 flex flex-col justify-center items-center text-center px-4">
+            <h1 className="text-white text-2xl md:text-5xl font-bold uppercase mb-6">
+              {texts[currentIndex]}
+            </h1>
+            <p className="text-gray-200 text-lg md:text-xl mb-8 max-w-2xl">
+              Commandez vos impressions en ligne et recevez-les chez vous rapidement.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link to="/login" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full transition-all duration-300 hover:scale-105">
+                Commander maintenant
+              </Link>
+              <Link to='/detaille' className="bg-transparent border-2 border-white hover:bg-white hover:text-black text-white font-bold py-4 px-6 rounded-full transition-all duration-300 hover:scale-105">En savoir plus </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -116,7 +121,7 @@ export default function HomePage() {
 
 
       {/* Section Features / Services */}
-      <section className="py-16 bg-base-100">
+      <section className="py-16 bg-base-100" id="services">
         <div className="container mx-auto space-y-8 px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {[
@@ -176,9 +181,9 @@ export default function HomePage() {
         <p className="text-sm md:text-lg mb-6">
           Commencez votre commande dès maintenant et profitez d’une livraison rapide.
         </p>
-        <button className="btn btn-lg btn-white text-blue-500 font-bold">
+        <Link to="/login" className="btn btn-lg btn-white text-blue-500 font-bold">
           Commander Maintenant
-        </button>
+        </Link>
       </section>
       {/* Call to Action */}
 
@@ -242,9 +247,9 @@ export default function HomePage() {
                 Donnez vie à vos projets avec des impressions de haute qualité,
                 rapides et fiables.
               </p>
-              <button className="btn bg-blue-500 text-white mt-6 px-6 py-3 rounded-xl shadow-lg hover:scale-105 transition">
+              <Link to="/login" className="btn bg-blue-500 text-white mt-6 px-6 py-3 rounded-xl shadow-lg hover:scale-105 transition">
                 Commencer maintenant
-              </button>
+              </Link>
             </div>
           </div>
 
@@ -358,9 +363,9 @@ export default function HomePage() {
               Notre service d’impression en ligne vous permet de commander en quelques clics
               et de recevoir vos impressions sans vous déplacer.
             </p>
-            <button className="btn bg-blue-500 text-white px-6 py-3 rounded-xl shadow-md hover:scale-105 transition">
+            <Link to="/login" className="btn bg-blue-500 text-white px-6 py-3 rounded-xl shadow-md hover:scale-105 transition">
               Commander maintenant
-            </button>
+            </Link>
           </div>
         </div>
       </section>

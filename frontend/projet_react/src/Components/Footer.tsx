@@ -1,4 +1,7 @@
 import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
+
+
 
 export default function Footer() {
   return (
@@ -32,8 +35,12 @@ export default function Footer() {
         <div className="md:ml-10">
           <h3 className="text-xl font-bold text-blue-800 mb-3">Liens rapides</h3>
           <ul className="space-y-1 text-md">
-            <li><a href="/" className="hover:text-blue-800 transition flex items-center">Accueil</a></li>
-            <li><a href="/services" className="hover:text-blue-800 transition flex items-center">Services</a></li>
+            <li>
+              <Link to='/' className="hover:text-blue-800 transition flex items-center">Acceuil</Link>
+            </li>
+            <li>
+              <Link to='/#services' className="hover:text-blue-800 transition flex items-center">Services</Link>
+            </li>
             <li><a href="/about" className="hover:text-blue-800 transition flex items-center">À propos</a></li>
             <li><a href="/contact" className="hover:text-blue-800 transition flex items-center">Contact</a></li>
           </ul>

@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef } from "react";
-import { ShoppingCart, Menu, Globe, UserPlus, UserCheck, ShoppingBasket, Search, Printer } from "lucide-react";
+import { ShoppingCart, Menu, Globe, UserPlus, UserCheck, ShoppingBasket, Search, Printer, Grid } from "lucide-react";
 import axios from "axios";
 import Image from "../assets/album photo.jpg"
 import Photo from "../assets/album photo.jpg"
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
     const [cartCount, setCartCount] = useState(0);
@@ -27,6 +28,7 @@ export default function Navbar() {
     // const navbarRef = useRef<HTMLDivElement>(null);
     const timeoutRef = useRef<number | null>(null);
 
+    // Les informations des trois papier
     const papiers = [
         {
             name: "Grand format",
@@ -153,10 +155,6 @@ export default function Navbar() {
         setHoveredProduct(null);
     };
 
-    const handleSeeMoreClick = () => {
-        console.log("Voir plus d'images pour:", hoveredProduct);
-        alert(`Redirection vers la page des ${hoveredProduct}`);
-    };
 
     useEffect(() => {
         return () => {
@@ -272,29 +270,29 @@ export default function Navbar() {
                                 tabIndex={0}
                                 className="btn bg-blue-500 text-white py-3 px-6 text-sm rounded-lg hover:bg-blue-600 transition-colors duration-200"
                             >
-                                Se connecter
+                                Connexion
                             </button>
                             <ul
                                 tabIndex={0}
                                 className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-44"
                             >
                                 <li>
-                                    <a href="#">
+                                    <Link to="/register">
                                         <UserPlus />
                                         Créer un compte
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <Link to="/login">
                                         <UserCheck />
                                         Connexion
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <Link to="/login">
                                         <ShoppingBasket />
                                         Commander
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
                                     <a
@@ -356,9 +354,24 @@ export default function Navbar() {
                                         />
                                     </div>
                                 </li>
-                                <li><a>Se connecter</a></li>
-                                <li><a>Changer de langue</a></li>
-                                <li><a>Tous les produits</a></li>
+                                <li>
+                                    <Link to="/login">
+                                        <UserCheck />
+                                        Connexion
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="#">
+                                        <Globe />
+                                        Changer de langue
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/detaille">
+                                        <Grid />
+                                        Tout les produits
+                                    </Link>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -419,18 +432,8 @@ export default function Navbar() {
                                     alt={`${hoveredProduct} ${index + 1}`}
                                     className="w-full h-32 object-cover rounded-md shadow-sm transition-transform duration-300 group-hover:scale-105"
                                 />
-                                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 rounded-md"></div>
                             </div>
                         ))}
-                        <div
-                            className="flex items-center justify-center bg-gray-100 rounded-md shadow-sm p-2 group hover:bg-blue-50 transition-colors cursor-pointer"
-                            onClick={handleSeeMoreClick}
-                        >
-                            <div className="flex flex-col items-center justify-center w-full h-full text-blue-500 group-hover:text-blue-700">
-                                <span className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mb-1">+</span>
-                                <span className="text-xs">Voir plus</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             )}
