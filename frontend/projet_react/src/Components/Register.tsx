@@ -8,6 +8,7 @@ const RegisterPage = () => {
     const [formData, setFormData] = useState({
         nom: "",
         prenom: "",
+        photo: "",
         email: "",
         phone: "",
         password: "",
@@ -25,17 +26,33 @@ const RegisterPage = () => {
     };
 
     const nextStep = () => {
-        if (step === 1 && (!formData.nom || !formData.prenom)) {
-            setNotification("Veuillez remplir tous les champs.");
-            return;
+        if (step === 1) {
+            if (!formData.nom || !formData.prenom) {
+                setNotification("Veuillez remplir tous les champs.");
+                return;
+            }
         }
-        if (step === 2 && (!formData.email || !formData.phone)) {
-            setNotification("Veuillez remplir tous les champs.");
-            return;
+
+        if (step === 2) {
+            // Vérification email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!formData.email || !emailRegex.test(formData.email)) {
+                setNotification("Veuillez entrer un email valide.");
+                return;
+            }
+
+            // Vérification téléphone
+            const phoneRegex = /^\d{10}$/; // exactement 10 chiffres
+            if (!formData.phone || !phoneRegex.test(formData.phone)) {
+                setNotification("Veuillez entrer un numéro de téléphone valide à 10 chiffres.");
+                return;
+            }
         }
+
         setNotification("");
         setStep((prev) => prev + 1);
     };
+
 
     const prevStep = () => {
         setNotification("");
@@ -110,6 +127,31 @@ const RegisterPage = () => {
                                     </div>
                                 </div>
 
+                                {/* Champ photo de profil */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Photo de profil</label>
+                                    <div className="flex items-center gap-4">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => {
+                                                if (e.target.files && e.target.files[0]) {
+                                                    const file = e.target.files[0];
+                                                    setFormData((prev) => ({ ...prev, photo: URL.createObjectURL(file), photoFile: file }));
+                                                }
+                                            }}
+                                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-blue-500 file:text-white hover:file:bg-blue-600 cursor-pointer"
+                                        />
+                                        {formData.photo && (
+                                            <img
+                                                src={formData.photo}
+                                                alt="Aperçu profil"
+                                                className="w-10 h-10 rounded-full object-cover border border-gray-300"
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+
                                 <button
                                     type="button"
                                     onClick={nextStep}
@@ -119,6 +161,7 @@ const RegisterPage = () => {
                                 </button>
                             </>
                         )}
+
 
                         {step === 2 && (
                             <>
@@ -147,10 +190,14 @@ const RegisterPage = () => {
                                             name="phone"
                                             value={formData.phone}
                                             onChange={handleChange}
-                                            placeholder="+261 ..."
+                                            placeholder="0123456789"
                                             required
+                                            maxLength={10}
+                                            pattern="\d{10}"
+                                            inputMode="numeric"
                                             className="block w-full pl-10 pr-3 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                         />
+
                                     </div>
                                 </div>
 
