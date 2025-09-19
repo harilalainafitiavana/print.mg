@@ -161,7 +161,7 @@ export default function DashboardLayout({ children, userPhoto, menus, onMenuClic
                 {/* Zone de contenu */}
                 <div className="flex flex-1 overflow-y-auto">
                     {/* Contenu dynamique */}
-                    <div className={`flex-1 p-4 md:p-6 bg-gray-50 min-w-0 transition-all duration-300 ${isRightSidebarVisible && windowWidth >= 1024 ? 'lg:mr-80' : ''}`}>
+                    <div className={`flex-1 p-4 md:p-6 bg-gray-50 min-w-100 transition-all duration-300 ${isRightSidebarVisible && windowWidth >= 1024 ? 'lg:mr-0' : 'mr-0'}`}>
                         {children}
                     </div>
 
