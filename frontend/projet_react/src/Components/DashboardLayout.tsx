@@ -3,6 +3,7 @@ import type { JSX } from "react";
 import { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import user from "../assets/Utilisateur.png";
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -29,7 +30,7 @@ export default function DashboardLayout({ children, userPhoto, menus, onMenuClic
                 setIsSidebarOpen(false);
             }
 
-    
+
             if (window.innerWidth < 1024) {
                 setIsRightSidebarVisible(false);
             }
@@ -79,7 +80,7 @@ export default function DashboardLayout({ children, userPhoto, menus, onMenuClic
                             }}
                             className="flex items-center text-black hover:text-white space-x-3 w-full px-3 py-4 rounded-lg hover:bg-blue-400 hover:font-bold"
                         >
-                            <span className="text-blue-500">{menu.icon}</span>
+                            <span className="text-red-500 font-bold">{menu.icon}</span>
                             <span>{menu.label}</span>
                         </button>
                     ))}
@@ -144,16 +145,23 @@ export default function DashboardLayout({ children, userPhoto, menus, onMenuClic
                             <Settings size={22} />
                         </button>
                         <button
-                            onClick={() => 
+                            onClick={() =>
                                 onMenuClick("profil")
                             }
                             className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 transition-all"
                         >
-                            <img
-                                src={userPhoto || "/images/default-profile.jpg"}
-                                alt="Profil utilisateur"
-                                className="w-full h-full object-cover"
-                            />
+
+                            <button
+                                onClick={() => onMenuClick("profil")}
+                                className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 transition-all"
+                            >
+                                <img
+                                    src={userPhoto && userPhoto.trim() !== "" ? userPhoto : user}
+                                    onError={(e) => (e.currentTarget.src = user)} // fallback si image cassée
+                                    alt="Profil utilisateur"
+                                    className="w-full h-full object-cover"
+                                />
+                            </button>
                         </button>
                     </div>
                 </header>

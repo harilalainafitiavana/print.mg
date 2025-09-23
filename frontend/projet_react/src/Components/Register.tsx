@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Mail, Phone, Lock, User, Printer, Truck, Shield, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
 import Slide_show from "./Slide_show";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
     const [step, setStep] = useState(1);
@@ -59,25 +60,60 @@ const RegisterPage = () => {
         setStep((prev) => prev - 1);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+
+    // Navigué vers la page de login après avoir fait l'inscription
+    const navigate = useNavigate();
+    
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+    
+        // Vérification des champs mot de passe
         if (!formData.password || !formData.confirmPassword) {
             setNotification("Veuillez remplir tous les champs.");
             return;
         }
         if (!validatePassword(formData.password)) {
-            setNotification(
-                "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et une chaine de carctère."
-            );
+            setNotification("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre.");
             return;
         }
         if (formData.password !== formData.confirmPassword) {
             setNotification("Les mots de passe ne correspondent pas.");
             return;
         }
-        setNotification("Inscription réussi ✅, ☺️👏 mercii!");
-        // Ici tu peux appeler ton API Django pour enregistrer l'utilisateur
+    
+        try {
+            // Préparation des données à envoyer (FormData pour texte + fichier)
+            const formDataToSend = new FormData();
+            formDataToSend.append("nom", formData.nom);
+            formDataToSend.append("prenom", formData.prenom);
+            formDataToSend.append("email", formData.email);
+            formDataToSend.append("num_tel", formData.phone);
+            formDataToSend.append("mdp", formData.password);
+    
+            if ((formData as any).photoFile) {
+                formDataToSend.append("profils", (formData as any).photoFile);
+            }
+    
+            // Envoi vers Django REST API
+            const response = await fetch("http://127.0.0.1:8000/api/register/", {
+                method: "POST",
+                body: formDataToSend,
+            });
+    
+            if (response.ok) {
+                // Redirection vers login après succès
+                navigate("/login");
+            } else {
+                const errorData = await response.json();
+                setNotification("❌ Erreur : " + JSON.stringify(errorData));
+            }
+        } catch (error) {
+            setNotification("⚠️ Erreur de connexion au serveur.");
+        }
     };
+    
+
+
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -139,7 +175,7 @@ const RegisterPage = () => {
                                                     const file = e.target.files[0];
                                                     setFormData((prev) => ({ ...prev, photo: URL.createObjectURL(file), photoFile: file }));
                                                 }
-                                            }}
+                                            }}                                            
                                             className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-blue-500 file:text-white hover:file:bg-blue-600 cursor-pointer"
                                         />
                                         {formData.photo && (

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { BookOpen, Ticket, Book, ImageIcon, Bookmark, MessageCircle, Camera, Sparkles, Rocket, Printer, Smile } from "lucide-react";
+import { BookOpen, Ticket, Book, ImageIcon, Bookmark, Camera, Sparkles, Rocket, Printer, Smile } from "lucide-react";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import Slide from "./Slide_home";
 import { Link } from "react-router-dom";
+import Chat from "./Chat";
 
 export default function HomePage() {
   // Service
@@ -93,7 +94,6 @@ export default function HomePage() {
 
       {/* <Navbar /> */}
       <Navbar />
-      {/* <Navbar /> */}
 
       {/* Hero Section avec carosel en background */}
       <section className="relative w-full h-screen overflow-hidden">
@@ -112,7 +112,7 @@ export default function HomePage() {
               <Link to="/login" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full transition-all duration-300 hover:scale-105">
                 Commander maintenant
               </Link>
-              <Link to='/detaille' className="bg-transparent border-2 border-white hover:bg-white hover:text-black text-white font-bold py-4 px-6 rounded-full transition-all duration-300 hover:scale-105">En savoir plus </Link>
+              <Link to='/detaille' className="bg-transparent border-2 border-white hover:bg-white hover:text-black text-white font-bold py-4 px-6 rounded-full transition-all duration-300 hover:scale-105">Tout les produits </Link>
             </div>
           </div>
         </div>
@@ -371,25 +371,13 @@ export default function HomePage() {
       </section>
       {/* Pub */}
 
+      {/* Slide */}
       <Slide />
 
-
       {/* Chat */}
-      <button
-        className="
-          fixed bottom-6 right-6 
-          bg-blue-500 text-white 
-          w-14 h-14 rounded-full 
-          shadow-xl flex items-center justify-center 
-          hover:bg-blue-300 transition-transform transform hover:scale-110
-          z-50
-        "
-        onClick={() => alert("Boîte de discussion à créer bientôt !")}
-      >
-        <MessageCircle className="w-10 10-8" />
-      </button>
-      {/* Chat */}
+      <Chat />
 
+      {/* Footer */}
       <Footer />
     </div>
   );

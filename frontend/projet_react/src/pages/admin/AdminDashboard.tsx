@@ -3,6 +3,11 @@ import DashboardLayout from "../../Components/DashboardLayout";
 import Setting from "../../Components/Settings"
 import { Home, ShoppingCart, Package, Users, CreditCard, Settings, Trash } from "lucide-react";
 import Profils from "../../Components/Profils";
+import CommandeList from "./CommandeList";
+import AdminCorbeil from "./AdminCorbeil";
+import Product from "./Product";
+import UserList from "./UserList";
+import AdminProfil from "../../assets/icone.png"
 
 export default function AdminDashboard() {
     const [activeMenu, setActiveMenu] = useState("home");
@@ -22,23 +27,26 @@ export default function AdminDashboard() {
     const renderContent = () => {
         switch (activeMenu) {
             case "orders":
-                return <div>📦 Liste et gestion des commandes (en attente, en cours, livrées)...</div>;
+                return <div><CommandeList /></div>;
+
+            case "trash":
+                return <AdminCorbeil />
 
             case "products":
-                return <div>🛍️ Gestion des produits et services d’impression...</div>;
+                return <Product />
 
             case "users":
-                return <div>👥 Liste des utilisateurs + détails...</div>;
+                return <UserList />
 
             case "payments":
                 return <div>💳 Suivi des paiements + factures...</div>;
 
             case "settings":
-                return <div className="p-6"> <Setting /> </div>
+                return <Setting />
 
             case "notification":
                 return <div> Votre notification</div>;
-                
+
             case "profil":
                 return <div className="p-6"> <Profils /> </div>
 
@@ -56,7 +64,7 @@ export default function AdminDashboard() {
     return (
         <DashboardLayout
             userName="Administrateur"
-            userPhoto="/images/user1.jpg"
+            userPhoto={AdminProfil}
             menus={menus}
             onMenuClick={setActiveMenu}
         >

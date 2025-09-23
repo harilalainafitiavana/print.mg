@@ -1,125 +1,77 @@
-import React, { useState } from 'react';
-import { Printer, Shield, Truck, Star, Search, Filter } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Printer, Shield, Truck, Search, Filter } from 'lucide-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { Link } from 'react-router-dom';
+import Chat from './Chat';
 
 // Types TypeScript
 interface Product {
+    future: string;
     id: number;
     name: string;
     description: string;
-    category: string;
-    price: string;
-    rating: number;
+    categorie: string;
+    prix: string;
     image: string;
     featured: boolean;
 }
 
-// Données des produits
-const productsData: Product[] = [
-    {
-        id: 1,
-        name: "Cartes de visite premium",
-        description: "Cartes de visite en papier qualité premium avec finition mate ou brillante. Parfaites pour les professionnels.",
-        category: "Papeterie",
-        price: "À partir de 15.000 Ar",
-        rating: 4.8,
-        image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        featured: true
-    },
-    {
-        id: 2,
-        name: "Flyers promotionnels",
-        description: "Flyers vibrants qui captivent l'attention. Idéals pour promotions et événements.",
-        category: "Marketing",
-        price: "À partir de 25.000 Ar",
-        rating: 4.5,
-        image: "https://images.unsplash.com/photo-1521334884684-d80222895322?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        featured: true
-    },
-    {
-        id: 3,
-        name: "Brochures élégantes",
-        description: "Brochures pliantes qui racontent l'histoire de votre marque avec élégance.",
-        category: "Marketing",
-        price: "À partir de 45.000 Ar",
-        rating: 4.7,
-        image: "https://images.unsplash.com/photo-1531346680769-a1d79b57de5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        featured: false
-    },
-    {
-        id: 4,
-        name: "Affiches grand format",
-        description: "Affiches grand format avec des couleurs vives et une résolution exceptionnelle.",
-        category: "Décoration",
-        price: "À partir de 30.000 Ar",
-        rating: 4.9,
-        image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        featured: true
-    },
-    {
-        id: 5,
-        name: "Stickers personnalisés",
-        description: "Stickers résistants de toutes formes et tailles pour personnaliser vos produits.",
-        category: "Divers",
-        price: "À partir de 10.000 Ar",
-        rating: 4.6,
-        image: "https://images.unsplash.com/photo-1584824486539-53bb4646bdbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        featured: false
-    },
-    {
-        id: 6,
-        name: "Emballages sur mesure",
-        description: "Emballages personnalisés qui rendent vos produits irrésistibles.",
-        category: "Emballage",
-        price: "À partir de 60.000 Ar",
-        rating: 4.8,
-        image: "https://images.unsplash.com/photo-1586880244386-9682836f6eeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        featured: false
-    },
-    {
-        id: 7,
-        name: "Invitations événementielles",
-        description: "Invitations élégantes pour mariages, anniversaires et événements corporatifs.",
-        category: "Papeterie",
-        price: "À partir de 20.000 Ar",
-        rating: 4.9,
-        image: "https://images.unsplash.com/photo-1535 1043215-4a78c7a6c6a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        featured: true
-    },
-    {
-        id: 8,
-        name: "Catalogues produits",
-        description: "Catalogues professionnels pour présenter votre gamme de produits.",
-        category: "Marketing",
-        price: "À partir de 75.000 Ar",
-        rating: 4.7,
-        image: "https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        featured: false
-    }
-];
 
 const PublicationsPage: React.FC = () => {
     const [selectedCategory, setSelectedCategory] = useState<string>('Tous');
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [products, setProducts] = useState<Product[]>([]);
+
+    // --- Fetch des produits existants ---
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const res = await fetch("http://localhost:8000/api/produits/");
+                const data = await res.json();
+                setProducts(data);
+            } catch (error) {
+                console.error("Erreur lors du fetch des produits :", error);
+            }
+        };
+        fetchProducts();
+    }, []);
 
     // Filtrer les produits par catégorie et recherche
-    const filteredProducts = productsData.filter(product => {
-        const matchesCategory = selectedCategory === 'Tous' || product.category === selectedCategory;
+    const filteredProducts = products.filter(product => {
+        const matchesCategory = selectedCategory === 'Tous' || product.categorie === selectedCategory;
         const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             product.description.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesCategory && matchesSearch;
     });
 
     // Obtenir toutes les catégories uniques
-    const categories = ['Tous', ...Array.from(new Set(productsData.map(product => product.category)))];
+    const categories = ['Tous', ...Array.from(new Set(products.map(product => product.categorie)))];
+
+    // --- Pagination ---
+    const [currentPage, setCurrentPage] = useState(1);
+    const productsPerPage = 6; // nombre d’éléments par page
+
+    // Calcul des indices
+    const indexOfLastProduct = currentPage * productsPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+
+    // Nombre total de pages
+    const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
 
     return (
 
         <div className="min-h-screen bg-gray-50">
 
+            {/* Navbar */}
             <Navbar />
+
             {/* Hero Section */}
             <section className="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-20">
                 <div className="container mx-auto px-4 text-center">
@@ -178,7 +130,7 @@ const PublicationsPage: React.FC = () => {
                             <input
                                 type="text"
                                 placeholder="Rechercher un produit..."
-                                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="pl-10 pr-4 py-2 w-full border border-blue-500 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
@@ -199,17 +151,17 @@ const PublicationsPage: React.FC = () => {
                     </div>
 
                     {/* Products Grid */}
-                    {filteredProducts.length === 0 ? (
+                    {currentProducts.length === 0 ? (
                         <div className="text-center py-12">
                             <p className="text-gray-600 text-xl">Aucun produit ne correspond à votre recherche.</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {filteredProducts.map(product => (
+                            {currentProducts.map(product => (
                                 <div key={product.id} className="bg-white rounded-xl overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
                                     <div className="relative">
                                         <img
-                                            src={product.image}
+                                            src={product.image.startsWith("http") ? product.image : `http://localhost:8000${product.image}`}
                                             alt={product.name}
                                             className="w-full h-48 object-cover"
                                         />
@@ -220,25 +172,32 @@ const PublicationsPage: React.FC = () => {
                                         )}
                                     </div>
                                     <div className="p-6">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <h3 className="text-xl font-bold">{product.name}</h3>
-                                            <div className="flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">
-                                                <Star className="h-4 w-4 mr-1 fill-current" />
-                                                {product.rating}
-                                            </div>
-                                        </div>
+                                        <h3 className="text-xl font-bold">{product.name}</h3>
                                         <p className="text-gray-600 mb-4">{product.description}</p>
-                                        <div className="flex justify-between items-center mb-4">
-                                            <span className="text-blue-600 font-bold">{product.price}</span>
-                                        </div>
-                                        <Link to="/login" className="w-full px-6 bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition duration-300">
-                                            Commander
-                                        </Link>
+                                        <span className="text-blue-600 font-bold">{product.prix} Ariary</span>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     )}
+
+                    {/* Pagination Controls */}
+                    <div className="flex justify-center mt-8 gap-2">
+                        {Array.from({ length: totalPages }, (_, i) => (
+                            <button
+                                key={i + 1}
+                                onClick={() => handlePageChange(i + 1)}
+                                className={`px-4 py-2 rounded-lg border ${currentPage === i + 1
+                                    ? "bg-blue-500 text-white"
+                                    : "bg-white text-blue-500 border-blue-500"
+                                    }`}
+                            >
+                                {i + 1}
+                            </button>
+                        ))}
+                    </div>
+
+
                 </div>
             </section>
 
@@ -257,6 +216,10 @@ const PublicationsPage: React.FC = () => {
                 </div>
             </section>
 
+            {/* Chat */}
+            <Chat />
+
+            {/* Footer */}
             <Footer />
         </div>
     );

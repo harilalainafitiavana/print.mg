@@ -1,9 +1,11 @@
 import { useState } from "react";
 import DashboardLayout from "../../Components/DashboardLayout";
 import { Home, Folder, Trash, BarChart3, CheckSquare, Settings } from "lucide-react";
-import Commande from "../../Components/Commande";
+import Commande from "./Commande";
 import Setting from "../../Components/Settings";
 import Profils from "../../Components/Profils";
+import Mes_commande from "./Mes_commande";
+import Corbeille from "./Corbeille";
 
 export default function UserDashboard() {
     const [activeMenu, setActiveMenu] = useState("home");
@@ -20,11 +22,18 @@ export default function UserDashboard() {
     const renderContent = () => {
         switch (activeMenu) {
             case "orders":
-                return <div> <Commande /> </div>;
+                return <Mes_commande onMenuClick={setActiveMenu} />;
+            case "order":
+                return <Commande />;
+
             case "tasks":
                 return <div>🗓️ Tout les tâches ici...</div>;
+
             case "trash":
-                return <div>🗑️ Historique corbeille ici...</div>;
+                return <Corbeille onMenuClick={function (): void {
+                    throw new Error("Function not implemented.");
+                } } />;
+
             case "settings":
                 return <div className="p-6"> <Setting /> </div>
 
