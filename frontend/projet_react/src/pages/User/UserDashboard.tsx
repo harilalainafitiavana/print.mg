@@ -59,7 +59,7 @@ export default function UserDashboard() {
             default:
                 return (
                     <div>
-                        <h2 className="text-xl font-bold mb-4">Bienvenue {user?.nom} !</h2>
+                        <h2 className="text-xl font-bold mb-4">Bienvenue  {user?.prenom} {user?.nom} ☺️!</h2>
                         <p>Ceci est ton tableau de bord.</p>
                     </div>
                 );

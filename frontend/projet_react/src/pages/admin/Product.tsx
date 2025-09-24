@@ -1,6 +1,7 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { X, Check, PlusCircle, ImageIcon, Trash, Edit } from "lucide-react";
 
+
 interface Product {
     future: string;
     id: number;
@@ -36,6 +37,7 @@ export default function ProductList() {
     }, []);
 
 
+
     // --- Pagination ---
     const [currentPage, setCurrentPage] = useState(1);
     const productsPerPage = 6; // nombre d’éléments par page
@@ -64,6 +66,23 @@ export default function ProductList() {
         setNewProduct((prev) => ({ ...prev, imageFile: file, image: URL.createObjectURL(file) }));
     };
 
+    // Memoriser le token
+    async function authFetch(url: string, options: RequestInit = {}) {
+        const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+
+        if (!token) {
+            throw new Error("Token manquant, veuillez vous reconnecter.");
+        }
+
+        return fetch(url, {
+            ...options,
+            headers: {
+                ...options.headers,
+                Authorization: `Bearer ${token}`,
+            },
+        });
+    }
+
     // --- Ajouter un produit ---
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -82,20 +101,28 @@ export default function ProductList() {
         if (newProduct.imageFile) formData.append("image", newProduct.imageFile);
 
         try {
-            const res = await fetch("http://localhost:8000/api/produits/", {
+            const res = await authFetch("http://localhost:8000/api/produits/", {
                 method: "POST",
                 body: formData,
             });
+
+            if (!res.ok) {
+                if (res.status === 401) throw new Error("Token expiré ou manquant, veuillez vous reconnecter.");
+                throw new Error("Erreur lors de l'ajout du produit.");
+            }
+
             const data = await res.json();
             setProducts([...products, data]);
             setNewProduct({});
             setShowAddModal(false);
             alert("Produit ajouté avec succès !");
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            alert("Erreur lors de l'ajout du produit.");
+            alert(error.message || "Erreur serveur.");
         }
     };
+
+
 
     // Modifier un produit
     const handleUpdate = async () => {
@@ -117,23 +144,24 @@ export default function ProductList() {
         }
 
         try {
-            const res = await fetch(`http://localhost:8000/api/produits/${selectedProduct.id}/`, {
+            const res = await authFetch(`http://localhost:8000/api/produits/${selectedProduct.id}/`, {
                 method: "PUT",
                 body: formData,
             });
 
-            if (!res.ok) throw new Error("Erreur API");
+            if (!res.ok) {
+                if (res.status === 401) throw new Error("Token expiré ou manquant, veuillez vous reconnecter.");
+                throw new Error("Erreur lors de la modification du produit.");
+            }
 
             const updated = await res.json();
-
-            // mise à jour locale
             setProducts(products.map((p) => (p.id === updated.id ? updated : p)));
             setShowEditModal(false);
             setSelectedProduct(null);
             alert("Produit modifié avec succès !");
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            alert("Erreur lors de la modification.");
+            alert(error.message || "Erreur serveur.");
         }
     };
 
@@ -146,17 +174,24 @@ export default function ProductList() {
 
     const confirmDelete = async () => {
         if (!productToDelete) return;
+
         try {
-            await fetch(`http://localhost:8000/api/produits/${productToDelete.id}/`, {
+            const res = await authFetch(`http://localhost:8000/api/produits/${productToDelete.id}/`, {
                 method: "DELETE",
             });
+
+            if (!res.ok) {
+                if (res.status === 401) throw new Error("Token expiré ou manquant, veuillez vous reconnecter.");
+                throw new Error("Erreur lors de la suppression du produit.");
+            }
+
             setProducts(products.filter((p) => p.id !== productToDelete.id));
             setProductToDelete(null);
             setShowDeleteModal(false);
             alert("Produit supprimé avec succès !");
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            alert("Erreur lors de la suppression du produit.");
+            alert(error.message || "Erreur serveur.");
         }
     };
     return (

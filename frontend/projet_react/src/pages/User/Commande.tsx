@@ -1,12 +1,15 @@
-import { useState, type ChangeEvent } from "react";
+import { useState, useEffect, type ChangeEvent } from "react";
 import { ArrowRight, ArrowLeft, Check, X } from "lucide-react";
+// import axios from "axios";
+import { authFetch } from "./Utils";
+
 
 type Step = 1 | 2 | 3 | 4;
 
 export default function PrintingOrderForm() {
   const [step, setStep] = useState<Step>(1);
 
-  // Étape 1
+  // Étape 1 - Fichier
   const [file, setFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState("");
   const [dpi, setDpi] = useState(150);
@@ -14,22 +17,25 @@ export default function PrintingOrderForm() {
   const [dateUpload] = useState(new Date().toISOString().split("T")[0]);
   const [fileError, setFileError] = useState("");
 
-  // Étape 2
+  // Étape 2 - Configuration
   const [formatType, setFormatType] = useState("petit");
   const [smallFormat, setSmallFormat] = useState("A4");
   const [customSize, setCustomSize] = useState({ width: "", height: "" });
   const [paperType, setPaperType] = useState("");
   const [finish, setFinish] = useState("");
   const [quantity, setQuantity] = useState<number | "">("");
+  const [duplex, setDuplex] = useState(""); // recto/verso option facultative
+  const [binding, setBinding] = useState(""); // reliure option facultative
+  const [coverPaper, setCoverPaper] = useState(""); // couverture option facultative
   const [formatError, setFormatError] = useState("");
 
-  // Étape 3
+  // Étape 3 - Paiement
   const [phone, setPhone] = useState("");
   const [amount, setAmount] = useState<number | "">("");
   const [options, setOptions] = useState("");
   const [step3Error, setStep3Error] = useState("");
 
-  // Étape 4 (Confirmation)
+  // Étape 4 - Confirmation
   const [showModal, setShowModal] = useState(false);
 
   // Gestion du fichier
@@ -37,7 +43,7 @@ export default function PrintingOrderForm() {
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
     const ext = selectedFile.name.split(".").pop()?.toLowerCase();
-    if (ext !== "pdf" && ext !== "jpg") {
+    if (!["pdf", "jpg", "jpeg"].includes(ext || "")) {
       setFileError("Seuls les fichiers PDF et JPG sont acceptés");
       setFile(null);
       return;
@@ -46,6 +52,7 @@ export default function PrintingOrderForm() {
     setFile(selectedFile);
   };
 
+  // Validation Étape 1
   const validateStep1 = () => {
     if (!file || !fileName) {
       setFileError("Veuillez remplir tous les champs de l'étape 1");
@@ -55,35 +62,48 @@ export default function PrintingOrderForm() {
     return true;
   };
 
+  // Validation Étape 2
   const validateStep2 = () => {
     if (!paperType || !finish || !quantity) {
-      setFormatError("Veuillez remplir tous les champs de l'étape 2");
+      setFormatError("Veuillez remplir tous les champs obligatoires de l'étape 2");
       return false;
     }
-    const minQty = smallFormat === "A5" ? 30 : smallFormat === "A4" ? 20 : 50;
-    if (quantity < minQty) {
-      setFormatError(`Quantité minimale pour ${smallFormat} est ${minQty}`);
-      return false;
-    }
-    if (formatType === "grand") {
-      const w = parseFloat(customSize.width);
-      const h = parseFloat(customSize.height);
-      if (w > 160 || h > 100) {
-        setFormatError("Votre impression sera divisée en plusieurs parties");
+
+    // Quantité minimale selon format
+    if (formatType === "petit") {
+      const minQty = smallFormat === "A5" ? 30 : smallFormat === "A4" ? 20 : smallFormat === "A3" ? 10 : 50;
+      if (quantity < minQty) {
+        setFormatError(`Quantité minimale pour ${smallFormat} : ${minQty}`);
         return false;
       }
     }
+
+    // Grand format
+    if (formatType === "grand") {
+      const w = parseFloat(customSize.width || "0");
+      const h = parseFloat(customSize.height || "0");
+      if (!w || !h) {
+        setFormatError("Veuillez saisir largeur et hauteur pour le grand format");
+        return false;
+      }
+      if (w > 160 || h > 100) {
+        setFormatError("La limite du grand format est 160x100 cm");
+        return false;
+      }
+    }
+
     setFormatError("");
     return true;
   };
 
+  // Validation Étape 3
   const validateStep3 = () => {
     if (!phone.match(/^\d{10}$/)) {
       setStep3Error("Veuillez entrer un numéro de téléphone valide à 10 chiffres");
       return false;
     }
     if (!amount || amount <= 0) {
-      setStep3Error("Veuillez entrer un montant valide");
+      setStep3Error("Le montant doit être supérieur à 0");
       return false;
     }
     setStep3Error("");
@@ -100,22 +120,133 @@ export default function PrintingOrderForm() {
     if (step > 1) setStep((prev) => (prev - 1) as Step);
   };
 
-  const handleConfirm = () => {
-    setShowModal(false);
-    alert("✅ Commande envoyée !");
-    // Ici envoyer les données à Django
+  // Fonction pour envoyer la commande au backend
+  const handleSubmit = async () => {
+    if (!file) {
+      alert("Veuillez sélectionner un fichier.");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("fileName", fileName);
+      formData.append("dpi", dpi.toString());
+      formData.append("file_format", file.name.split('.').pop() || "");
+      formData.append("colorProfile", colorProfile);
+      formData.append("format_type", formatType);
+      formData.append("smallFormat", smallFormat);
+      formData.append("largeur", customSize.width);
+      formData.append("hauteur", customSize.height);
+      formData.append("paperType", paperType);
+      formData.append("finish", finish);
+      formData.append("quantity", quantity.toString());
+      formData.append("duplex", duplex);
+      formData.append("binding", binding);
+      formData.append("coverPaper", coverPaper);
+      formData.append("phone", phone);
+      formData.append("amount", amount.toString());
+      formData.append("options", options);
+
+      console.log("Données envoyées :", {
+        file,
+        fileName,
+        dpi,
+        colorProfile,
+        formatType,
+        smallFormat,
+        customSize,
+        paperType,
+        finish,
+        quantity,
+        duplex,
+        binding,
+        coverPaper,
+        phone,
+        amount,
+        options,
+      });
+
+      // ✅ Utilisation de authFetch pour gérer le token automatiquement
+      const res = await authFetch("http://localhost:8000/api/commande/", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json(); // 🔹 important pour fetch
+
+      if (data.success) {
+        alert(`✅ Commande créée ! Paiement status : ${data.paiement_status}`);
+
+        // 🔹 Reset formulaire
+        setStep(1);
+        setFile(null);
+        setFileName("");
+        setQuantity("");
+        setAmount("");
+        setPhone("");
+        setDuplex("");
+        setBinding("");
+        setCoverPaper("");
+        setOptions("");
+        setShowModal(false);
+      } else {
+        alert(`❌ Erreur : ${data.error}`);
+      }
+    } catch (error: any) {
+      console.error(error);
+      alert(error.message || "❌ Une erreur est survenue lors de la création de la commande.");
+    }
   };
+
 
   const handleCancel = () => {
     setShowModal(false);
-    alert("❌ Commande annulée");
   };
 
-  // Options de papier dynamiques
+  // Options de papier selon format
   const paperOptions =
     smallFormat === "A4" ? ["Papier glacé", "Papier mat"] :
       smallFormat === "A3" ? ["Papier standard", "Papier brillant"] :
         ["Papier standard"];
+
+  // Calcul automatique du montant
+  useEffect(() => {
+    let basePrice = 0;
+    if (!quantity) return;
+
+    // Prix selon format
+    if (formatType === "petit") {
+      switch (smallFormat) {
+        case "A5": basePrice = 1000; break;
+        case "A4": basePrice = 1500; break;
+        case "A3": basePrice = 2000; break;
+        case "custom": basePrice = 2500; break;
+      }
+    } else {
+      const w = parseFloat(customSize.width || "0");
+      const h = parseFloat(customSize.height || "0");
+      const surface = (w * h) / 10000;
+      basePrice = Math.max(surface * 50000, 50000); // prix minimum 50000
+    }
+
+    // Duplex
+    const duplexMultiplier = duplex === "recto_verso" ? 1.2 : 1;
+
+    // Reliure
+    let bindingPrice = 0;
+    if (binding === "spirale") bindingPrice = 2000;
+    if (binding === "dos_colle") bindingPrice = 3000;
+    if (binding === "agrafé") bindingPrice = 1000;
+
+    // Couverture
+    let coverPrice = 0;
+    if (coverPaper === "photo") coverPrice = 5000;
+    if (coverPaper === "simple") coverPrice = 1000;
+
+    setAmount(Math.round((basePrice * quantity * duplexMultiplier) + bindingPrice + coverPrice));
+
+  }, [formatType, smallFormat, customSize, duplex, quantity, binding, coverPaper]);
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md">
@@ -124,20 +255,8 @@ export default function PrintingOrderForm() {
       {/* Étape 1 */}
       {step === 1 && (
         <div className="space-y-4">
-          <label>Nom du fichier</label>
-          <input
-            type="text"
-            placeholder="Nom du fichier"
-            value={fileName}
-            onChange={(e) => setFileName(e.target.value)}
-            className="input input-bordered w-full mt-0"
-          />
-          <input
-            type="file"
-            accept=".pdf,.jpg"
-            onChange={handleFileChange}
-            className="input input-bordered w-full"
-          />
+          <input type="text" placeholder="Nom du fichier" value={fileName} onChange={(e) => setFileName(e.target.value)} className="input input-bordered w-full" />
+          <input type="file" accept=".pdf,.jpg,.jpeg" onChange={handleFileChange} className="input input-bordered w-full" />
           {fileError && <p className="text-red-500">{fileError}</p>}
 
           <div className="flex gap-4">
@@ -171,28 +290,16 @@ export default function PrintingOrderForm() {
               <option value="A5">A5</option>
               <option value="A4">A4</option>
               <option value="A3">A3</option>
-              <option value="custom">Personnalisé</option>
+              <option value="custom">Personnalisé (A6 ou autre)</option>
             </select>
           )}
 
           {formatType === "grand" && (
             <div>
-              <p className="text-yellow-600">⚠️ Limite imprimante : 160x100cm</p>
+              <p className="text-yellow-600">⚠️ Limite imprimante : 160x100 cm</p>
               <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Largeur (cm)"
-                  value={customSize.width}
-                  onChange={(e) => setCustomSize({ ...customSize, width: e.target.value })}
-                  className="input input-bordered"
-                />
-                <input
-                  type="text"
-                  placeholder="Hauteur (cm)"
-                  value={customSize.height}
-                  onChange={(e) => setCustomSize({ ...customSize, height: e.target.value })}
-                  className="input input-bordered"
-                />
+                <input type="text" placeholder="Largeur (cm)" value={customSize.width} onChange={(e) => setCustomSize({ ...customSize, width: e.target.value })} className="input input-bordered" />
+                <input type="text" placeholder="Hauteur (cm)" value={customSize.height} onChange={(e) => setCustomSize({ ...customSize, height: e.target.value })} className="input input-bordered" />
               </div>
             </div>
           )}
@@ -210,6 +317,26 @@ export default function PrintingOrderForm() {
           </select>
 
           <input type="number" placeholder="Quantité" value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value))} className="input input-bordered w-full" />
+
+          {/* Options facultatives */}
+          <select value={duplex} onChange={(e) => setDuplex(e.target.value)} className="select select-bordered w-full">
+            <option value="">Recto seul</option>
+            <option value="recto_verso">Recto/verso</option>
+          </select>
+
+          <select value={binding} onChange={(e) => setBinding(e.target.value)} className="select select-bordered w-full">
+            <option value="">Pas de reliure</option>
+            <option value="spirale">Spirale</option>
+            <option value="dos_colle">Dos collé</option>
+            <option value="agrafé">Agrafé</option>
+          </select>
+
+          <select value={coverPaper} onChange={(e) => setCoverPaper(e.target.value)} className="select select-bordered w-full">
+            <option value="">Pas de couverture spéciale</option>
+            <option value="simple">Papier simple</option>
+            <option value="photo">Papier photo</option>
+          </select>
+
           {formatError && <p className="text-red-500">{formatError}</p>}
 
           <div className="flex justify-between">
@@ -227,7 +354,7 @@ export default function PrintingOrderForm() {
       {step === 3 && (
         <div className="space-y-4">
           <input type="tel" placeholder="Téléphone" value={phone} onChange={(e) => setPhone(e.target.value)} className="input input-bordered w-full" />
-          <input type="number" placeholder="Montant (ARIARY)" value={amount} onChange={(e) => setAmount(parseInt(e.target.value))} className="input input-bordered w-full" />
+          <input type="number" placeholder="Montant (ARIARY)" value={amount} readOnly className="input input-bordered w-full" />
           <textarea placeholder="Options supplémentaires" value={options} onChange={(e) => setOptions(e.target.value)} className="textarea textarea-bordered w-full" />
           {step3Error && <p className="text-red-500">{step3Error}</p>}
 
@@ -253,6 +380,9 @@ export default function PrintingOrderForm() {
               <p><strong>Papier :</strong> {paperType}</p>
               <p><strong>Finition :</strong> {finish}</p>
               <p><strong>Quantité :</strong> {quantity}</p>
+              {duplex && <p><strong>Duplex :</strong> {duplex}</p>}
+              {binding && <p><strong>Reliure :</strong> {binding}</p>}
+              {coverPaper && <p><strong>Couverture :</strong> {coverPaper}</p>}
               <p><strong>Téléphone :</strong> {phone}</p>
               <p><strong>Montant :</strong> {amount} Ariary</p>
               <p><strong>Options :</strong> {options || "-"}</p>
@@ -261,7 +391,7 @@ export default function PrintingOrderForm() {
               <button onClick={handleCancel} className="btn btn-outline flex items-center gap-2">
                 <X size={16} /> Annuler
               </button>
-              <button onClick={handleConfirm} className="btn btn-primary flex items-center gap-2">
+              <button onClick={handleSubmit} className="btn btn-primary flex items-center gap-2">
                 <Check size={16} /> Confirmer
               </button>
             </div>
