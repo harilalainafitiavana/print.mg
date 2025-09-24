@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DashboardLayout from "../../Components/DashboardLayout";
 import { Home, Folder, Trash, BarChart3, CheckSquare, Settings } from "lucide-react";
 import Commande from "./Commande";
@@ -9,6 +9,27 @@ import Corbeille from "./Corbeille";
 
 export default function UserDashboard() {
     const [activeMenu, setActiveMenu] = useState("home");
+    const [user, setUser] = useState<{ nom: string; prenom: string; profils?: string } | null>(null);
+
+    // 🔹 Récupération des infos de l'utilisateur connecté
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+                const res = await fetch("http://localhost:8000/api/me/", {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    setUser(data);
+                }
+            } catch (error) {
+                console.error("Erreur récupération utilisateur :", error);
+            }
+        };
+
+        fetchUser();
+    }, []);
 
     const menus = [
         { id: "home", label: "Dashboard", icon: <Home size={20} /> },
@@ -25,28 +46,20 @@ export default function UserDashboard() {
                 return <Mes_commande onMenuClick={setActiveMenu} />;
             case "order":
                 return <Commande />;
-
             case "tasks":
-                return <div>🗓️ Tout les tâches ici...</div>;
-
+                return <div>🗓️ Toutes les tâches ici...</div>;
             case "trash":
-                return <Corbeille onMenuClick={function (): void {
-                    throw new Error("Function not implemented.");
-                } } />;
-
+                return <Corbeille onMenuClick={function (): void { throw new Error("Function not implemented."); }} />;
             case "settings":
-                return <div className="p-6"> <Setting /> </div>
-
+                return <div className="p-6"><Setting /></div>;
             case "notification":
-                return <div> Votre notification</div>;
-
+                return <div>Votre notification</div>;
             case "profil":
-                return <div className="p-6"> <Profils /> </div>
-
+                return <div className="p-6"><Profils /></div>;
             default:
                 return (
                     <div>
-                        <h2 className="text-xl font-bold mb-4">Bienvenue !</h2>
+                        <h2 className="text-xl font-bold mb-4">Bienvenue {user?.nom} !</h2>
                         <p>Ceci est ton tableau de bord.</p>
                     </div>
                 );
@@ -55,8 +68,8 @@ export default function UserDashboard() {
 
     return (
         <DashboardLayout
-            userName="Uitlisateur"
-            userPhoto="/images/user1.jpg"
+            userName={user ? `${user.nom} ${user.prenom}` : "Utilisateur"}
+            userPhoto={user?.profils ? `http://localhost:8000${user.profils}` : "../../assets/Utilisateur.png"}
             menus={menus}
             onMenuClick={setActiveMenu}
         >
@@ -64,3 +77,4 @@ export default function UserDashboard() {
         </DashboardLayout>
     );
 }
+

@@ -2,9 +2,82 @@ import { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, Printer, Truck, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Slide_show from './Slide_show';
+import { useNavigate } from 'react-router-dom';
+
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(""); 
+  // État qui sert à indiquer si le formulaire est en cours de traitement (utile pour un bouton "Loading…").
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(""); // reset de l'erreur à chaque soumission
+
+    try {
+      // 🔹 1️⃣ Récupérer le token
+      const res = await fetch('http://localhost:8000/api/token/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+     
+      if (!res.ok) {
+        // On récupère le message exact envoyé par le serializer
+        if (data.detail) setError(data.detail); // pour erreurs globales
+        else if (data.email) setError(data.email);
+        else if (data.password) setError(data.password);
+        else setError("Email ou mot de passe incorrect 😓");
+        return;
+      }
+
+      // 🔹 2️⃣ Stocker le token
+      const rememberMe = (document.getElementById('remember-me') as HTMLInputElement)?.checked;
+      if (rememberMe) localStorage.setItem('token', data.access);
+      else sessionStorage.setItem('token', data.access);
+
+      // 🔹 3️⃣ Récupérer les infos de l'utilisateur pour savoir son rôle
+      const userRes = await fetch('http://localhost:8000/api/me/', {
+        headers: { Authorization: `Bearer ${data.access}` }
+      });
+      const userData = await userRes.json();
+
+      // 🔹 4️⃣ Stocker le rôle pour protéger les routes
+      localStorage.setItem('role', userData.role);
+
+
+      if (res.ok) {
+        const rememberMe = (document.getElementById('remember-me') as HTMLInputElement).checked;
+        if (rememberMe) {
+          localStorage.setItem('token', data.access);
+          localStorage.setItem('role', userData.role); // ajouter rôle
+        } else {
+          sessionStorage.setItem('token', data.access);
+          sessionStorage.setItem('role', userData.role); // ajouter rôle
+        }
+
+        if (userData.role === 'ADMIN') navigate('/dashboard-admin');
+        else navigate('/dashboard-user');
+      }
+
+
+    } catch (err) {
+      console.error(err);
+      setError("Erreur serveur, veuillez réessayer 🙏😪");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
 
   return (
     <div className="min-h-screen flex">
@@ -20,7 +93,13 @@ const LoginPage = () => {
             <p className="text-gray-600">Connectez-vous à votre compte</p>
           </div>
 
-          <form className="space-y-6">
+          {error && (
+            <div className='mb-4 p-3 bg-red-100 text-red-700 border border-red-300 rounded'>
+              {error}
+            </div>
+          )}
+
+          <form className="space-y-6" onSubmit={handleLogin}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                 Adresse email
@@ -33,7 +112,9 @@ const LoginPage = () => {
                   id="email"
                   name="email"
                   type="email"
-                  autoComplete="email"
+                  // autoComplete="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
                   required
                   className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                   placeholder="votre@email.com"
@@ -53,7 +134,9 @@ const LoginPage = () => {
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
-                  autoComplete="current-password"
+                  // autoComplete="current-password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
                   required
                   className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                   placeholder="Votre mot de passe"
@@ -95,9 +178,10 @@ const LoginPage = () => {
             <div>
               <button
                 type="submit"
+                disabled={loading}
                 className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition"
               >
-                Se connecter
+                {loading ? "Connexion..." : "Se connecter"}
               </button>
             </div>
           </form>

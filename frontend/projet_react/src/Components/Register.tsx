@@ -63,10 +63,12 @@ const RegisterPage = () => {
 
     // Navigué vers la page de login après avoir fait l'inscription
     const navigate = useNavigate();
-    
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-    
+
+        // console.log("Données envoyées :", formData);
+
         // Vérification des champs mot de passe
         if (!formData.password || !formData.confirmPassword) {
             setNotification("Veuillez remplir tous les champs.");
@@ -80,7 +82,7 @@ const RegisterPage = () => {
             setNotification("Les mots de passe ne correspondent pas.");
             return;
         }
-    
+
         try {
             // Préparation des données à envoyer (FormData pour texte + fichier)
             const formDataToSend = new FormData();
@@ -88,30 +90,36 @@ const RegisterPage = () => {
             formDataToSend.append("prenom", formData.prenom);
             formDataToSend.append("email", formData.email);
             formDataToSend.append("num_tel", formData.phone);
-            formDataToSend.append("mdp", formData.password);
-    
+            formDataToSend.append("password", formData.password);
+            formDataToSend.append("confirm_password", formData.confirmPassword);
+
             if ((formData as any).photoFile) {
                 formDataToSend.append("profils", (formData as any).photoFile);
             }
-    
+
             // Envoi vers Django REST API
             const response = await fetch("http://127.0.0.1:8000/api/register/", {
                 method: "POST",
                 body: formDataToSend,
             });
-    
+
             if (response.ok) {
                 // Redirection vers login après succès
                 navigate("/login");
             } else {
-                const errorData = await response.json();
-                setNotification("❌ Erreur : " + JSON.stringify(errorData));
+                const data = await response.json();
+
+                if (data.email) setNotification("❌ Email : " + data.email);
+                else if (data.password) setNotification("❌ Mot de passe : " + data.password);
+                else if (data.detail) setNotification("❌ " + data.detail);
+                else setNotification("❌ Erreur serveur, veuillez réessayer");
+                return;
             }
         } catch (error) {
             setNotification("⚠️ Erreur de connexion au serveur.");
         }
     };
-    
+
 
 
     const [showPassword, setShowPassword] = useState(false);
@@ -126,6 +134,12 @@ const RegisterPage = () => {
                     <div className="text-center mb-10">
                         <h1 className="text-3xl font-bold text-blue-500 mb-2">Print.mg</h1>
                         <p className="text-gray-600">Inscrivez-vous pour continuer</p>
+                        {/* 🔥 Notification stylée */}
+                        {notification && (
+                            <div className="mt-4 p-3 text-sm bg-red-100 text-red-700 border border-red-300 rounded">
+                                {notification}
+                            </div>
+                        )}
                     </div>
 
                     <form className="space-y-6" onSubmit={handleSubmit}>
@@ -175,7 +189,7 @@ const RegisterPage = () => {
                                                     const file = e.target.files[0];
                                                     setFormData((prev) => ({ ...prev, photo: URL.createObjectURL(file), photoFile: file }));
                                                 }
-                                            }}                                            
+                                            }}
                                             className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-blue-500 file:text-white hover:file:bg-blue-600 cursor-pointer"
                                         />
                                         {formData.photo && (
@@ -331,12 +345,6 @@ const RegisterPage = () => {
                         )}
                     </form>
 
-                    {/* 🔥 Notification stylée */}
-                    {notification && (
-                        <div className="mt-4 p-3 text-sm bg-red-100 text-red-700 border border-red-300 rounded">
-                            {notification}
-                        </div>
-                    )}
 
                     <div className="mt-6 text-center">
                         <p className="text-sm text-gray-600">

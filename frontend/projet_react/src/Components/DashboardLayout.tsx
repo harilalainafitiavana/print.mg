@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import user from "../assets/Utilisateur.png";
+import { useNavigate } from "react-router-dom";
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -49,6 +50,21 @@ export default function DashboardLayout({ children, userPhoto, menus, onMenuClic
         setIsRightSidebarVisible(!isRightSidebarVisible);
     };
 
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        const confirmLogout = window.confirm("Voulez-vous vraiment vous déconnecter ?");
+        if (!confirmLogout) return; // annuler si l'utilisateur clique sur "Annuler
+        
+        // Supprimer le token et le rôle
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("role");
+
+        // Rediriger vers login
+        navigate("/login");
+    };
     return (
         <div className="flex h-screen bg-gray-50">
             {/* Overlay pour mobile */}
@@ -85,7 +101,10 @@ export default function DashboardLayout({ children, userPhoto, menus, onMenuClic
                         </button>
                     ))}
                 </nav>
-                <button className="flex items-center text-black space-x-3 px-3 py-2 hover:bg-blue-400 hover:text-white hover:font-bold mb-4">
+                <button
+                    className="flex items-center text-black space-x-3 px-3 py-2 hover:bg-blue-400 hover:text-white hover:font-bold mb-4"
+                    onClick={handleLogout}
+                >
                     <LogOut size={20} /> <span>Déconnexion</span>
                 </button>
             </aside>
@@ -153,7 +172,7 @@ export default function DashboardLayout({ children, userPhoto, menus, onMenuClic
 
                             <button
                                 onClick={() => onMenuClick("profil")}
-                                className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 transition-all"
+                                className="w-10 h-15 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 transition-all"
                             >
                                 <img
                                     src={userPhoto && userPhoto.trim() !== "" ? userPhoto : user}

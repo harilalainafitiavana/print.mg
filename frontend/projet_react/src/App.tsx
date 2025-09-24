@@ -1,10 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PrivateRoute from './Components/PrivateRoute';
 import Home from "./Components/Home";
 import Detaille from "./Components/Detaille";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
-import UserDashboard from "./pages/User/UserDashboard";
-import AdminDashboard from "./pages/admin/AdminDashboard";
+import DashboardAdmin from "./pages/admin/AdminDashboard";
+import DashboardUser from "./pages/User/UserDashboard"
+
 
 export default function App() {
   return (
@@ -15,8 +17,23 @@ export default function App() {
         <Route path="/detaille" element={<Detaille />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/user" element={<UserDashboard />} />
-        <Route path="/admin" element={<AdminDashboard />} />
+        <Route
+          path="/dashboard-admin"
+          element={
+            <PrivateRoute allowedRoles={["ADMIN"]}>
+              <DashboardAdmin />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard-user"
+          element={
+            <PrivateRoute allowedRoles={["USER"]}>
+              <DashboardUser />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
