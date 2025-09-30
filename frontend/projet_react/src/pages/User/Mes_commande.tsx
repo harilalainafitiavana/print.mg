@@ -1,91 +1,122 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
-  Trash2,
-  Eye,
-  PlusCircle,
-  X,
-  Search,
-  ChevronLeft,
-  ChevronRight,
+  Trash2, Eye, PlusCircle, X, 
 } from "lucide-react";
 
 type MesCommandeProps = {
   onMenuClick: (menu: string) => void;
+  searchQuery?: string;
 };
 
 export type Order = {
   id: string;
-  title: string;
-  date: string; // YYYY-MM-DD
-  amount: number;
-  status: "En cours" | "Terminé" | "Annulé";
-  thumbnail?: string; // url/local path
+  date_commande: string;
+  statut: string;
+  montant_total: number;
+  mode_paiement: string;
+  configuration: any;
+  fichiers: any[];
+  phone?: string;
+  options?: string;
+  quantity?: number;
+  duplex?: string;
+  binding?: string;
+  coverPaper?: string;
 };
 
-
-const defaultOrders: Order[] = [
-  {
-    id: "CMD-20250918-001",
-    title: "Affiche A2 - Événement",
-    date: "2025-09-15",
-    amount: 45000,
-    status: "Terminé",
-    thumbnail: "",
-  },
-  {
-    id: "CMD-20250917-022",
-    title: "Dépliant A4 - Pack 50",
-    date: "2025-09-16",
-    amount: 120000,
-    status: "En cours",
-    thumbnail: "",
-  },
-  {
-    id: "CMD-20250916-105",
-    title: "Carte de visite - 250 ex.",
-    date: "2025-09-10",
-    amount: 30000,
-    status: "Annulé",
-    thumbnail: "",
-  },
-];
-
-export default function MesCommande({ onMenuClick }: MesCommandeProps) {
-  const [orders, setOrders] = useState<Order[]>(defaultOrders);
-  const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState<Order | null>(null);
+export default function MesCommande({ onMenuClick, searchQuery }: MesCommandeProps) {
+  const [orders, setOrders] = useState<Order[]>([]);
+  // const [query, setQuery] = useState("");
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
 
-  // Filtre simple local (sera remplacé par un call backend quand prêt)
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        if (!token) return;
+
+        const res = await fetch("http://127.0.0.1:8000/api/commandes/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setOrders(data);
+        } else {
+          console.error("Erreur chargement commandes", res.statusText);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchOrders();
+  }, []);
+
   const filtered = orders.filter((o) =>
-    (o.title + o.id + o.status).toLowerCase().includes(query.toLowerCase())
+    (o.fichiers.map(f => f.nom_fichier).join(" ") + o.id + o.statut)
+      .toLowerCase()
+      // .includes(query.toLowerCase())
+      .includes((searchQuery || "").toLowerCase())
   );
 
   const handleDeleteClick = (order: Order) => {
-    setSelected(order);
+    setSelectedOrder(order);
     setShowConfirm(true);
   };
 
-  const confirmDelete = () => {
-    if (!selected) return;
-    setOrders((prev) => prev.filter((o) => o.id !== selected.id));
-    setSelected(null);
-    setShowConfirm(false);
+  const confirmDelete = async () => {
+    if (!selectedOrder) return;
+
+    try {
+      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      if (!token) {
+        alert("Vous devez être connecté pour effectuer cette action.");
+        return;
+      }
+
+      const response = await fetch(`http://localhost:8000/api/commandes/${selectedOrder.id}/soft_delete/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Ajoute le token JWT dans les en-têtes
+        },
+      });
+
+      const data = await response.json();
+      console.log("Data:", data);
+
+      if (data.success) {
+        // Retirer la commande de la liste principale
+        setOrders((prev) => prev.filter((o) => o.id !== selectedOrder.id));
+
+        // Réinitialiser l'état
+        setSelectedOrder(null);
+        setShowConfirm(false);
+        alert("Commande déplacée dans la corbeille ✅");
+      } else {
+        alert("Erreur : " + data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Erreur lors de la suppression");
+    }
   };
+
 
   const cancelDelete = () => {
-    setSelected(null);
+    setSelectedOrder(null);
     setShowConfirm(false);
   };
 
-  // Placeholder pour integration backend
-  // async function fetchOrders() {
-  //   const res = await fetch('/api/orders');
-  //   const data = await res.json();
-  //   setOrders(data);
-  // }
-  // useEffect(() => { fetchOrders(); }, []);
+  const handleViewDetail = (order: Order) => {
+    setSelectedOrder(order);
+    setShowDetailModal(true);
+  };
 
+  const handleCancel = () => setShowDetailModal(false);
   return (
     <div className="p-4 max-w-6xl mx-auto">
       <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
@@ -95,15 +126,6 @@ export default function MesCommande({ onMenuClick }: MesCommandeProps) {
         </div>
 
         <div className="flex gap-2 w-full sm:w-auto">
-          <label className="relative flex-1">
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Rechercher par titre, id ou statut"
-              className="w-full pl-10 pr-3 py-2 rounded-lg border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2" size={18} />
-          </label>
 
           <button
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 text-white shadow hover:bg-blue-600"
@@ -118,9 +140,6 @@ export default function MesCommande({ onMenuClick }: MesCommandeProps) {
       {filtered.length === 0 ? (
         <div className="border-2 border-dashed border-gray-200 rounded-lg p-8 text-center">
           <p className="text-gray-600 mb-4">Aucune commande trouvée.</p>
-          <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600" onClick={() => setOrders(defaultOrders)}>
-            Restaurer la liste par défaut
-          </button>
         </div>
       ) : (
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -129,21 +148,19 @@ export default function MesCommande({ onMenuClick }: MesCommandeProps) {
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1">
                   <div className="flex items-center justify-between gap-2">
-                    <h2 className="font-semibold text-lg">{order.title}</h2>
-                    <span className={`text-sm px-2 py-1 rounded-full text-white ${order.status === 'Terminé' ? 'bg-green-500' : order.status === 'Annulé' ? 'bg-red-500' : 'bg-yellow-500'}`}>
-                      {order.status}
+                    <h2 className="font-semibold text-lg">Commande {order.id}</h2>
+                    <span className={`text-sm px-2 py-1 rounded-full text-white ${order.statut === 'Terminé' ? 'bg-green-500' : order.statut === 'Annulé' ? 'bg-red-500' : 'bg-yellow-500'}`}>
+                      {order.statut}
                     </span>
                   </div>
-
-                  <p className="text-xs text-gray-500 mt-2">ID: <span className="font-mono">{order.id}</span></p>
-                  <p className="text-sm text-gray-600 mt-2">Date: {order.date}</p>
-                  <p className="text-sm text-gray-800 mt-2 font-medium">Montant: {order.amount.toLocaleString()} Ariary</p>
+                  <p className="text-sm text-gray-600 mt-2">Date: {new Date(order.date_commande).toLocaleDateString()}</p>
+                  <p className="text-sm text-gray-800 mt-2 font-medium">Montant: {order.montant_total.toLocaleString()} Ariary</p>
                 </div>
 
                 <div className="flex flex-col items-center gap-2">
                   <button
                     title="Voir"
-                    onClick={() => alert(`Détail commande ${order.id} (remplacer par un modal ou route)`)}
+                    onClick={() => handleViewDetail(order)}
                     className="p-2 rounded-lg border border-gray-100 hover:bg-gray-50"
                   >
                     <Eye size={18} />
@@ -163,17 +180,46 @@ export default function MesCommande({ onMenuClick }: MesCommandeProps) {
         </section>
       )}
 
-      {/* Simple pagination skeleton (UI only) */}
-      <footer className="mt-6 flex items-center justify-between">
-        <div className="text-sm text-gray-500">Affichage {filtered.length} commande(s)</div>
-        <div className="flex items-center gap-2">
-          <button className="p-2 rounded-lg border" aria-label="prev"><ChevronLeft /></button>
-          <button className="p-2 rounded-lg border" aria-label="next"><ChevronRight /></button>
+      {/* Modal détail complet */}
+      {showDetailModal && selectedOrder && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-xl max-w-md w-full">
+            <h3 className="text-xl font-bold mb-4">📄 Résumé de la commande</h3>
+            <div className="space-y-2 text-sm">
+              {selectedOrder.fichiers.map((f, idx) => (
+                <div key={idx} className="border-b border-gray-200 pb-2 mb-2">
+                  <p><strong>Fichier :</strong> {f.nom_fichier}</p>
+                  <p><strong>DPI :</strong> {f.resolution_dpi}</p>
+                  <p><strong>Profil :</strong> {f.profil_couleur}</p>
+                  <p><strong>Format :</strong> {f.format} {selectedOrder.configuration.format_type === "petit"
+                    ? `- ${selectedOrder.configuration.small_format}`
+                    : `- ${selectedOrder.configuration.largeur}x${selectedOrder.configuration.hauteur} cm`
+                  }</p>
+                  <p><strong>Type format :</strong> {selectedOrder.configuration.format_type}</p>
+                  <p><strong>Papier :</strong> {selectedOrder.configuration.paper_type}</p>
+                  <p><strong>Finition :</strong> {selectedOrder.configuration.finish}</p>
+                  <p><strong>Quantité :</strong> {selectedOrder.configuration.quantity}</p>
+                  {selectedOrder.configuration.duplex && <p><strong>Duplex :</strong> {selectedOrder.configuration.duplex}</p>}
+                  {selectedOrder.configuration.binding && <p><strong>Reliure :</strong> {selectedOrder.configuration.binding}</p>}
+                  {selectedOrder.configuration.cover_paper && <p><strong>Couverture :</strong> {selectedOrder.configuration.cover_paper}</p>}
+                  <p><strong>Téléphone :</strong> {selectedOrder.phone}</p>
+                  <p><strong>Montant :</strong> {selectedOrder.montant_total} Ariary</p>
+                  <p><strong>Options :</strong> {selectedOrder.configuration.options || "-"}</p>
+                </div>
+              ))}
+
+            </div>
+            <div className="flex justify-end gap-4 mt-4">
+              <button onClick={handleCancel} className="px-4 py-2 rounded-lg border flex items-center gap-2 hover:bg-red-600 hover:text-white">
+                <X size={16} /> Annuler
+              </button>
+            </div>
+          </div>
         </div>
-      </footer>
+      )}
 
       {/* Modal de confirmation suppression */}
-      {showConfirm && selected && (
+      {showConfirm && selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
           <div className="bg-white rounded-xl p-6 w-full max-w-md">
             <div className="flex items-start justify-between">
@@ -182,7 +228,7 @@ export default function MesCommande({ onMenuClick }: MesCommandeProps) {
                 <X />
               </button>
             </div>
-            <p className="mt-4 text-sm text-gray-600">Es-tu sûr(e) de vouloir supprimer la commande <span className="font-mono">{selected.id}</span>? Cette fichier est stocké dans le corbeille pendant 30j</p>
+            <p className="mt-4 text-sm text-gray-600">Es-tu sûr(e) de vouloir supprimer la commande <span className="font-mono">{selectedOrder.id}</span> ?</p>
             <div className="mt-6 flex justify-end gap-3">
               <button onClick={cancelDelete} className="px-4 py-2 rounded-lg border">Annuler</button>
               <button onClick={confirmDelete} className="px-4 py-2 rounded-lg bg-blue-500 text-white">Supprimer</button>

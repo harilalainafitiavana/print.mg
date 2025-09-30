@@ -1,5 +1,6 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { X, Check, PlusCircle, ImageIcon, Trash, Edit } from "lucide-react";
+import {authFetch} from "../../Components/Utils"
 
 
 interface Product {
@@ -11,6 +12,7 @@ interface Product {
     prix: string;
     image: string;
     featured: boolean;
+    searchQuery?: string;
 }
 
 export default function ProductList() {
@@ -21,6 +23,7 @@ export default function ProductList() {
     const [productToDelete, setProductToDelete] = useState<Product | null>(null);
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    
 
     // --- Fetch des produits existants ---
     useEffect(() => {
@@ -65,23 +68,6 @@ export default function ProductList() {
         if (!file) return;
         setNewProduct((prev) => ({ ...prev, imageFile: file, image: URL.createObjectURL(file) }));
     };
-
-    // Memoriser le token
-    async function authFetch(url: string, options: RequestInit = {}) {
-        const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-
-        if (!token) {
-            throw new Error("Token manquant, veuillez vous reconnecter.");
-        }
-
-        return fetch(url, {
-            ...options,
-            headers: {
-                ...options.headers,
-                Authorization: `Bearer ${token}`,
-            },
-        });
-    }
 
     // --- Ajouter un produit ---
     const handleSubmit = async (e: FormEvent) => {

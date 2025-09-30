@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import DashboardLayout from "../../Components/DashboardLayout";
-import { Home, Folder, Trash, BarChart3, CheckSquare, Settings } from "lucide-react";
+import { Home, Folder, Trash, BarChart3, CheckSquare, Settings, Search } from "lucide-react";
 import Commande from "./Commande";
 import Setting from "../../Components/Settings";
 import Profils from "../../Components/Profils";
-import Mes_commande from "./Mes_commande";
 import Corbeille from "./Corbeille";
+import MesCommande from "./Mes_commande";
 
 export default function UserDashboard() {
     const [activeMenu, setActiveMenu] = useState("home");
     const [user, setUser] = useState<{ nom: string; prenom: string; profils?: string } | null>(null);
+    const [query, setQuery] = useState("");
 
     // 🔹 Récupération des infos de l'utilisateur connecté
     useEffect(() => {
@@ -43,7 +44,7 @@ export default function UserDashboard() {
     const renderContent = () => {
         switch (activeMenu) {
             case "orders":
-                return <Mes_commande onMenuClick={setActiveMenu} />;
+                return <MesCommande onMenuClick={setActiveMenu} searchQuery={query} />;
             case "order":
                 return <Commande />;
             case "tasks":
@@ -59,7 +60,7 @@ export default function UserDashboard() {
             default:
                 return (
                     <div>
-                        <h2 className="text-xl font-bold mb-4">Bienvenue  {user?.prenom} {user?.nom} ☺️!</h2>
+                        <h2 className="text-4xl font-bold mb-4">Bonjour  <span className="text-blue-500">{user?.prenom} ☺️!</span> Bienvenue</h2>
                         <p>Ceci est ton tableau de bord.</p>
                     </div>
                 );
@@ -72,8 +73,20 @@ export default function UserDashboard() {
             userPhoto={user?.profils ? `http://localhost:8000${user.profils}` : "../../assets/Utilisateur.png"}
             menus={menus}
             onMenuClick={setActiveMenu}
+            headerContent={
+                <label className="relative flex-1">
+                    <input
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        placeholder="Rechercher une commande........."
+                        className="w-full pl-10 pr-3 py-2 rounded-lg border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2" size={18} />
+                </label>
+            }
         >
             {renderContent()}
+
         </DashboardLayout>
     );
 }

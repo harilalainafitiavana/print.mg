@@ -1,6 +1,6 @@
 import { LogOut, Bell, Settings, Printer, Menu, X, CalendarIcon } from "lucide-react";
 import type { JSX } from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect,  useRef } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import user from "../assets/Utilisateur.png";
@@ -12,12 +12,14 @@ interface DashboardLayoutProps {
     userPhoto?: string;
     menus: { label: string; icon: JSX.Element; id: string }[];
     onMenuClick: (id: string) => void;
+    headerContent?: React.ReactNode;
 }
 
-export default function DashboardLayout({ children, userPhoto, menus, onMenuClick }: DashboardLayoutProps) {
+export default function DashboardLayout({ children, userPhoto, menus, headerContent, onMenuClick }: DashboardLayoutProps) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
-
+    const [open, setOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
     // Sur desktop ET mobile : sidebar droite cachée par défaut
     const [isRightSidebarVisible, setIsRightSidebarVisible] = useState(false);
 
@@ -41,6 +43,20 @@ export default function DashboardLayout({ children, userPhoto, menus, onMenuClic
         return () => window.removeEventListener('resize', handleResize);
     }, [isSidebarOpen]);
 
+    // 👇 Fermer le menu quand on clique en dehors
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setOpen(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -55,7 +71,7 @@ export default function DashboardLayout({ children, userPhoto, menus, onMenuClic
     const handleLogout = () => {
         const confirmLogout = window.confirm("Voulez-vous vraiment vous déconnecter ?");
         if (!confirmLogout) return; // annuler si l'utilisateur clique sur "Annuler
-        
+
         // Supprimer le token et le rôle
         localStorage.removeItem("token");
         localStorage.removeItem("role");
@@ -65,6 +81,7 @@ export default function DashboardLayout({ children, userPhoto, menus, onMenuClic
         // Rediriger vers login
         navigate("/login");
     };
+
     return (
         <div className="flex h-screen bg-gray-50">
             {/* Overlay pour mobile */}
@@ -122,11 +139,7 @@ export default function DashboardLayout({ children, userPhoto, menus, onMenuClic
                         </button>
 
                         {/* Barre de recherche */}
-                        <input
-                            type="text"
-                            placeholder="Rechercher..."
-                            className="w-32 sm:w-48 md:w-64 lg:w-96 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
+                        {headerContent && <div>{headerContent}</div>}
                     </div>
 
                     {/* Zone utilisateur */}
@@ -163,16 +176,11 @@ export default function DashboardLayout({ children, userPhoto, menus, onMenuClic
                         >
                             <Settings size={22} />
                         </button>
-                        <button
-                            onClick={() =>
-                                onMenuClick("profil")
-                            }
-                            className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 transition-all"
-                        >
-
+                        <div ref={dropdownRef} className="relative inline-block text-left">
+                            {/* Avatar bouton */}
                             <button
-                                onClick={() => onMenuClick("profil")}
-                                className="w-10 h-15 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 transition-all"
+                                onClick={() => setOpen(!open)}
+                                className="w-11 h-11 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 transition-all"
                             >
                                 <img
                                     src={userPhoto && userPhoto.trim() !== "" ? userPhoto : user}
@@ -181,7 +189,34 @@ export default function DashboardLayout({ children, userPhoto, menus, onMenuClic
                                     className="w-full h-full object-cover"
                                 />
                             </button>
-                        </button>
+
+                            {/* Menu déroulant */}
+                            {open && (
+                                <div className="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border z-50">
+                                    <ul className="py-1 text-gray-700">
+                                        <li>
+                                            <button
+                                                onClick={() => {
+                                                    onMenuClick("profil");
+                                                    setOpen(false);
+                                                }}
+                                                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                                            >
+                                                Profil
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button
+                                                onClick={handleLogout}
+                                                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                                            >
+                                                Déconnexion
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </header>
 

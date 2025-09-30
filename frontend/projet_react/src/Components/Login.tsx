@@ -9,7 +9,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(""); 
+  const [error, setError] = useState("");
   // État qui sert à indiquer si le formulaire est en cours de traitement (utile pour un bouton "Loading…").
   const [loading, setLoading] = useState(false);
 
@@ -18,56 +18,45 @@ const LoginPage = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(""); // reset de l'erreur à chaque soumission
+    setError("");
 
     try {
-      // 🔹 1️⃣ Récupérer le token
+      // 1️⃣ Récupérer le token
       const res = await fetch('http://localhost:8000/api/token/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
-     
+
       if (!res.ok) {
-        // On récupère le message exact envoyé par le serializer
-        if (data.detail) setError(data.detail); // pour erreurs globales
+        if (data.detail) setError(data.detail);
         else if (data.email) setError(data.email);
         else if (data.password) setError(data.password);
         else setError("Email ou mot de passe incorrect 😓");
         return;
       }
 
-      // 🔹 2️⃣ Stocker le token
-      const rememberMe = (document.getElementById('remember-me') as HTMLInputElement)?.checked;
-      if (rememberMe) localStorage.setItem('token', data.access);
-      else sessionStorage.setItem('token', data.access);
-
-      // 🔹 3️⃣ Récupérer les infos de l'utilisateur pour savoir son rôle
+      // 2️⃣ Récupérer les infos utilisateur
       const userRes = await fetch('http://localhost:8000/api/me/', {
-        headers: { Authorization: `Bearer ${data.access}` }
+        headers: { Authorization: `Bearer ${data.access}` },
       });
       const userData = await userRes.json();
 
-      // 🔹 4️⃣ Stocker le rôle pour protéger les routes
-      localStorage.setItem('role', userData.role);
-
-
-      if (res.ok) {
-        const rememberMe = (document.getElementById('remember-me') as HTMLInputElement).checked;
-        if (rememberMe) {
-          localStorage.setItem('token', data.access);
-          localStorage.setItem('role', userData.role); // ajouter rôle
-        } else {
-          sessionStorage.setItem('token', data.access);
-          sessionStorage.setItem('role', userData.role); // ajouter rôle
-        }
-
-        if (userData.role === 'ADMIN') navigate('/dashboard-admin');
-        else navigate('/dashboard-user');
+      // 3️⃣ Stocker token + rôle
+      const rememberMe = (document.getElementById('remember-me') as HTMLInputElement)?.checked;
+      if (rememberMe) {
+        localStorage.setItem('token', data.access);
+        localStorage.setItem('role', userData.role);
+      } else {
+        sessionStorage.setItem('token', data.access);
+        sessionStorage.setItem('role', userData.role);
       }
 
+      // 4️⃣ Rediriger selon rôle
+      if (userData.role === 'ADMIN') navigate('/dashboard-admin');
+      else navigate('/dashboard-user');
 
     } catch (err) {
       console.error(err);
@@ -76,7 +65,6 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
-
 
 
   return (

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Eye } from "lucide-react";
+import { authFetch } from "../../Components/Utils";
 
 interface User {
     id: number;
@@ -19,21 +20,26 @@ const AdminUsersDashboard = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const usersPerPage = 10;
 
+
     // 🔹 Charger les utilisateurs depuis l'API Django
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await fetch("http://127.0.0.1:8000/api/users/");
+                const response = await authFetch("http://127.0.0.1:8000/api/users/");
+
                 if (response.ok) {
                     const data = await response.json();
                     setUsers(data);
+                } else {
+                    console.error("Erreur lors du chargement des utilisateurs :", response.statusText);
                 }
             } catch (error) {
-                console.error("Erreur lors du chargement des utilisateurs:", error);
+                console.error("Erreur lors du chargement des utilisateurs :", error);
             }
         };
         fetchUsers();
     }, []);
+
 
     const openModal = (user: User) => {
         setSelectedUser(user);

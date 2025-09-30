@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { ShoppingCart, Menu, Globe, UserPlus, UserCheck, ShoppingBasket, Search, Printer, Grid } from "lucide-react";
-import axios from "axios";
+// import axios from "axios";
 import Image from "../assets/album photo.jpg"
 import Photo from "../assets/album photo.jpg"
 import { Link } from "react-router-dom";
@@ -10,11 +10,11 @@ export default function Navbar() {
     const [search, setSearch] = useState("");
 
     useEffect(() => {
-        axios.get("http://localhost:8000/api/cart/count/")
-            .then(res => setCartCount(res.data.count))
+        fetch("http://localhost:8000/api/admin/commandes/count/")
+            .then(res => res.json())
+            .then(data => setCartCount(data.count))
             .catch(err => console.error(err));
     }, []);
-
     const [language, setLanguage] = useState("fr");
 
     const changeLanguage = (lang: string) => {
@@ -329,8 +329,8 @@ export default function Navbar() {
 
                         {/* Icône panier */}
                         <div className="flex items-center gap-1">
-                            <ShoppingCart size={22} className="text-blue-500" />
-                            <span className="font-bold">{cartCount}</span>
+                            <ShoppingCart size={30} className="text-blue-500" />
+                            <span className="font-bold border-2 bg-blue-200 text-lg border-blue-500 px-2 py-0 rounded-full">{cartCount}</span>
                         </div>
 
                         {/* Menu mobile */}

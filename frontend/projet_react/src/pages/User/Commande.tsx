@@ -1,7 +1,7 @@
 import { useState, useEffect, type ChangeEvent } from "react";
 import { ArrowRight, ArrowLeft, Check, X } from "lucide-react";
 // import axios from "axios";
-import { authFetch } from "./Utils";
+import { authFetch } from "../../Components/Utils";
 
 
 type Step = 1 | 2 | 3 | 4;
@@ -129,24 +129,30 @@ export default function PrintingOrderForm() {
 
     try {
       const formData = new FormData();
+
+      // 🔹 Fichier
       formData.append("file", file);
       formData.append("fileName", fileName);
       formData.append("dpi", dpi.toString());
       formData.append("file_format", file.name.split('.').pop() || "");
       formData.append("colorProfile", colorProfile);
+
+      // 🔹 Configuration
       formData.append("format_type", formatType);
-      formData.append("smallFormat", smallFormat);
-      formData.append("largeur", customSize.width);
-      formData.append("hauteur", customSize.height);
-      formData.append("paperType", paperType);
-      formData.append("finish", finish);
+      if (smallFormat) formData.append("small_format", smallFormat);
+      if (customSize.width) formData.append("largeur", customSize.width);
+      if (customSize.height) formData.append("hauteur", customSize.height);
+      if (paperType) formData.append("paper_type", paperType);
+      if (finish) formData.append("finish", finish);
       formData.append("quantity", quantity.toString());
-      formData.append("duplex", duplex);
-      formData.append("binding", binding);
-      formData.append("coverPaper", coverPaper);
+      if (duplex) formData.append("duplex", duplex);
+      if (binding) formData.append("binding", binding);
+      if (coverPaper) formData.append("cover_paper", coverPaper);
+
+      // 🔹 Paiement
       formData.append("phone", phone);
       formData.append("amount", amount.toString());
-      formData.append("options", options);
+      if (options) formData.append("options", options);
 
       console.log("Données envoyées :", {
         file,
@@ -167,13 +173,12 @@ export default function PrintingOrderForm() {
         options,
       });
 
-      // ✅ Utilisation de authFetch pour gérer le token automatiquement
       const res = await authFetch("http://localhost:8000/api/commande/", {
         method: "POST",
         body: formData,
       });
 
-      const data = await res.json(); // 🔹 important pour fetch
+      const data = await res.json();
 
       if (data.success) {
         alert(`✅ Commande créée ! Paiement status : ${data.paiement_status}`);
@@ -189,6 +194,7 @@ export default function PrintingOrderForm() {
         setBinding("");
         setCoverPaper("");
         setOptions("");
+        setCustomSize({ width: "", height: "" });
         setShowModal(false);
       } else {
         alert(`❌ Erreur : ${data.error}`);
@@ -200,15 +206,16 @@ export default function PrintingOrderForm() {
   };
 
 
+
   const handleCancel = () => {
     setShowModal(false);
   };
 
   // Options de papier selon format
   const paperOptions =
-    smallFormat === "A4" ? ["Papier glacé", "Papier mat"] :
-      smallFormat === "A3" ? ["Papier standard", "Papier brillant"] :
-        ["Papier standard"];
+    smallFormat === "A4" ? ["glace", "mat"] :
+      smallFormat === "A3" ? ["standard", "brillant"] :
+        ["standard"];
 
   // Calcul automatique du montant
   useEffect(() => {
@@ -294,15 +301,29 @@ export default function PrintingOrderForm() {
             </select>
           )}
 
-          {formatType === "grand" && (
-            <div>
-              <p className="text-yellow-600">⚠️ Limite imprimante : 160x100 cm</p>
+          {/* Champs largeur/hauteur */}
+          {(formatType === "grand" || (formatType === "petit" && smallFormat === "custom")) && (
+            <div className="flex flex-col gap-2">
+              {formatType === "grand" && <p className="text-yellow-600">⚠️ Limite imprimante : 160x100 cm</p>}
               <div className="flex gap-2">
-                <input type="text" placeholder="Largeur (cm)" value={customSize.width} onChange={(e) => setCustomSize({ ...customSize, width: e.target.value })} className="input input-bordered" />
-                <input type="text" placeholder="Hauteur (cm)" value={customSize.height} onChange={(e) => setCustomSize({ ...customSize, height: e.target.value })} className="input input-bordered" />
+                <input
+                  type="text"
+                  placeholder="Largeur (cm)"
+                  value={customSize.width}
+                  onChange={(e) => setCustomSize({ ...customSize, width: e.target.value })}
+                  className="input input-bordered"
+                />
+                <input
+                  type="text"
+                  placeholder="Hauteur (cm)"
+                  value={customSize.height}
+                  onChange={(e) => setCustomSize({ ...customSize, height: e.target.value })}
+                  className="input input-bordered"
+                />
               </div>
             </div>
           )}
+
 
           <select value={paperType} onChange={(e) => setPaperType(e.target.value)} className="select select-bordered w-full">
             <option value="">Sélectionnez le type de papier</option>
@@ -320,7 +341,8 @@ export default function PrintingOrderForm() {
 
           {/* Options facultatives */}
           <select value={duplex} onChange={(e) => setDuplex(e.target.value)} className="select select-bordered w-full">
-            <option value="">Recto seul</option>
+            <option value="">Version Recto seul ou Recto/verso ?</option>
+            <option value="recto">Recto seul</option>
             <option value="recto_verso">Recto/verso</option>
           </select>
 
