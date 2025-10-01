@@ -38,7 +38,6 @@ export default function AdminDashboard() {
         { id: "orders", label: "Commandes", icon: <ShoppingCart size={20} /> },
         { id: "products", label: "Produits", icon: <Package size={20} /> },
         { id: "users", label: "Utilisateurs", icon: <Users size={20} /> },
-        { id: "payments", label: "Paiements", icon: <CreditCard size={20} /> },
         { id: "trash", label: "Corbeille", icon: <Trash size={20} /> },
         { id: "settings", label: "Paramètres", icon: <Settings size={20} /> },
 
@@ -58,9 +57,6 @@ export default function AdminDashboard() {
 
             case "users":
                 return <UserList />
-
-            case "payments":
-                return <div>💳 Suivi des paiements + factures...</div>;
 
             case "settings":
                 return <Setting />

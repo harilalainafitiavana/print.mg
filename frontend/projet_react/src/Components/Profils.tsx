@@ -8,6 +8,9 @@ export default function Profils() {
         prenom: "",
         email: "",
         phone: "",
+        code_postal: "",
+        ville: "",
+        pays: "",
         photo: null as File | null,
     });
     const [userProfilUrl, setUserProfilUrl] = useState<string | null>(null);
@@ -36,6 +39,9 @@ export default function Profils() {
                         prenom: data.prenom || "",
                         email: data.email || "",
                         phone: data.num_tel || "",
+                        code_postal: data.code_postal || "",
+                        ville: data.ville || "",
+                        pays: data.pays || "",
                         photo: null,
                     });
 
@@ -64,6 +70,9 @@ export default function Profils() {
         data.append("prenom", formData.prenom);
         data.append("num_tel", formData.phone);
         data.append("email", formData.email);
+        data.append("code_postal", formData.code_postal);
+        data.append("ville", formData.ville);
+        data.append("pays", formData.pays);
         if (formData.photo) data.append("profils", formData.photo);
 
         try {
@@ -129,12 +138,43 @@ export default function Profils() {
                 <form className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6" onSubmit={handleSubmit}>
                     {/* Partie gauche : inputs et bouton */}
                     <div className="flex-1 space-y-4">
+                        <div className="flex justify-between gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1 mt-4">Code Postal</label>
+                                <input
+                                    type="text"
+                                    value={formData.code_postal}
+                                    onChange={(e) => setFormData({ ...formData, code_postal: e.target.value })}
+                                    placeholder="Votre code postal"
+                                    className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1 mt-4">Ville</label>
+                                <input
+                                    type="text"
+                                    value={formData.ville}
+                                    onChange={(e) => setFormData({ ...formData, ville: e.target.value })}
+                                    placeholder="Votre ville"
+                                    className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Pays</label>
+                            <input
+                                type="text"
+                                value={formData.pays}
+                                onChange={(e) => setFormData({ ...formData, pays: e.target.value })}
+                                placeholder="Votre pays"
+                                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Photo de profil</label>
                             <input
                                 type="file"
                                 accept="image/*"
-                                required
                                 onChange={(e) =>
                                     setFormData({ ...formData, photo: e.target.files ? e.target.files[0] : null })
                                 }
@@ -151,7 +191,7 @@ export default function Profils() {
                     </div>
 
                     {/* Partie droite : aperçu de l'image */}
-                    <div className="flex-shrink-0 items-center justify-center">
+                    <div className="flex-1 flex items-center justify-center">
                         {formData.photo ? (
                             <img
                                 src={URL.createObjectURL(formData.photo)}

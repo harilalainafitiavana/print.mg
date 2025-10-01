@@ -8,6 +8,9 @@ type Step = 1 | 2 | 3 | 4;
 
 export default function PrintingOrderForm() {
   const [step, setStep] = useState<Step>(1);
+  const [isBook, setIsBook] = useState(false);
+  const [bookPages, setBookPages] = useState<number | "">("");
+
 
   // Étape 1 - Fichier
   const [file, setFile] = useState<File | null>(null);
@@ -69,32 +72,45 @@ export default function PrintingOrderForm() {
       return false;
     }
 
-    // Quantité minimale selon format
-    if (formatType === "petit") {
-      const minQty = smallFormat === "A5" ? 30 : smallFormat === "A4" ? 20 : smallFormat === "A3" ? 10 : 50;
-      if (quantity < minQty) {
-        setFormatError(`Quantité minimale pour ${smallFormat} : ${minQty}`);
+    // 🔹 Si c'est un livre, quantité minimale spéciale
+    if (isBook) {
+      const minBookQty = 4;
+      if (quantity < minBookQty) {
+        setFormatError(`Pour un livre, la quantité doit être au moins ${minBookQty}`);
         return false;
       }
-    }
+    } else {
+      // 🔹 Quantité minimale selon format
+      if (formatType === "petit") {
+        const minQty =
+          smallFormat === "A5" ? 30 :
+            smallFormat === "A4" ? 20 :
+              smallFormat === "A3" ? 10 : 50;
 
-    // Grand format
-    if (formatType === "grand") {
-      const w = parseFloat(customSize.width || "0");
-      const h = parseFloat(customSize.height || "0");
-      if (!w || !h) {
-        setFormatError("Veuillez saisir largeur et hauteur pour le grand format");
-        return false;
+        if (quantity < minQty) {
+          setFormatError(`Quantité minimale pour ${smallFormat} : ${minQty}`);
+          return false;
+        }
       }
-      if (w > 160 || h > 100) {
-        setFormatError("La limite du grand format est 160x100 cm");
-        return false;
+
+      if (formatType === "grand") {
+        const w = parseFloat(customSize.width || "0");
+        const h = parseFloat(customSize.height || "0");
+        if (!w || !h) {
+          setFormatError("Veuillez saisir largeur et hauteur pour le grand format");
+          return false;
+        }
+        if (w > 160 || h > 100) {
+          setFormatError("La limite du grand format est 160x100 cm");
+          return false;
+        }
       }
     }
 
     setFormatError("");
     return true;
   };
+
 
   // Validation Étape 3
   const validateStep3 = () => {
@@ -148,6 +164,8 @@ export default function PrintingOrderForm() {
       if (duplex) formData.append("duplex", duplex);
       if (binding) formData.append("binding", binding);
       if (coverPaper) formData.append("cover_paper", coverPaper);
+      formData.append("is_book", isBook ? "true" : "false");
+      if (isBook && bookPages) formData.append("book_pages", bookPages.toString());
 
       // 🔹 Paiement
       formData.append("phone", phone);
@@ -206,7 +224,6 @@ export default function PrintingOrderForm() {
   };
 
 
-
   const handleCancel = () => {
     setShowModal(false);
   };
@@ -219,41 +236,58 @@ export default function PrintingOrderForm() {
 
   // Calcul automatique du montant
   useEffect(() => {
-    let basePrice = 0;
     if (!quantity) return;
 
-    // Prix selon format
+    let basePrice = 0;
+
+    // ---- Format ----
     if (formatType === "petit") {
       switch (smallFormat) {
-        case "A5": basePrice = 1000; break;
-        case "A4": basePrice = 1500; break;
-        case "A3": basePrice = 2000; break;
-        case "custom": basePrice = 2500; break;
+        case "A6": basePrice = 200; break;
+        case "A5": basePrice = 300; break;
+        case "A4": basePrice = 500; break;
+        case "A3": basePrice = 1000; break;
+        case "custom": {
+          const w = parseFloat(customSize.width || "0");
+          const h = parseFloat(customSize.height || "0");
+          const surface = (w * h) / 10000;
+          basePrice = Math.max(surface * 5000, 200);
+          break;
+        }
       }
-    } else {
+    } else if (formatType === "grand") {
       const w = parseFloat(customSize.width || "0");
       const h = parseFloat(customSize.height || "0");
       const surface = (w * h) / 10000;
-      basePrice = Math.max(surface * 50000, 50000); // prix minimum 50000
+      basePrice = Math.max(surface * 5000, 5000);
     }
 
-    // Duplex
+    // ---- Calcul pour livre ----
+    let pagesTotal = basePrice;
+    let optionsTotal = 0;
     const duplexMultiplier = duplex === "recto_verso" ? 1.2 : 1;
 
-    // Reliure
     let bindingPrice = 0;
     if (binding === "spirale") bindingPrice = 2000;
     if (binding === "dos_colle") bindingPrice = 3000;
     if (binding === "agrafé") bindingPrice = 1000;
 
-    // Couverture
     let coverPrice = 0;
-    if (coverPaper === "photo") coverPrice = 5000;
+    if (coverPaper === "photo") coverPrice = 3000;
     if (coverPaper === "simple") coverPrice = 1000;
 
-    setAmount(Math.round((basePrice * quantity * duplexMultiplier) + bindingPrice + coverPrice));
+    const deliveryFee = 5000;
 
-  }, [formatType, smallFormat, customSize, duplex, quantity, binding, coverPaper]);
+    if (isBook && bookPages) {
+      pagesTotal = basePrice * bookPages; // prix pour 1 livre
+      optionsTotal = (bindingPrice + coverPrice) * quantity; // options multiplié par le nombre de livres
+      setAmount(Math.round((pagesTotal * quantity + optionsTotal) * duplexMultiplier + deliveryFee));
+    } else {
+      setAmount(Math.round((basePrice * quantity * duplexMultiplier) + bindingPrice + coverPrice + deliveryFee));
+    }
+
+  }, [formatType, smallFormat, customSize, duplex, quantity, binding, coverPaper, isBook, bookPages]);
+
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md">
@@ -324,6 +358,26 @@ export default function PrintingOrderForm() {
             </div>
           )}
 
+          <div className="flex items-center gap-2 mb-2">
+            <input
+              type="checkbox"
+              checked={isBook}
+              onChange={(e) => setIsBook(e.target.checked)}
+              id="isBook"
+              className="checkbox"
+            />
+            <label htmlFor="isBook">Je veux imprimer un livre</label>
+          </div>
+
+          {isBook && (
+            <input
+              type="number"
+              placeholder="Nombre de pages"
+              value={bookPages}
+              onChange={(e) => setBookPages(parseInt(e.target.value))}
+              className="input input-bordered w-full mb-2"
+            />
+          )}
 
           <select value={paperType} onChange={(e) => setPaperType(e.target.value)} className="select select-bordered w-full">
             <option value="">Sélectionnez le type de papier</option>

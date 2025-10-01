@@ -149,9 +149,9 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
                 <div className="flex-1">
                   <div className="flex items-center justify-between gap-2">
                     <h2 className="font-semibold text-lg">Commande {order.id}</h2>
-                    <span className={`text-sm px-2 py-1 rounded-full text-white ${order.statut === 'Terminé' ? 'bg-green-500' : order.statut === 'Annulé' ? 'bg-red-500' : 'bg-yellow-500'}`}>
+                    {/* <span className={`text-sm px-2 py-1 rounded-full text-white ${order.statut === 'Terminé' ? 'bg-green-500' : order.statut === 'Annulé' ? 'bg-red-500' : 'bg-yellow-500'}`}>
                       {order.statut}
-                    </span>
+                    </span> */}
                   </div>
                   <p className="text-sm text-gray-600 mt-2">Date: {new Date(order.date_commande).toLocaleDateString()}</p>
                   <p className="text-sm text-gray-800 mt-2 font-medium">Montant: {order.montant_total.toLocaleString()} Ariary</p>
@@ -199,6 +199,7 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
                   <p><strong>Papier :</strong> {selectedOrder.configuration.paper_type}</p>
                   <p><strong>Finition :</strong> {selectedOrder.configuration.finish}</p>
                   <p><strong>Quantité :</strong> {selectedOrder.configuration.quantity}</p>
+                  <p><strong>Nombre de page :</strong> {selectedOrder.configuration.book_pages || "Il n'y à pas"} </p>
                   {selectedOrder.configuration.duplex && <p><strong>Duplex :</strong> {selectedOrder.configuration.duplex}</p>}
                   {selectedOrder.configuration.binding && <p><strong>Reliure :</strong> {selectedOrder.configuration.binding}</p>}
                   {selectedOrder.configuration.cover_paper && <p><strong>Couverture :</strong> {selectedOrder.configuration.cover_paper}</p>}

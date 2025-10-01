@@ -8,6 +8,9 @@ interface User {
     prenom: string;
     email: string;
     num_tel?: string;
+    code_postal: string;
+    ville: string;
+    pays: string;
     role?: string;
     profils?: string;
     date_inscription: string;
@@ -184,6 +187,9 @@ const AdminUsersDashboard = () => {
                                 <p><strong>Prénom:</strong> {selectedUser.prenom}</p>
                                 <p><strong>Email:</strong> {selectedUser.email}</p>
                                 <p><strong>Téléphone:</strong> {selectedUser.num_tel || "N/A"}</p>
+                                <p><strong>Code Postale:</strong> {selectedUser.code_postal} </p>
+                                <p><strong>Ville:</strong> {selectedUser.ville} </p>
+                                <p><strong>Pays:</strong> {selectedUser.pays} </p>
                                 <p><strong>Rôle:</strong> {selectedUser.role || "USER"}</p>
                                 <p><strong>Date d'inscription:</strong> {new Date(selectedUser.date_inscription).toLocaleString()}</p>
                             </div>

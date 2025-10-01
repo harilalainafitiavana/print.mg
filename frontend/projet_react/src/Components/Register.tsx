@@ -12,6 +12,9 @@ const RegisterPage = () => {
         photo: "",
         email: "",
         phone: "",
+        codePostal: "",
+        ville: "Antananarivo",
+        pays: "Madagascar",
         password: "",
         confirmPassword: "",
     });
@@ -46,6 +49,13 @@ const RegisterPage = () => {
             const phoneRegex = /^\d{10}$/; // exactement 10 chiffres
             if (!formData.phone || !phoneRegex.test(formData.phone)) {
                 setNotification("Veuillez entrer un numéro de téléphone valide à 10 chiffres.");
+                return;
+            }
+        }
+
+        if (step === 3) {
+            if (!formData.codePostal) {
+                setNotification("Veuillez remplir le code postal.!");
                 return;
             }
         }
@@ -90,6 +100,9 @@ const RegisterPage = () => {
             formDataToSend.append("prenom", formData.prenom);
             formDataToSend.append("email", formData.email);
             formDataToSend.append("num_tel", formData.phone);
+            formDataToSend.append("code_postal", formData.codePostal);
+            formDataToSend.append("ville", formData.ville);
+            formDataToSend.append("pays", formData.pays);
             formDataToSend.append("password", formData.password);
             formDataToSend.append("confirm_password", formData.confirmPassword);
 
@@ -119,8 +132,6 @@ const RegisterPage = () => {
             setNotification("⚠️ Erreur de connexion au serveur.");
         }
     };
-
-
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -212,7 +223,6 @@ const RegisterPage = () => {
                             </>
                         )}
 
-
                         {step === 2 && (
                             <>
                                 <div>
@@ -271,6 +281,66 @@ const RegisterPage = () => {
                         )}
 
                         {step === 3 && (
+                            <>
+                                <div className="flex justify-between">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Code postal</label>
+                                        <input
+                                            type="text"
+                                            name="codePostal"
+                                            value={formData.codePostal}
+                                            onChange={handleChange}
+                                            placeholder="Ex: 101"
+                                            required
+                                            className="block w-full px-3 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Ville</label>
+                                        <input
+                                            type="text"
+                                            name="ville"
+                                            value={formData.ville}
+                                            // onChange={handleChange}
+                                            readOnly
+                                            className="block w-full px-3 py-3 border border-gray-200 rounded-lg bg-gray-100 text-gray-800 cursor-not-allowed"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Pays</label>
+                                    <input
+                                        type="text"
+                                        name="pays"
+                                        value={formData.pays}
+                                        readOnly
+                                        className="block w-full px-3 py-3 border border-gray-200 rounded-lg bg-gray-100 text-gray-800 cursor-not-allowed"
+                                    />
+                                </div>
+
+                                <div className="flex justify-between">
+                                    <button
+                                        type="button"
+                                        onClick={prevStep}
+                                        className="px-4 py-2 rounded-lg border text-gray-600 hover:bg-gray-100"
+                                    >
+                                        Précédent
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={nextStep}
+                                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                                    >
+                                        Suivant
+                                    </button>
+                                </div>
+                            </>
+                        )}
+
+
+                        {step === 4 && (
                             <>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>

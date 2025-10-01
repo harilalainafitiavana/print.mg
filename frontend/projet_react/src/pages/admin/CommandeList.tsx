@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Eye, Bell, Trash, Download, X, Check } from "lucide-react";
+import { Eye, Bell, Trash, Download, X, Check, Printer } from "lucide-react";
 import { authFetch } from "../../Components/Utils";
 
 export default function AdminCommande() {
@@ -9,6 +9,9 @@ export default function AdminCommande() {
   const [showNotifyModal, setShowNotifyModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState("");
+  const [showFinishModal, setShowFinishModal] = useState(false);
+  const [showClickModal, setShowClickModal] = useState(false);
+
 
   useEffect(() => {
     async function loadOrders() {
@@ -38,6 +41,11 @@ export default function AdminCommande() {
     setShowDeleteModal(true);
   };
 
+  const handlePrintClick = (order: any) => {
+    setSelectedOrder(order);
+    setShowClickModal(true);
+  }
+
   const confirmDelete = async () => {
     if (!selectedOrder) return;
     try {
@@ -59,6 +67,49 @@ export default function AdminCommande() {
     setShowDeleteModal(false);
   };
 
+  const handleFinishClick = (order: any) => {
+    setSelectedOrder(order);
+    setShowFinishModal(true);
+  };
+
+
+  const handleFinish = async (order: any) => {
+    try {
+      const res = await authFetch(`http://localhost:8000/api/commandes/${order.id}/terminer/`, {
+        method: "POST",
+      });
+
+      if (res.ok) {
+        alert(`✅ Email envoyé à ${order.user_email} : impression terminée !`);
+        setShowFinishModal(false); // 🔹 Ferme le modal
+        setSelectedOrder(null);    // 🔹 Réinitialise l'ordre sélectionné
+      } else {
+        alert("❌ Erreur lors de l'envoi de la notification");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Erreur réseau");
+    }
+  };
+
+  const handleEncours = async (order: any) => {
+    try {
+      const res = await authFetch(`http://localhost:8000/api/commandes/${order.id}/encours/`, {
+        method: "POST",
+      });
+
+      if (res.ok) {
+        alert(`✅ Email envoyé à ${order.user_email} : impression en cours !`);
+        setShowClickModal(false); // 🔹 Ferme le modal
+        setSelectedOrder(null);    // 🔹 Réinitialise l'ordre sélectionné
+      } else {
+        alert("❌ Erreur lors de l'envoi de la notification");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Erreur réseau");
+    }
+  };
 
 
   const sendNotification = async () => {
@@ -81,6 +132,21 @@ export default function AdminCommande() {
     setShowNotifyModal(false);
   };
 
+  // --- Pagination ---
+  const [currentPage, setCurrentPage] = useState(1);
+  const ordersPerPage = 7; // nombre d’éléments par page
+
+  // Calcul des indices
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
+
+  // Nombre total de pages
+  const totalPages = Math.ceil(orders.length / ordersPerPage);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">📋 Liste des commandes</h1>
@@ -96,13 +162,26 @@ export default function AdminCommande() {
           </tr>
         </thead>
         <tbody>
-          {orders.map(order => (
+          {currentOrders.map(order => (
             <tr key={order.id} className="border-b hover:bg-gray-50">
               <td className="px-4 py-2">{order.id}</td>
               <td className="px-4 py-2">{order.user_name}</td>
               <td className="px-4 py-2">{order.user_email}</td>
               <td className="px-4 py-2">{order.user_phone}</td>
               <td className="px-4 py-2 flex gap-2 justify-center">
+                <button
+                  onClick={() => handlePrintClick(order)}
+                  className="bg-yellow-600 hover:bg-yellow-400 text-white p-2 rounded flex items-center gap-1"
+                >
+                  <Printer size={16} />
+                </button>
+                <button
+                  onClick={() => handleFinishClick(order)}
+                  className="bg-purple-500 text-white p-2 rounded"
+                >
+                  <Check size={16} />
+                </button>
+
                 <a
                   href={`http://127.0.0.1:8000/download/${order.fichiers[0]?.id}/`}
                   download
@@ -127,6 +206,19 @@ export default function AdminCommande() {
           ))}
         </tbody>
       </table>
+
+      <div className="flex justify-center gap-2 mt-4">
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          <button
+            key={page}
+            onClick={() => handlePageChange(page)}
+            className={`px-3 py-1 rounded ${page === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+          >
+            {page}
+          </button>
+        ))}
+      </div>
+
 
       {/* Modal détail complet Admin */}
       {showDetailModal && selectedOrder && (
@@ -175,6 +267,7 @@ export default function AdminCommande() {
             <p><strong>Papier :</strong> {selectedOrder.configuration.paper_type || "-"}</p>
             <p><strong>Finition :</strong> {selectedOrder.configuration.finish || "-"}</p>
             <p><strong>Quantité :</strong> {selectedOrder.configuration.quantity}</p>
+            <p><strong>Nombre de pages :</strong> {selectedOrder.configuration.book_pages || "-"} </p>
             {selectedOrder.configuration.duplex && <p><strong>Duplex :</strong> {selectedOrder.configuration.duplex}</p>}
             {selectedOrder.configuration.binding && <p><strong>Reliure :</strong> {selectedOrder.configuration.binding}</p>}
             {selectedOrder.configuration.cover_paper && <p><strong>Couverture :</strong> {selectedOrder.configuration.cover_paper}</p>}
@@ -213,6 +306,54 @@ export default function AdminCommande() {
             <div className="flex justify-end gap-4 mt-4">
               <button onClick={() => setShowDeleteModal(false)} className="btn btn-outline flex items-center gap-2"><X size={16} /> Annuler</button>
               <button onClick={confirmDelete} className="btn btn-primary flex items-center gap-2"><Check size={16} /> Confirmer</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal confirmation Terminer */}
+      {showFinishModal && selectedOrder && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-xl max-w-md w-full">
+            <h2 className="text-xl font-bold mb-4">⚡ Confirmer l’action</h2>
+            <p>Êtes-vous sûr de vouloir marquer la commande <strong>#{selectedOrder.id}</strong> comme <span className="text-purple-600 font-semibold">terminée</span> ?</p>
+            <div className="flex justify-end gap-4 mt-4">
+              <button
+                onClick={() => setShowFinishModal(false)}
+                className="btn btn-outline flex items-center gap-2"
+              >
+                <X size={16} /> Annuler
+              </button>
+              <button
+                onClick={() => handleFinish(selectedOrder)}
+                className="btn btn-primary bg-purple-600 text-white flex items-center gap-2"
+              >
+                <Check size={16} /> Envoyer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal confirmation En cours */}
+      {showClickModal && selectedOrder && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-xl max-w-md w-full">
+            <h2 className="text-xl font-bold mb-4">⚡ Confirmer l’action</h2>
+            <p>Êtes-vous sûr de vouloir marquer la commande <strong>#{selectedOrder.id}</strong> comme <span className="text-purple-600 font-semibold">En cours!</span> ?</p>
+            <div className="flex justify-end gap-4 mt-4">
+              <button
+                onClick={() => setShowClickModal(false)}
+                className="btn btn-outline flex items-center gap-2"
+              >
+                <X size={16} /> Annuler
+              </button>
+              <button
+                onClick={() => handleEncours(selectedOrder)}
+                className="btn btn-primary bg-purple-600 text-white flex items-center gap-2"
+              >
+                <Check size={16} /> Envoyer
+              </button>
             </div>
           </div>
         </div>
