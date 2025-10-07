@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^1.11.0",
     "daisyui": "^5.0.50",
+    "framer-motion": "^12.23.22",
     "i18next": "^25.3.6",
     "lucide-react": "^0.539.0",
     "react": "^19.1.1",

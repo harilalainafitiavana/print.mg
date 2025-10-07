@@ -55,8 +55,6 @@ export default function AdminCommande() {
       if (res.ok) {
         // ✅ Filtrer la commande supprimée pour la retirer de la liste principale
         setOrders(prev => prev.filter(o => o.id !== selectedOrder.id));
-
-        alert("Commande déplacée dans la corbeille ✅");
       } else {
         alert("Impossible de supprimer la commande");
       }
@@ -80,7 +78,6 @@ export default function AdminCommande() {
       });
 
       if (res.ok) {
-        alert(`✅ Email envoyé à ${order.user_email} : impression terminée !`);
         setShowFinishModal(false); // 🔹 Ferme le modal
         setSelectedOrder(null);    // 🔹 Réinitialise l'ordre sélectionné
       } else {
@@ -99,7 +96,6 @@ export default function AdminCommande() {
       });
 
       if (res.ok) {
-        alert(`✅ Email envoyé à ${order.user_email} : impression en cours !`);
         setShowClickModal(false); // 🔹 Ferme le modal
         setSelectedOrder(null);    // 🔹 Réinitialise l'ordre sélectionné
       } else {
@@ -113,24 +109,42 @@ export default function AdminCommande() {
 
 
   const sendNotification = async () => {
-    if (!selectedOrder) return;
+    if (!notifyMessage.trim()) {
+      return alert("Veuillez écrire un message");
+    }
+
+    console.log("selectedOrder:", selectedOrder);
+
     try {
-      const res = await authFetch("http://localhost:8000/api/notify/", {
+      const res = await authFetch("http://localhost:8000/api/send-notification/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          userId: selectedOrder.utilisateur, // adapte selon ton backend
+          user_email: selectedOrder.user_email, // email de l'user depuis modèle Utilisateurs
           message: notifyMessage,
         }),
       });
-      if (res.ok) alert("Notification envoyée ✅");
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || "Erreur lors de l'envoi");
+      }
+
+      const data = await res.json();
+      console.log("✅ Notification envoyée :", data);
+
+      // UI update
+      alert("Notification envoyée !");
+      setNotifyMessage("");
+      setShowNotifyModal(false);
     } catch (err) {
-      console.error(err);
-      alert("Erreur réseau");
+      console.error("❌ Erreur envoi notification:", err);
+      alert("Impossible d'envoyer la notification");
     }
-    setNotifyMessage("");
-    setShowNotifyModal(false);
   };
+
 
   // --- Pagination ---
   const [currentPage, setCurrentPage] = useState(1);
@@ -163,7 +177,7 @@ export default function AdminCommande() {
         </thead>
         <tbody>
           {currentOrders.map(order => (
-            <tr key={order.id} className="border-b hover:bg-gray-50">
+            <tr key={order.id} className="border-b hover:bg-base-200">
               <td className="px-4 py-2">{order.id}</td>
               <td className="px-4 py-2">{order.user_name}</td>
               <td className="px-4 py-2">{order.user_email}</td>
@@ -171,7 +185,7 @@ export default function AdminCommande() {
               <td className="px-4 py-2 flex gap-2 justify-center">
                 <button
                   onClick={() => handlePrintClick(order)}
-                  className="bg-yellow-600 hover:bg-yellow-400 text-white p-2 rounded flex items-center gap-1"
+                  className="bg-blue-600 hover:bg-blue-400 text-white p-2 rounded flex items-center gap-1"
                 >
                   <Printer size={16} />
                 </button>
@@ -223,7 +237,7 @@ export default function AdminCommande() {
       {/* Modal détail complet Admin */}
       {showDetailModal && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-xl max-w-lg w-full overflow-y-auto max-h-[90vh]">
+          <div className="bg-base-100 p-6 rounded-xl max-w-lg w-full overflow-y-auto max-h-[90vh]">
             <h3 className="text-xl font-bold mb-4">📄 Détails de la commande #{selectedOrder.id}</h3>
 
             <p><strong>Utilisateur :</strong> {selectedOrder.user_name} ({selectedOrder.user_email})</p>
@@ -282,11 +296,10 @@ export default function AdminCommande() {
         </div>
       )}
 
-
       {/* Modal notification */}
       {showNotifyModal && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-xl max-w-md w-full">
+          <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
             <h2 className="text-xl font-bold mb-4">🔔 Envoyer notification à {selectedOrder.user_name}</h2>
             <textarea className="textarea textarea-bordered w-full mb-4" rows={3} placeholder="Votre message..." value={notifyMessage} onChange={(e) => setNotifyMessage(e.target.value)} />
             <div className="flex justify-end gap-4">
@@ -300,7 +313,7 @@ export default function AdminCommande() {
       {/* Modal suppression */}
       {showDeleteModal && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-xl max-w-md w-full">
+          <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
             <h2 className="text-xl font-bold mb-4">⚠️ Confirmer la suppression</h2>
             <p>La commande <strong>{selectedOrder.user_name}</strong> sera déplacée dans la corbeille.</p>
             <div className="flex justify-end gap-4 mt-4">
@@ -314,9 +327,9 @@ export default function AdminCommande() {
       {/* Modal confirmation Terminer */}
       {showFinishModal && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-xl max-w-md w-full">
+          <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
             <h2 className="text-xl font-bold mb-4">⚡ Confirmer l’action</h2>
-            <p>Êtes-vous sûr de vouloir marquer la commande <strong>#{selectedOrder.id}</strong> comme <span className="text-purple-600 font-semibold">terminée</span> ?</p>
+            <p>Êtes-vous sûr de vouloir marquer la commande <strong>#{selectedOrder.id}</strong> de <strong> {selectedOrder.user_email} </strong> comme <span className="text-purple-600 font-semibold">terminée</span> ?</p>
             <div className="flex justify-end gap-4 mt-4">
               <button
                 onClick={() => setShowFinishModal(false)}
@@ -338,9 +351,9 @@ export default function AdminCommande() {
       {/* Modal confirmation En cours */}
       {showClickModal && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-xl max-w-md w-full">
+          <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
             <h2 className="text-xl font-bold mb-4">⚡ Confirmer l’action</h2>
-            <p>Êtes-vous sûr de vouloir marquer la commande <strong>#{selectedOrder.id}</strong> comme <span className="text-purple-600 font-semibold">En cours!</span> ?</p>
+            <p>Êtes-vous sûr de vouloir marquer la commande <strong>#{selectedOrder.id}</strong> de <strong> {selectedOrder.user_email} </strong> comme <span className="text-purple-600 font-semibold">En cours!</span> ?</p>
             <div className="flex justify-end gap-4 mt-4">
               <button
                 onClick={() => setShowClickModal(false)}

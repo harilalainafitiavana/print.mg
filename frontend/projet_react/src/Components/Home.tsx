@@ -5,6 +5,8 @@ import Navbar from "./Navbar";
 import Slide from "./Slide_home";
 import { Link } from "react-router-dom";
 import Chat from "./Chat";
+import RetourAccueil from "./RetourAccueil";
+import Popup from "./Popup";
 
 export default function HomePage() {
   // Service
@@ -376,6 +378,12 @@ export default function HomePage() {
 
       {/* Chat */}
       <Chat />
+
+      {/* Retour vers le haut */}
+      <RetourAccueil />
+
+      {/* Popup de publication */}
+      <Popup />
 
       {/* Footer */}
       <Footer />

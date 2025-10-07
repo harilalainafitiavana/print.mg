@@ -194,7 +194,7 @@ export default function ProductList() {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {currentProducts.map((product) => (
-                    <div key={product.id} className="bg-white shadow rounded-xl p-4 flex flex-col">
+                    <div key={product.id} className="bg-base-100 shadow rounded-xl p-4 flex flex-col">
                         <img
                             src={product.image}
                             alt={product.name}
@@ -202,12 +202,12 @@ export default function ProductList() {
                             onError={(e) => (e.currentTarget.src = "/placeholder.png")} // Affiche une image par défaut en cas d'erreur
                         />
 
-                        <h2 className="text-lg font-semibold">{product.name}</h2>
-                        <p className="text-sm text-gray-500">{product.description}</p>
-                        <p className="text-sm text-gray-500">Catégorie : {product.categorie}</p>
-                        <p className="text-sm font-medium">Prix : {product.prix} Ariary</p>
-                        <p className="text-sm text-gray-500">
-                            Produit mis en avant : {product.future === "Oui" ? "✅" : "❌"}
+                        <h2 className="text-lg font-bold text-blue-500">{product.name}</h2>
+                        <p className="text-sm text-base-content">{product.description}</p>
+                        <p className="text-sm text-base-content"><strong>Catégorie : </strong>{product.categorie}</p>
+                        <p className="text-sm font-medium"><strong>Prix : </strong>{product.prix} Ariary</p>
+                        <p className="text-sm text-base-content">
+                            <strong>Produit mis en avant : </strong>{product.future === "Oui" ? "✅" : "❌"}
                         </p>
 
                         <div className="flex gap-2 mt-3">
@@ -252,7 +252,7 @@ export default function ProductList() {
             {/* MODAL AJOUT */}
             {showAddModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className="bg-white p-6 rounded-xl max-w-lg w-full">
+                    <div className="bg-base-100 p-6 rounded-xl max-w-lg w-full">
                         <h3 className="text-xl font-bold mb-4">➕ Ajouter un nouveau produit</h3>
                         <form onSubmit={handleSubmit} className="space-y-3">
                             <input
@@ -325,7 +325,7 @@ export default function ProductList() {
             {/* MODAL SUPPRESSION */}
             {showDeleteModal && productToDelete && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className="bg-white p-6 rounded-xl max-w-md w-full">
+                    <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
                         <h3 className="text-xl font-bold mb-4">⚠️ Confirmer la suppression</h3>
                         <p className="mb-4">
                             Le produit <strong>{productToDelete.name}</strong> sera supprimé définitivement.
@@ -351,7 +351,7 @@ export default function ProductList() {
             {/* MODAL MODIFIER */}
             {showEditModal && selectedProduct && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className="bg-white p-6 rounded-xl max-w-lg w-full">
+                    <div className="bg-base-100 p-6 rounded-xl max-w-lg w-full">
                         <h3 className="text-xl font-bold mb-4">✏️ Modifier le produit</h3>
                         <div className="space-y-3">
                             <input

@@ -4,6 +4,8 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import { Link } from 'react-router-dom';
 import Chat from './Chat';
+import RetourAcceuil from './RetourAccueil'
+import Popup from './Popup';
 
 // Types TypeScript
 interface Product {
@@ -218,6 +220,12 @@ const PublicationsPage: React.FC = () => {
 
             {/* Chat */}
             <Chat />
+
+            {/* Retour vers le haut */}
+            <RetourAcceuil />
+
+            {/* Popup */}
+            <Popup />
 
             {/* Footer */}
             <Footer />

@@ -6,6 +6,8 @@ import Login from "./Components/Login";
 import Register from "./Components/Register";
 import DashboardAdmin from "./pages/admin/AdminDashboard";
 import DashboardUser from "./pages/User/UserDashboard"
+import ForgotPassword from "./Components/Forgotpassword";
+import ResetPassword from "./Components/ResetPassword";
 
 
 export default function App() {
@@ -17,6 +19,8 @@ export default function App() {
         <Route path="/detaille" element={<Detaille />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:uidb64/:token" element={<ResetPassword />} />
         <Route
           path="/dashboard-admin"
           element={

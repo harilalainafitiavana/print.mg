@@ -133,14 +133,14 @@ export default function Profils() {
     return (
         <div>
             {/* Photo de profil */}
-            <div className="border p-6 rounded-xl shadow-sm bg-white">
+            <div className="border p-6 rounded-xl shadow-sm bg-base-100">
                 <h3 className="text-2xl font-semibold">Bonjour <span className="text-blue-500">{formData.prenom} {formData.nom} 😀😊</span></h3>
                 <form className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6" onSubmit={handleSubmit}>
                     {/* Partie gauche : inputs et bouton */}
                     <div className="flex-1 space-y-4">
                         <div className="flex justify-between gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1 mt-4">Code Postal</label>
+                                <label className="block text-sm font-medium text-base-content mb-1 mt-4">Code Postal</label>
                                 <input
                                     type="text"
                                     value={formData.code_postal}
@@ -150,7 +150,7 @@ export default function Profils() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1 mt-4">Ville</label>
+                                <label className="block text-sm font-medium text-base-content mb-1 mt-4">Ville</label>
                                 <input
                                     type="text"
                                     value={formData.ville}
@@ -161,7 +161,7 @@ export default function Profils() {
                             </div>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Pays</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">Pays</label>
                             <input
                                 type="text"
                                 value={formData.pays}
@@ -171,7 +171,7 @@ export default function Profils() {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Photo de profil</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">Photo de profil</label>
                             <input
                                 type="file"
                                 accept="image/*"
@@ -214,12 +214,12 @@ export default function Profils() {
             </div>
             <div className="grid gap-6 lg:grid-cols-2">
                 {/* Profil utilisateur */}
-                <div className="border p-6 rounded-xl shadow-sm bg-white">
+                <div className="border p-6 rounded-xl shadow-sm bg-base-100">
                     <h3 className="text-lg font-semibold mb-4">Modifier votre information!!</h3>
                     <form className="space-y-4" onSubmit={handleSubmit}>
                         {/* Nom */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">Nom</label>
                             <input
                                 type="text"
                                 value={formData.nom}
@@ -231,7 +231,7 @@ export default function Profils() {
 
                         {/* Prenom */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Prenom</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">Prenom</label>
                             <input
                                 type="text"
                                 value={formData.prenom}
@@ -243,7 +243,7 @@ export default function Profils() {
 
                         {/* Email */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">Email</label>
                             <input
                                 type="email"
                                 value={formData.email}
@@ -255,7 +255,7 @@ export default function Profils() {
 
                         {/* Téléphone */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">Téléphone</label>
                             <input
                                 type="tel"
                                 value={formData.phone}
@@ -275,12 +275,12 @@ export default function Profils() {
                     </form>
                 </div>
                 {/* Sécurité */}
-                <div className="border p-6 rounded-xl shadow-sm bg-white">
+                <div className="border p-6 rounded-xl shadow-sm bg-base-100">
                     <h3 className="text-lg font-semibold mb-4">Sécurité</h3>
                     <form className="space-y-4" onSubmit={handlePasswordChange}>
                         {/* Ancien mot de passe */}
                         <div className="relative">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Ancien mot de passe</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">Ancien mot de passe</label>
                             <input
                                 type={showOld ? "text" : "password"}
                                 value={oldPassword}
@@ -299,7 +299,7 @@ export default function Profils() {
 
                         {/* Nouveau mot de passe */}
                         <div className="relative">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Nouveau mot de passe</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">Nouveau mot de passe</label>
                             <input
                                 type={showNew ? "text" : "password"}
                                 value={newPassword}
@@ -318,7 +318,7 @@ export default function Profils() {
 
                         {/* Confirmation du mot de passe */}
                         <div className="relative">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Confirmation du mot de passe</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">Confirmation du mot de passe</label>
                             <input
                                 type={showConfirm ? "text" : "password"}
                                 value={confirmPassword}

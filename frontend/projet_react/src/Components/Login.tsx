@@ -74,11 +74,11 @@ const LoginPage = () => {
       <Slide_show />
 
       {/* Partie gauche - Formulaire de connexion */}
-      <div className="w-full md:w-1/2 bg-white flex items-center justify-center px-6 py-12">
+      <div className="w-full md:w-1/2 bg-base-200 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
           <div className="text-center mb-10">
             <h1 className="text-3xl font-bold text-blue-500 mb-2">Print.mg</h1>
-            <p className="text-gray-600">Connectez-vous à votre compte</p>
+            <p className="text-base-content">Connectez-vous à votre compte</p>
           </div>
 
           {error && (
@@ -89,7 +89,7 @@ const LoginPage = () => {
 
           <form className="space-y-6" onSubmit={handleLogin}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="email" className="block text-sm font-medium text-base-content mb-1">
                 Adresse email
               </label>
               <div className="relative">
@@ -104,14 +104,14 @@ const LoginPage = () => {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   required
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition"
                   placeholder="votre@email.com"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="password" className="block text-sm font-medium text-base-content mb-1">
                 Mot de passe
               </label>
               <div className="relative">
@@ -126,7 +126,7 @@ const LoginPage = () => {
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   required
-                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition"
                   placeholder="Votre mot de passe"
                 />
                 <button
@@ -151,15 +151,15 @@ const LoginPage = () => {
                   type="checkbox"
                   className="h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-base-content">
                   Se souvenir de moi
                 </label>
               </div>
 
               <div className="text-sm">
-                <a href="#" className="font-medium text-blue-500 hover:text-blue-600 transition">
+                <Link to="/forgot-password" className="font-medium text-blue-500 hover:text-blue-600 transition">
                   Mot de passe oublié?
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -175,7 +175,7 @@ const LoginPage = () => {
           </form>
 
           <div className="mt-8 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-base-content">
               Vous n'avez pas de compte?{' '}
               <Link to="/register" className="font-medium text-blue-500 hover:text-blue-600 transition">
                 Créer un compte

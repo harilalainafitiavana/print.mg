@@ -4,6 +4,7 @@ import { Home, Folder, Trash, BarChart3, Settings, Search } from "lucide-react";
 import Commande from "./Commande";
 import Setting from "../../Components/Settings";
 import Profils from "../../Components/Profils";
+import Notification from "./NotificationsUser"
 import Corbeille from "./Corbeille";
 import MesCommande from "./Mes_commande";
 
@@ -33,7 +34,7 @@ export default function UserDashboard() {
     }, []);
 
     const menus = [
-        { id: "home", label: "Dashboard", icon: <Home size={20} /> },
+        { id: "home", label: "Tableau de bord", icon: <Home size={20} /> },
         { id: "orders", label: "Mes Commandes", icon: <Folder size={20} /> },
         { id: "trash", label: "Corbeille", icon: <Trash size={20} /> },
         { id: "stats", label: "Statistiques", icon: <BarChart3 size={20} /> },
@@ -47,11 +48,11 @@ export default function UserDashboard() {
             case "order":
                 return <Commande />;
             case "trash":
-                return <Corbeille onMenuClick={function (): void { throw new Error("Function not implemented."); }} />;
+                return <Corbeille />;
             case "settings":
-                return <div className="p-6"><Setting /></div>;
+                return <Setting />;
             case "notification":
-                return <div>Votre notification</div>;
+                return <Notification />;
             case "profil":
                 return <div className="p-6"><Profils /></div>;
             default:

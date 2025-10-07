@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import DashboardLayout from "../../Components/DashboardLayout";
 import Setting from "../../Components/Settings"
-import { Home, ShoppingCart, Package, Users, CreditCard, Settings, Trash } from "lucide-react";
+import { Home, ShoppingCart, Package, Users, Settings, Trash } from "lucide-react";
 import Profils from "../../Components/Profils";
 import CommandeList from "./CommandeList";
 import AdminCorbeil from "./AdminCorbeil";
 import Product from "./Product";
 import UserList from "./UserList";
+import Notifications from "./NotificationAdmin"
 import AdminProfil from "../../assets/icone.png"
 
 export default function AdminDashboard() {
@@ -34,12 +35,11 @@ export default function AdminDashboard() {
 
     // 👉 Menus spécifiques à l'admin
     const menus = [
-        { id: "home", label: "Dashboard", icon: <Home size={20} /> },
+        { id: "home", label: "Tableau de bord", icon: <Home size={20} /> },
         { id: "orders", label: "Commandes", icon: <ShoppingCart size={20} /> },
         { id: "products", label: "Produits", icon: <Package size={20} /> },
         { id: "users", label: "Utilisateurs", icon: <Users size={20} /> },
         { id: "trash", label: "Corbeille", icon: <Trash size={20} /> },
-        { id: "settings", label: "Paramètres", icon: <Settings size={20} /> },
 
     ];
 
@@ -62,7 +62,7 @@ export default function AdminDashboard() {
                 return <Setting />
 
             case "notification":
-                return <div> Votre notification</div>;
+                return <Notifications />;
 
             case "profil":
                 return <div className="p-6"> <Profils /> </div>

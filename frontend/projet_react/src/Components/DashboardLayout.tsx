@@ -1,10 +1,12 @@
-import { LogOut, Bell, Settings, Printer, Menu, X, CalendarIcon } from "lucide-react";
+import { LogOut, Settings, Printer, Menu, X, CalendarIcon } from "lucide-react";
 import type { JSX } from "react";
-import { useState, useEffect,  useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import user from "../assets/Utilisateur.png";
 import { useNavigate } from "react-router-dom";
+import NotificationButton from "./NotificationButton";
+import '../calendar.css';
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -83,7 +85,7 @@ export default function DashboardLayout({ children, userPhoto, menus, headerCont
     };
 
     return (
-        <div className="flex h-screen bg-gray-50">
+        <div className="flex h-screen bg-base-200 text-base-content">
             {/* Overlay pour mobile */}
             {isSidebarOpen && (
                 <div
@@ -93,9 +95,9 @@ export default function DashboardLayout({ children, userPhoto, menus, headerCont
             )}
 
             {/* Sidebar gauche */}
-            <aside className={`fixed md:relative z-30 w-64 bg-white text-blue-500 flex flex-col transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:flex h-full`}>
+            <aside className={`fixed md:relative z-30 w-64 bg-base-100 text-base-content flex flex-col transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:flex h-full`}>
                 <div className="p-4 font-bold text-2xl flex items-center justify-between">
-                    <div className="flex items-center gap-2">
+                    <div className="flex text-blue-600 items-center gap-2">
                         <Printer size={20} />
                         Print.mg
                     </div>
@@ -111,7 +113,7 @@ export default function DashboardLayout({ children, userPhoto, menus, headerCont
                                 onMenuClick(menu.id);
                                 if (windowWidth < 768) setIsSidebarOpen(false);
                             }}
-                            className="flex items-center text-black hover:text-white space-x-3 w-full px-3 py-4 rounded-lg hover:bg-blue-400 hover:font-bold"
+                            className="flex items-center text-base-content hover:text-white space-x-3 w-full px-3 py-4 rounded-lg hover:bg-blue-400 hover:font-bold"
                         >
                             <span className="text-red-500 font-bold">{menu.icon}</span>
                             <span>{menu.label}</span>
@@ -119,7 +121,7 @@ export default function DashboardLayout({ children, userPhoto, menus, headerCont
                     ))}
                 </nav>
                 <button
-                    className="flex items-center text-black space-x-3 px-3 py-2 hover:bg-blue-400 hover:text-white hover:font-bold mb-4"
+                    className="flex items-center text-base-content space-x-3 px-3 py-2 hover:bg-blue-400 hover:text-white hover:font-bold mb-4"
                     onClick={handleLogout}
                 >
                     <LogOut size={20} /> <span>Déconnexion</span>
@@ -129,10 +131,10 @@ export default function DashboardLayout({ children, userPhoto, menus, headerCont
             {/* Contenu principal */}
             <main className="flex-1 flex flex-col min-w-0">
                 {/* Header */}
-                <header className="flex justify-between items-center bg-white px-4 md:px-6 py-4 shadow">
+                <header className="flex justify-between items-center bg-base-100 px-4 md:px-6 py-4 shadow text-base-content">
                     <div className="flex items-center">
                         <button
-                            className="mr-4 text-gray-600 md:hidden"
+                            className="mr-4 text-base-content md:hidden"
                             onClick={toggleSidebar}
                         >
                             <Menu size={24} />
@@ -153,25 +155,26 @@ export default function DashboardLayout({ children, userPhoto, menus, headerCont
                                         relative flex items-center justify-center 
                                         w-10 h-10 rounded-full 
                                         transition-all duration-300 
-                                        ${isRightSidebarVisible ? 'bg-blue-500 text-white shadow-lg' : 'bg-gray-200 text-gray-600 hover:bg-blue-400 hover:text-white'}
+                                        ${isRightSidebarVisible ? 'bg-base-200 text-base-content shadow-lg' : 'bg-base-200 text-base-content hover:bg-blue-400 hover:text-white'}
                                     `}
                             >
                                 <CalendarIcon size={20} />
                                 {/* Petit point animé pour attirer l'attention */}
                                 {!isRightSidebarVisible && (
-                                    <span className="absolute top-0 right-0 block w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
+                                    <span className="absolute top-0 right-0 block w-2 h-2 bg-red-400 rounded-full animate-ping"></span>
                                 )}
                             </button>
                         )}
 
-                        <button
+                        {/* <button
                             className="text-gray-600 hover:text-blue-500"
                             onClick={() => onMenuClick("notification")}
                         >
                             <Bell size={22} />
-                        </button>
+                        </button> */}
+                        <NotificationButton onClick={() => onMenuClick("notification")} />
                         <button
-                            className="text-gray-600 hover:text-blue-500"
+                            className="text-base-content hover:text-white hover:bg-blue-400 p-2 rounded-full"
                             onClick={() => onMenuClick("settings")}
                         >
                             <Settings size={22} />
@@ -192,15 +195,15 @@ export default function DashboardLayout({ children, userPhoto, menus, headerCont
 
                             {/* Menu déroulant */}
                             {open && (
-                                <div className="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border z-50">
-                                    <ul className="py-1 text-gray-700">
+                                <div className="absolute right-0 mt-2 w-40 bg-base-200 rounded-xl shadow-lg border z-50">
+                                    <ul className="py-1 text-base-content">
                                         <li>
                                             <button
                                                 onClick={() => {
                                                     onMenuClick("profil");
                                                     setOpen(false);
                                                 }}
-                                                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                                                className="block w-full text-left px-4 py-2 hover:bg-blue-300 rounded-lg"
                                             >
                                                 Profil
                                             </button>
@@ -208,7 +211,7 @@ export default function DashboardLayout({ children, userPhoto, menus, headerCont
                                         <li>
                                             <button
                                                 onClick={handleLogout}
-                                                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                                                className="block w-full text-left px-4 py-2 hover:bg-blue-300 rounded-lg"
                                             >
                                                 Déconnexion
                                             </button>
@@ -223,28 +226,33 @@ export default function DashboardLayout({ children, userPhoto, menus, headerCont
                 {/* Zone de contenu */}
                 <div className="flex flex-1 overflow-y-auto">
                     {/* Contenu dynamique */}
-                    <div className={`flex-1 p-4 md:p-6 bg-gray-50 min-w-100 transition-all duration-300 ${isRightSidebarVisible && windowWidth >= 1024 ? 'lg:mr-0' : 'mr-0'}`}>
+                    <div className={`flex-1 p-4 md:p-6 bg-base-200 min-w-100 transition-all duration-300 ${isRightSidebarVisible && windowWidth >= 1024 ? 'lg:mr-0' : 'mr-0'}`}>
                         {children}
                     </div>
 
                     {/* Sidebar droite */}
                     {isRightSidebarVisible && windowWidth >= 1024 && (
-                        <aside className="w-80 bg-white p-4 border-l shadow-sm">
+                        <aside className="w-80 bg-base-100 p-4 border-l border-base-300 shadow-sm">
                             <div className="flex justify-between items-center mb-4">
                                 <h3 className="text-lg font-semibold">Calendrier</h3>
                             </div>
-                            <div className="border rounded-lg p-2 bg-gray-50">
+                            <div className="border rounded-lg p-2 bg-base-200">
                                 <Calendar
                                     value={new Date()}
                                     view="month"
                                     selectRange={false}
                                     showNeighboringMonth={true}
                                     onClickDay={() => { }}
-                                    className="w-full border-none text-gray-700"
-                                    tileClassName={({ date }) =>
-                                        `p-2 hover:bg-blue-100 rounded-md ${date.getDate() === new Date().getDate() ? 'bg-blue-200 font-bold' : ''}`
-                                    }
+                                    className="w-full rounded-lg"
+                                    tileClassName={({ date }) => {
+                                        const isToday = date.toDateString() === new Date().toDateString();
+                                        return `
+                                            p-2 rounded-md
+                                            ${isToday ? 'bg-primary text-primary-content font-bold' : ''}
+                                            `;
+                                    }}
                                 />
+
                             </div>
                         </aside>
                     )}

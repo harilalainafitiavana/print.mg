@@ -95,7 +95,6 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
         // Réinitialiser l'état
         setSelectedOrder(null);
         setShowConfirm(false);
-        alert("Commande déplacée dans la corbeille ✅");
       } else {
         alert("Erreur : " + data.message);
       }
@@ -121,8 +120,8 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
     <div className="p-4 max-w-6xl mx-auto">
       <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Mes commandes</h1>
-          <p className="text-sm text-gray-500">Toutes les commandes que tu as passées sur la plateforme.</p>
+          <h1 className="text-4xl font-bold">Mes commandes</h1>
+          <p className="text-sm text-base-content">Toutes les commandes que tu as passées sur la plateforme.</p>
         </div>
 
         <div className="flex gap-2 w-full sm:w-auto">
@@ -144,7 +143,7 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
       ) : (
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((order) => (
-            <article key={order.id} className="bg-white rounded-2xl p-4 shadow-md border-l-4" style={{ borderLeftColor: '#3b82f6' }}>
+            <article key={order.id} className="bg-base-100 rounded-2xl p-4 shadow-md border-l-4" style={{ borderLeftColor: '#3b82f6' }}>
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1">
                   <div className="flex items-center justify-between gap-2">
@@ -153,15 +152,15 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
                       {order.statut}
                     </span> */}
                   </div>
-                  <p className="text-sm text-gray-600 mt-2">Date: {new Date(order.date_commande).toLocaleDateString()}</p>
-                  <p className="text-sm text-gray-800 mt-2 font-medium">Montant: {order.montant_total.toLocaleString()} Ariary</p>
+                  <p className="text-sm text-base-content mt-2">Date: {new Date(order.date_commande).toLocaleDateString()}</p>
+                  <p className="text-sm text-base-content mt-2 font-medium">Montant: {order.montant_total.toLocaleString()} Ariary</p>
                 </div>
 
                 <div className="flex flex-col items-center gap-2">
                   <button
                     title="Voir"
                     onClick={() => handleViewDetail(order)}
-                    className="p-2 rounded-lg border border-gray-100 hover:bg-gray-50"
+                    className="p-2 rounded-lg border border-gray-100 hover:bg-blue-300"
                   >
                     <Eye size={18} />
                   </button>
@@ -169,7 +168,7 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
                   <button
                     title="Supprimer"
                     onClick={() => handleDeleteClick(order)}
-                    className="p-2 rounded-lg border border-gray-100 hover:bg-gray-50 text-red-600"
+                    className="p-2 rounded-lg border border-gray-100 hover:bg-blue-300 text-red-600"
                   >
                     <Trash2 size={18} />
                   </button>
@@ -183,7 +182,7 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
       {/* Modal détail complet */}
       {showDetailModal && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-xl max-w-md w-full">
+          <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
             <h3 className="text-xl font-bold mb-4">📄 Résumé de la commande</h3>
             <div className="space-y-2 text-sm">
               {selectedOrder.fichiers.map((f, idx) => (
@@ -222,17 +221,17 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
       {/* Modal de confirmation suppression */}
       {showConfirm && selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md">
+          <div className="bg-base-100 rounded-xl p-6 w-full max-w-md">
             <div className="flex items-start justify-between">
               <h3 className="text-lg font-semibold">Confirmer la suppression</h3>
               <button onClick={cancelDelete} className="p-1 rounded">
                 <X />
               </button>
             </div>
-            <p className="mt-4 text-sm text-gray-600">Es-tu sûr(e) de vouloir supprimer la commande <span className="font-mono">{selectedOrder.id}</span> ?</p>
+            <p className="mt-4 text-sm text-base-content">Es-tu sûr(e) de vouloir supprimer la commande <span className="font-mono">{selectedOrder.id}</span> ?</p>
             <div className="mt-6 flex justify-end gap-3">
               <button onClick={cancelDelete} className="px-4 py-2 rounded-lg border">Annuler</button>
-              <button onClick={confirmDelete} className="px-4 py-2 rounded-lg bg-blue-500 text-white">Supprimer</button>
+              <button onClick={confirmDelete} className="px-4 py-2 rounded-lg bg-red-500 text-white">Supprimer</button>
             </div>
           </div>
         </div>

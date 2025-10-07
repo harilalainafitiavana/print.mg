@@ -290,8 +290,8 @@ export default function PrintingOrderForm() {
 
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md">
-      <h2 className="text-2xl font-bold mb-6">📄 Commande d'impression</h2>
+    <div className="max-w-4xl mx-auto p-6 bg-base-100 rounded-xl shadow-md">
+      <h2 className="text-2xl font-bold mb-6 text-base-content">📄 Commande d'impression</h2>
 
       {/* Étape 1 */}
       {step === 1 && (
@@ -446,7 +446,7 @@ export default function PrintingOrderForm() {
       {/* Modal confirmation */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-xl max-w-md w-full">
+          <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
             <h3 className="text-xl font-bold mb-4">📄 Résumé de la commande</h3>
             <div className="space-y-2 text-sm">
               <p><strong>Fichier :</strong> {fileName}</p>

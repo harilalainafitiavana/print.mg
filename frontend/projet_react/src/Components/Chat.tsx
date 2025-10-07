@@ -8,9 +8,9 @@ export default function Chat() {
                 className="
                     fixed bottom-6 right-6 
                     bg-blue-500 text-white 
-                    w-14 h-14 rounded-full 
+                    w-12 h-12 rounded-full 
                     shadow-xl flex items-center justify-center 
-                    hover:bg-blue-300 transition-transform transform hover:scale-110
+                    hover:bg-green-500 transition-transform transform hover:scale-110
                     z-50
                     "
                 onClick={() => alert("Boîte de discussion à créer bientôt !")}

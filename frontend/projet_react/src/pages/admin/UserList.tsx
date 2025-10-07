@@ -22,6 +22,8 @@ const AdminUsersDashboard = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const usersPerPage = 10;
+    const [theme, setTheme] = useState("light");
+
 
 
     // 🔹 Charger les utilisateurs depuis l'API Django
@@ -80,7 +82,7 @@ const AdminUsersDashboard = () => {
     };
 
     return (
-        <div className="p-6 bg-gray-100 min-h-screen">
+        <div className="p-6 bg-base-200 min-h-screen">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
                 {/* Titre à gauche */}
                 <h1 className="text-3xl font-bold text-blue-500 mb-4 md:mb-0">
@@ -102,9 +104,9 @@ const AdminUsersDashboard = () => {
             </div>
 
             {/* Tableau des utilisateurs */}
-            <div className="bg-white shadow rounded-lg overflow-hidden">
+            <div className="bg-base-100 shadow rounded-lg overflow-hidden">
                 <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-blue-500 text-white">
+                    <thead className="bg-blue-500 text-white text-lg">
                         <tr>
                             <th className="px-6 py-3 text-left text-sm font-medium">Nom</th>
                             <th className="px-6 py-3 text-left text-sm font-medium">Prénom</th>
@@ -115,7 +117,7 @@ const AdminUsersDashboard = () => {
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                         {currentUsers.map((user) => (
-                            <tr key={user.id} className="hover:bg-gray-50">
+                            <tr key={user.id}   className="">
                                 <td className="px-6 py-4 text-sm">{user.nom}</td>
                                 <td className="px-6 py-4 text-sm">{user.prenom}</td>
                                 <td className="px-6 py-4 text-sm">{user.email}</td>
@@ -154,7 +156,7 @@ const AdminUsersDashboard = () => {
                 >
                     Précédent
                 </button>
-                <span className="text-gray-700">
+                <span className="text-base-content">
                     Page {currentPage} / {totalPages}
                 </span>
                 <button
@@ -170,7 +172,7 @@ const AdminUsersDashboard = () => {
             {/* Modal */}
             {isModalOpen && selectedUser && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white rounded-lg shadow-lg w-11/12 max-w-lg p-6 relative">
+                    <div className="bg-base-100 rounded-lg shadow-lg w-11/12 max-w-lg p-6 relative">
                         <button
                             className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
                             onClick={closeModal}
@@ -182,7 +184,7 @@ const AdminUsersDashboard = () => {
                         {/* Flex container pour infos + image */}
                         <div className="flex items-start space-x-6">
                             {/* Informations à gauche */}
-                            <div className="flex-1 space-y-2 text-gray-700">
+                            <div className="flex-1 space-y-2 text-base-content">
                                 <p><strong>Nom:</strong> {selectedUser.nom}</p>
                                 <p><strong>Prénom:</strong> {selectedUser.prenom}</p>
                                 <p><strong>Email:</strong> {selectedUser.email}</p>

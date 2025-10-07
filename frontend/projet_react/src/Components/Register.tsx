@@ -140,11 +140,11 @@ const RegisterPage = () => {
         <div className="min-h-screen flex">
             <Slide_show />
 
-            <div className="w-full md:w-1/2 bg-white flex items-center justify-center px-6 py-12">
+            <div className="w-full md:w-1/2 bg-base-200 flex items-center justify-center px-6 py-12">
                 <div className="w-full max-w-md">
                     <div className="text-center mb-10">
                         <h1 className="text-3xl font-bold text-blue-500 mb-2">Print.mg</h1>
-                        <p className="text-gray-600">Inscrivez-vous pour continuer</p>
+                        <p className="text-base-content">Inscrivez-vous pour continuer</p>
                         {/* 🔥 Notification stylée */}
                         {notification && (
                             <div className="mt-4 p-3 text-sm bg-red-100 text-red-700 border border-red-300 rounded">
@@ -157,7 +157,7 @@ const RegisterPage = () => {
                         {step === 1 && (
                             <>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                                    <label className="block text-sm font-medium text-base-content mb-1">Nom</label>
                                     <div className="relative">
                                         <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                                         <input
@@ -173,7 +173,7 @@ const RegisterPage = () => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
+                                    <label className="block text-sm font-medium text-base-content mb-1">Prénom</label>
                                     <div className="relative">
                                         <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                                         <input
@@ -190,7 +190,7 @@ const RegisterPage = () => {
 
                                 {/* Champ photo de profil */}
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Photo de profil</label>
+                                    <label className="block text-sm font-medium text-base-content mb-1">Photo de profil</label>
                                     <div className="flex items-center gap-4">
                                         <input
                                             type="file"
@@ -226,9 +226,9 @@ const RegisterPage = () => {
                         {step === 2 && (
                             <>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                    <label className="block text-sm font-medium text-base-content mb-1">Email</label>
                                     <div className="relative">
-                                        <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                                        <Mail className="absolute left-3 top-4 h-5 w-5 text-gray-400" />
                                         <input
                                             type="email"
                                             name="email"
@@ -242,9 +242,9 @@ const RegisterPage = () => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+                                    <label className="block text-sm font-medium text-base-content mb-1">Téléphone</label>
                                     <div className="relative">
-                                        <Phone className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                                        <Phone className="absolute left-3 top-4 h-5 w-5 text-gray-400" />
                                         <input
                                             type="tel"
                                             name="phone"
@@ -265,7 +265,7 @@ const RegisterPage = () => {
                                     <button
                                         type="button"
                                         onClick={prevStep}
-                                        className="px-4 py-2 rounded-lg border text-gray-600 hover:bg-gray-100"
+                                        className="px-4 py-2 rounded-lg border text-base-content hover:text-black hover:bg-blue-100"
                                     >
                                         Précédent
                                     </button>
@@ -284,7 +284,7 @@ const RegisterPage = () => {
                             <>
                                 <div className="flex justify-between">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Code postal</label>
+                                        <label className="block text-sm font-medium text-base-content mb-1">Code postal</label>
                                         <input
                                             type="text"
                                             name="codePostal"
@@ -297,7 +297,7 @@ const RegisterPage = () => {
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Ville</label>
+                                        <label className="block text-sm font-medium text-base-content mb-1">Ville</label>
                                         <input
                                             type="text"
                                             name="ville"
@@ -310,7 +310,7 @@ const RegisterPage = () => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Pays</label>
+                                    <label className="block text-sm font-medium text-base-content mb-1">Pays</label>
                                     <input
                                         type="text"
                                         name="pays"
@@ -324,7 +324,7 @@ const RegisterPage = () => {
                                     <button
                                         type="button"
                                         onClick={prevStep}
-                                        className="px-4 py-2 rounded-lg border text-gray-600 hover:bg-gray-100"
+                                        className="px-4 py-2 rounded-lg border text-base-content hover:text-black hover:bg-blue-100"
                                     >
                                         Précédent
                                     </button>
@@ -339,11 +339,10 @@ const RegisterPage = () => {
                             </>
                         )}
 
-
                         {step === 4 && (
                             <>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+                                    <label className="block text-sm font-medium text-base-content mb-1">Mot de passe</label>
                                     <div className="relative">
                                         <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                                         <input
@@ -370,7 +369,7 @@ const RegisterPage = () => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Confirmez le mot de passe</label>
+                                    <label className="block text-sm font-medium text-base-content mb-1">Confirmez le mot de passe</label>
                                     <div className="relative">
                                         <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                                         <input
@@ -400,7 +399,7 @@ const RegisterPage = () => {
                                     <button
                                         type="button"
                                         onClick={prevStep}
-                                        className="px-4 py-2 rounded-lg border text-gray-600 hover:bg-gray-100"
+                                        className="px-4 py-2 rounded-lg border text-base-content hover:text-black hover:bg-blue-100"
                                     >
                                         Précédent
                                     </button>
@@ -417,7 +416,7 @@ const RegisterPage = () => {
 
 
                     <div className="mt-6 text-center">
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-base-content">
                             Vous avez déjà un compte ?{" "}
                             <Link to="/login" className="font-medium text-blue-500 hover:text-blue-600 transition">
                                 Se connecter
