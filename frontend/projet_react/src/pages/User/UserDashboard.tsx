@@ -7,6 +7,7 @@ import Profils from "../../Components/Profils";
 import Notification from "./NotificationsUser"
 import Corbeille from "./Corbeille";
 import MesCommande from "./Mes_commande";
+import TableauDeBord from "./TableauDeBord";
 
 export default function UserDashboard() {
     const [activeMenu, setActiveMenu] = useState("home");
@@ -58,8 +59,9 @@ export default function UserDashboard() {
             default:
                 return (
                     <div>
-                        <h2 className="text-4xl font-bold mb-4">Bonjour  <span className="text-blue-500">{user?.prenom} ☺️!</span> Bienvenue</h2>
-                        <p>Ceci est ton tableau de bord.</p>
+                        {/* <h2 className="text-4xl font-bold mb-4">Bonjour  <span className="text-blue-500">{user?.prenom} ☺️!</span> Bienvenue</h2>
+                        <p>Ceci est ton tableau de bord.</p> */}
+                        <TableauDeBord />
                     </div>
                 );
         }

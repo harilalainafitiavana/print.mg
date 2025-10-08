@@ -9,6 +9,7 @@ import Product from "./Product";
 import UserList from "./UserList";
 import Notifications from "./NotificationAdmin"
 import AdminProfil from "../../assets/icone.png"
+import TableauDeBordAdmin from "./TableauDeBordAdmin";
 
 export default function AdminDashboard() {
     const [activeMenu, setActiveMenu] = useState("home");
@@ -71,8 +72,9 @@ export default function AdminDashboard() {
             default:
                 return (
                     <div>
-                        <h2 className="text-xl font-bold mb-4">Bonjour <span className="text-blue-500">{user?.email}</span>, Bienvenue sur l’Admin Dashboard</h2>
-                        <p>Vue d’ensemble : statistiques globales, commandes récentes, revenus, etc.</p>
+                        {/* <h2 className="text-xl font-bold mb-4">Bonjour <span className="text-blue-500">{user?.email}</span>, Bienvenue sur l’Admin Dashboard</h2>
+                        <p>Vue d’ensemble : statistiques globales, commandes récentes, revenus, etc.</p> */}
+                        <TableauDeBordAdmin />
                     </div>
                 );
         }

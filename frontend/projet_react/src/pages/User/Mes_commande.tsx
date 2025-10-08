@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import {
-  Trash2, Eye, PlusCircle, X, 
+  Trash2, Eye, PlusCircle, X,
 } from "lucide-react";
 
 type MesCommandeProps = {
@@ -148,9 +148,33 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
                 <div className="flex-1">
                   <div className="flex items-center justify-between gap-2">
                     <h2 className="font-semibold text-lg">Commande {order.id}</h2>
-                    {/* <span className={`text-sm px-2 py-1 rounded-full text-white ${order.statut === 'Terminé' ? 'bg-green-500' : order.statut === 'Annulé' ? 'bg-red-500' : 'bg-yellow-500'}`}>
-                      {order.statut}
-                    </span> */}
+                    <span
+                      className={`text-sm px-2 py-1 rounded-full text-white ${order.statut === 'TERMINE'
+                          ? 'bg-green-500'
+                          : order.statut === 'EN_ATTENTE' || order.statut === 'RECU'
+                            ? 'bg-yellow-500'
+                            : order.statut === 'EN_COURS_IMPRESSION' || order.statut === 'EN_COURS_LIVRAISON'
+                              ? 'bg-blue-500'
+                              : order.statut === 'LIVREE'
+                                ? 'bg-indigo-500'
+                                : 'bg-gray-500' // pour tout autre cas
+                        }`}
+                    >
+                      {order.statut === 'TERMINE'
+                        ? 'Terminée'
+                        : order.statut === 'EN_ATTENTE'
+                          ? 'En attente'
+                          : order.statut === 'RECU'
+                            ? 'Reçue'
+                            : order.statut === 'EN_COURS_IMPRESSION'
+                              ? 'En cours impression'
+                              : order.statut === 'EN_COURS_LIVRAISON'
+                                ? 'Livraison en cours'
+                                : order.statut === 'LIVREE'
+                                  ? 'Livrée'
+                                  : order.statut}
+                    </span>
+
                   </div>
                   <p className="text-sm text-base-content mt-2">Date: {new Date(order.date_commande).toLocaleDateString()}</p>
                   <p className="text-sm text-base-content mt-2 font-medium">Montant: {order.montant_total.toLocaleString()} Ariary</p>

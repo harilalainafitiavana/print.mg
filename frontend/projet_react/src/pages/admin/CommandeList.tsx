@@ -11,6 +11,7 @@ export default function AdminCommande() {
   const [notifyMessage, setNotifyMessage] = useState("");
   const [showFinishModal, setShowFinishModal] = useState(false);
   const [showClickModal, setShowClickModal] = useState(false);
+  const [showActionModal, setShowActionModal] = useState(false)
 
 
   useEffect(() => {
@@ -145,6 +146,31 @@ export default function AdminCommande() {
     }
   };
 
+  const handleChangeStatut = async (id: number, nouveauStatut: string) => {
+    try {
+      const res = await authFetch(`http://127.0.0.1:8000/commandes/${id}/update_statut/`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ statut: nouveauStatut }),
+      });
+
+      if (!res.ok) throw new Error("Erreur lors du changement de statut");
+
+      const data = await res.json();
+      setOrders(prevOrders =>
+        prevOrders.map(order =>
+          order.id === id ? { ...order, statut: nouveauStatut } : order
+        )
+      );
+      console.log("✅ Statut mis à jour :", data.message);
+    } catch (err) {
+      console.error(err);
+      alert("❌ Impossible de changer le statut de la commande");
+    }
+  };
+
 
   // --- Pagination ---
   const [currentPage, setCurrentPage] = useState(1);
@@ -182,39 +208,116 @@ export default function AdminCommande() {
               <td className="px-4 py-2">{order.user_name}</td>
               <td className="px-4 py-2">{order.user_email}</td>
               <td className="px-4 py-2">{order.user_phone}</td>
-              <td className="px-4 py-2 flex gap-2 justify-center">
-                <button
-                  onClick={() => handlePrintClick(order)}
-                  className="bg-blue-600 hover:bg-blue-400 text-white p-2 rounded flex items-center gap-1"
+              <td className="px-4 py-2 text-center flex">
+                {/* Sélecteur de statut */}
+                <select
+                  value={order.statut}
+                  onChange={(e) => handleChangeStatut(order.id, e.target.value)}
+                  className={`border text-sm rounded-lg px-2 py-1 font-medium transition-colors
+                    ${order.statut === "TERMINE"
+                      ? "bg-green-100 text-green-800 border-green-300"
+                      : order.statut === "EN_COURS_IMPRESSION"
+                        ? "bg-yellow-100 text-yellow-800 border-yellow-300"
+                        : order.statut === "EN_ATTENTE"
+                          ? "bg-gray-100 text-gray-700 border-gray-300"
+                          : order.statut === "EN_COURS_LIVRAISON"
+                            ? "bg-blue-100 text-blue-800 border-blue-300"
+                            : "bg-red-100 text-red-800 border-red-200"
+                    }`}
                 >
-                  <Printer size={16} />
-                </button>
+                  <option value="EN_ATTENTE">En attente</option>
+                  <option value="RECU">Reçue</option>
+                  <option value="EN_COURS_IMPRESSION">En cours impression</option>
+                  <option value="TERMINE">Terminée</option>
+                  <option value="EN_COURS_LIVRAISON">Livraison en cours</option>
+                  <option value="LIVREE">Livrée</option>
+                </select>
+                {/* Action modale */}
                 <button
-                  onClick={() => handleFinishClick(order)}
-                  className="bg-purple-500 text-white p-2 rounded"
+                  onClick={() => {
+                    setSelectedOrder(order);
+                    setShowActionModal(true);
+                  }}
+
+                  className="bg-blue-500 text-white ml-4 px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center gap-2"
                 >
-                  <Check size={16} />
+                  Actions <Eye size={16} />
                 </button>
 
-                <a
-                  href={`http://127.0.0.1:8000/download/${order.fichiers[0]?.id}/`}
-                  download
-                  className="bg-indigo-500 text-white p-2 rounded"
-                >
-                  <Download size={16} />
-                </a>
-                <button onClick={() => handleView(order)} className="bg-blue-500 text-white p-2 rounded">
-                  <Eye size={16} />
-                </button>
-                <button onClick={() => handleNotify(order)} className="bg-green-500 text-white p-2 rounded">
-                  <Bell size={16} />
-                </button>
-                <button
-                  onClick={() => handleDeleteClick(order)}
-                  className="bg-red-500 text-white p-2 rounded"
-                >
-                  <Trash size={16} />
-                </button>
+                {/* Modal des actions */}
+                {showActionModal && selectedOrder && (
+                  <div className="fixed inset-0 bg-transparent flex justify-center items-center z-50 transition-all duration-300">
+                    <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
+                      <h2 className="text-xl font-bold mb-4">⚡ Actions pour la commande #{selectedOrder.id}</h2>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        {/* Imprimer → En cours */}
+                        <button
+                          onClick={() => handlePrintClick(selectedOrder)}
+                          className="bg-blue-500 text-white p-3 rounded-lg flex flex-col items-center gap-1 hover:bg-blue-600"
+                        >
+                          <Printer size={24} />
+                          <span>En cours</span>
+                        </button>
+
+                        {/* Terminé */}
+                        <button
+                          onClick={() => handleFinishClick(selectedOrder)}
+                          className="bg-purple-500 text-white p-3 rounded-lg flex flex-col items-center gap-1 hover:bg-purple-600"
+                        >
+                          <Check size={24} />
+                          <span>Terminé</span>
+                        </button>
+
+                        {/* Télécharger */}
+                        <a
+                          href={`http://127.0.0.1:8000/download/${selectedOrder.fichiers[0]?.id}/`}
+                          download
+                          className="bg-indigo-500 text-white p-3 rounded-lg flex flex-col items-center gap-1 hover:bg-indigo-600"
+                        >
+                          <Download size={24} />
+                          <span>Télécharger</span>
+                        </a>
+
+                        {/* Voir détails */}
+                        <button
+                          onClick={() => handleView(selectedOrder)}
+                          className="bg-green-500 text-white p-3 rounded-lg flex flex-col items-center gap-1 hover:bg-green-600"
+                        >
+                          <Eye size={24} />
+                          <span>Détails</span>
+                        </button>
+
+                        {/* Envoyer notification */}
+                        <button
+                          onClick={() => handleNotify(selectedOrder)}
+                          className="bg-yellow-500 text-white p-3 rounded-lg flex flex-col items-center gap-1 hover:bg-yellow-600"
+                        >
+                          <Bell size={24} />
+                          <span>Notification</span>
+                        </button>
+
+                        {/* Supprimer */}
+                        <button
+                          onClick={() => handleDeleteClick(selectedOrder)}
+                          className="bg-red-500 text-white p-3 rounded-lg flex flex-col items-center gap-1 hover:bg-red-600"
+                        >
+                          <Trash size={24} />
+                          <span>Supprimer</span>
+                        </button>
+                      </div>
+
+                      <div className="flex justify-end mt-4">
+                        <button
+                          onClick={() => setShowActionModal(false)}
+                          className="px-4 py-2 rounded-lg border hover:bg-gray-200"
+                        >
+                          Fermer
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </td>
             </tr>
           ))}

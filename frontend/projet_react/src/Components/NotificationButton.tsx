@@ -42,7 +42,7 @@ export default function NotificationButton({ onClick }: { onClick: () => void })
         <button className="relative text-base-content p-2 rounded-full hover:text-white hover:bg-blue-400" onClick={handleClick}>
             <Bell size={22} />
             {count > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-1 rounded-full leading-none">
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold px-1.5 py-1 rounded-full leading-none">
                     {count}
                 </span>
             )}

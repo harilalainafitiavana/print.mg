@@ -148,7 +148,7 @@ export default function UserNotifications() {
       {/* Modal pour envoyer message à admin */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-xl max-w-md w-full">
+          <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
             <h2 className="text-xl font-bold mb-4">📨 Envoyer un message à l'admin</h2>
             <textarea
               className="textarea textarea-bordered w-full mb-4"
@@ -178,7 +178,7 @@ export default function UserNotifications() {
       {/* Modal suppression */}
       {showDeleteModal && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-xl max-w-md w-full">
+          <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
             <h2 className="text-xl font-bold mb-4">⚠️ Confirmer la suppression</h2>
             <p>La notification sera déplacée dans la corbeille.</p>
             <div className="flex justify-end gap-4 mt-4">
