@@ -1,6 +1,7 @@
 // src/Pages/Admin/AdminDashboard.tsx
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
     PieChart, Pie, Cell
@@ -34,6 +35,7 @@ interface Utilisateur {
 }
 
 const AdminDashboard = () => {
+    const { t } = useTranslation();
     const [totaux, setTotaux] = useState<Totaux | null>(null);
     const [commandesParMois, setCommandesParMois] = useState<any[]>([]);
     const [commandesParStatut, setCommandesParStatut] = useState<any[]>([]);
@@ -65,11 +67,11 @@ const AdminDashboard = () => {
     if (!totaux) return <p className="text-center mt-10 text-gray-500">Chargement du dashboard...</p>;
 
     const statsCards = [
-        { title: "Utilisateurs", value: totaux.utilisateurs, color: "bg-blue-500", icon: <User size={32} className="text-white" /> },
-        { title: "Commandes", value: totaux.commandes, color: "bg-green-500", icon: <ShoppingCart size={32} className="text-white" /> },
-        { title: "Produits", value: totaux.produits, color: "bg-purple-500", icon: <Package size={32} className="text-white" /> },
-        { title: "Fichiers", value: totaux.fichiers, color: "bg-red-500", icon: <FileText size={32} className="text-white" /> },
-        { title: "Revenu", value: totaux.revenu + " Ar", color: "bg-yellow-500", icon: <DollarSign size={32} className="text-white" /> },
+        { title: t("TableauAdmin.users"), value: totaux.utilisateurs, color: "bg-blue-500", icon: <User size={32} className="text-white" /> },
+        { title: t("TableauAdmin.orders"), value: totaux.commandes, color: "bg-green-500", icon: <ShoppingCart size={32} className="text-white" /> },
+        { title: t("TableauAdmin.products"), value: totaux.produits, color: "bg-purple-500", icon: <Package size={32} className="text-white" /> },
+        { title: t("TableauAdmin.files"), value: totaux.fichiers, color: "bg-red-500", icon: <FileText size={32} className="text-white" /> },
+        { title: t("TableauAdmin.revenue"), value: totaux.revenu + " Ar", color: "bg-yellow-500", icon: <DollarSign size={32} className="text-white" /> },
     ];
 
     return (
@@ -77,18 +79,18 @@ const AdminDashboard = () => {
 
             {/* Header */}
             <div className="flex flex-col lg:flex-row lg:justify-between ">
-            {/* Widget météo */}
+                {/* Widget météo */}
                 <div className="bg-gradient-to-r from-yellow-400 to-orange-500 p-6 shadow rounded-xl w-64 flex items-center justify-between">
                     <div>
-                        <h3 className="text-lg font-semibold text-white">Météo actuelle</h3>
+                        <h3 className="text-lg font-semibold text-white">{t("TableauAdmin.weather")}</h3>
                         <p className="text-2xl font-bold text-white mt-1">{meteo}°C</p>
                     </div>
                     <Sun size={48} className="text-white" />
                 </div>
                 <div className="text-center mb-6">
-                    <h2 className="text-3xl mt-2 font-bold text-base-content">Dashboard Admin 👑</h2>
+                    <h2 className="text-3xl mt-2 font-bold text-base-content">{t("TableauAdmin.title")} 👑</h2>
                     <p className="text-gray-600 mt-2">
-                        Aperçu de l’activité sur <span className="font-semibold">Print.mg</span>
+                        {t("TableauAdmin.overview")}<span className="font-semibold"> Print.mg</span>
                     </p>
                 </div>
             </div>
@@ -110,7 +112,7 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Commandes par mois */}
                 <div className="bg-base-100 p-6 shadow rounded-xl">
-                    <h3 className="text-lg font-semibold mb-4">Commandes par mois</h3>
+                    <h3 className="text-lg font-semibold mb-4">{t("TableauAdmin.ordersByMonth")}</h3>
                     <ResponsiveContainer width="100%" height={300}>
                         <LineChart data={commandesParMois}>
                             <CartesianGrid strokeDasharray="3 3" />
@@ -125,7 +127,7 @@ const AdminDashboard = () => {
 
                 {/* Commandes par statut */}
                 <div className="bg-base-100 p-6 shadow rounded-xl">
-                    <h3 className="text-lg font-semibold mb-4">Commandes par statut</h3>
+                    <h3 className="text-lg font-semibold mb-4">{t("TableauAdmin.ordersByStatus")}</h3>
                     <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
                             <Pie
@@ -150,15 +152,15 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Dernières commandes */}
                 <div className="bg-base-100 p-6 shadow rounded-xl overflow-x-auto">
-                    <h3 className="text-lg font-semibold mb-4">Dernières commandes</h3>
+                    <h3 className="text-lg font-semibold mb-4">{t("TableauAdmin.latestOrders")}</h3>
                     <table className="min-w-full text-left border-collapse">
                         <thead>
                             <tr className="border-b text-base-content">
-                                <th className="p-2">ID</th>
-                                <th className="p-2">Utilisateur</th>
-                                <th className="p-2">Statut</th>
-                                <th className="p-2">Montant</th>
-                                <th className="p-2">Date</th>
+                                <th className="p-2">{t("TableauAdmin.table.id")}</th>
+                                <th className="p-2">{t("TableauAdmin.table.user")}</th>
+                                <th className="p-2">{t("TableauAdmin.table.status")}</th>
+                                <th className="p-2">{t("TableauAdmin.table.amount")}</th>
+                                <th className="p-2">{t("TableauAdmin.table.date")}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -177,7 +179,7 @@ const AdminDashboard = () => {
 
                 {/* Utilisateurs récents */}
                 <div className="bg-base-100 p-6 shadow rounded-xl">
-                    <h3 className="text-lg font-semibold mb-4">Utilisateurs récents</h3>
+                    <h3 className="text-lg font-semibold mb-4">{t("TableauAdmin.recentUsers")}</h3>
                     <ul className="space-y-3">
                         {utilisateursRecents.map(user => (
                             <li key={user.email} className="flex items-center p-3 border rounded-lg hover:bg-blue-50 transition">

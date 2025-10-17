@@ -7,6 +7,7 @@ import user from "../assets/Utilisateur.png";
 import { useNavigate } from "react-router-dom";
 import NotificationButton from "./NotificationButton";
 import '../calendar.css';
+import { useTranslation } from "react-i18next";
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -18,12 +19,16 @@ interface DashboardLayoutProps {
 }
 
 export default function DashboardLayout({ children, userPhoto, menus, headerContent, onMenuClick }: DashboardLayoutProps) {
+    const { t } = useTranslation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     // Sur desktop ET mobile : sidebar droite cachée par défaut
     const [isRightSidebarVisible, setIsRightSidebarVisible] = useState(false);
+
+
+
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
@@ -71,7 +76,7 @@ export default function DashboardLayout({ children, userPhoto, menus, headerCont
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        const confirmLogout = window.confirm("Voulez-vous vraiment vous déconnecter ?");
+        const confirmLogout = window.confirm(t("dashboard.sidebar.confirmLogout"));
         if (!confirmLogout) return; // annuler si l'utilisateur clique sur "Annuler
 
         // Supprimer le token et le rôle
@@ -99,7 +104,7 @@ export default function DashboardLayout({ children, userPhoto, menus, headerCont
                 <div className="p-4 font-bold text-2xl flex items-center justify-between">
                     <div className="flex text-blue-600 items-center gap-2">
                         <Printer size={20} />
-                        Print.mg
+                        {t("dashboard.sidebar.title")}
                     </div>
                     <button className="md:hidden" onClick={() => setIsSidebarOpen(false)}>
                         <X size={20} />
@@ -116,7 +121,7 @@ export default function DashboardLayout({ children, userPhoto, menus, headerCont
                             className="flex items-center text-base-content hover:text-white space-x-3 w-full px-3 py-4 rounded-lg hover:bg-blue-400 hover:font-bold"
                         >
                             <span className="text-red-500 font-bold">{menu.icon}</span>
-                            <span>{menu.label}</span>
+                            <span>{t(menu.label)}</span>
                         </button>
                     ))}
                 </nav>
@@ -124,7 +129,7 @@ export default function DashboardLayout({ children, userPhoto, menus, headerCont
                     className="flex items-center text-base-content space-x-3 px-3 py-2 hover:bg-blue-400 hover:text-white hover:font-bold mb-4"
                     onClick={handleLogout}
                 >
-                    <LogOut size={20} /> <span>Déconnexion</span>
+                    <LogOut size={20} /> <span>{t("dashboard.sidebar.logout")}</span>
                 </button>
             </aside>
 
@@ -205,7 +210,7 @@ export default function DashboardLayout({ children, userPhoto, menus, headerCont
                                                 }}
                                                 className="block w-full text-left px-4 py-2 hover:bg-blue-300 rounded-lg"
                                             >
-                                                Profil
+                                                {t("dashboard.menus.profil")}
                                             </button>
                                         </li>
                                         <li>
@@ -213,7 +218,7 @@ export default function DashboardLayout({ children, userPhoto, menus, headerCont
                                                 onClick={handleLogout}
                                                 className="block w-full text-left px-4 py-2 hover:bg-blue-300 rounded-lg"
                                             >
-                                                Déconnexion
+                                                {t("dashboard.sidebar.logout")}
                                             </button>
                                         </li>
                                     </ul>
@@ -234,7 +239,7 @@ export default function DashboardLayout({ children, userPhoto, menus, headerCont
                     {isRightSidebarVisible && windowWidth >= 1024 && (
                         <aside className="w-80 bg-base-100 p-4 border-l border-base-300 shadow-sm">
                             <div className="flex justify-between items-center mb-4">
-                                <h3 className="text-lg font-semibold">Calendrier</h3>
+                                <h3 className="text-lg font-semibold">{t("dashboard.header.calendar")}</h3>
                             </div>
                             <div className="border rounded-lg p-2 bg-base-200">
                                 <Calendar

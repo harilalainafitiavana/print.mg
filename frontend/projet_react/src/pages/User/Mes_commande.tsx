@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import {
   Trash2, Eye, PlusCircle, X,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { strong } from "framer-motion/client";
 
 type MesCommandeProps = {
   onMenuClick: (menu: string) => void;
@@ -25,6 +27,7 @@ export type Order = {
 };
 
 export default function MesCommande({ onMenuClick, searchQuery }: MesCommandeProps) {
+  const { t } = useTranslation();
   const [orders, setOrders] = useState<Order[]>([]);
   // const [query, setQuery] = useState("");
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -73,7 +76,7 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
     try {
       const token = localStorage.getItem("token") || sessionStorage.getItem("token");
       if (!token) {
-        alert("Vous devez être connecté pour effectuer cette action.");
+        alert(t("mesCommandes.alerts.mustBeLoggedIn"));
         return;
       }
 
@@ -96,11 +99,11 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
         setSelectedOrder(null);
         setShowConfirm(false);
       } else {
-        alert("Erreur : " + data.message);
+        alert(t("mesCommandes.alerts.deleteFail", { message: data.message }));
       }
     } catch (err) {
       console.error(err);
-      alert("Erreur lors de la suppression");
+      alert(t("mesCommandes.alerts.deleteError"));
     }
   };
 
@@ -120,8 +123,8 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
     <div className="p-4 max-w-6xl mx-auto">
       <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
         <div>
-          <h1 className="text-4xl font-bold">Mes commandes</h1>
-          <p className="text-sm text-base-content">Toutes les commandes que tu as passées sur la plateforme.</p>
+          <h1 className="text-4xl font-bold">{t("mesCommandes.title")}</h1>
+          <p className="text-sm text-base-content">{t("mesCommandes.description")}</p>
         </div>
 
         <div className="flex gap-2 w-full sm:w-auto">
@@ -131,14 +134,14 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
             onClick={() => onMenuClick("order")}
           >
             <PlusCircle size={18} />
-            Nouvelle
+            {t("mesCommandes.newOrder")}
           </button>
         </div>
       </header>
 
       {filtered.length === 0 ? (
         <div className="border-2 border-dashed border-gray-200 rounded-lg p-8 text-center">
-          <p className="text-gray-600 mb-4">Aucune commande trouvée.</p>
+          <p className="text-gray-600 mb-4">{t("mesCommandes.noOrder")}</p>
         </div>
       ) : (
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -147,42 +150,28 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1">
                   <div className="flex items-center justify-between gap-2">
-                    <h2 className="font-semibold text-lg">Commande {order.id}</h2>
-                    <span
-                      className={`text-sm px-2 py-1 rounded-full text-white ${order.statut === 'TERMINE'
-                          ? 'bg-green-500'
-                          : order.statut === 'EN_ATTENTE' || order.statut === 'RECU'
-                            ? 'bg-yellow-500'
-                            : order.statut === 'EN_COURS_IMPRESSION' || order.statut === 'EN_COURS_LIVRAISON'
-                              ? 'bg-blue-500'
-                              : order.statut === 'LIVREE'
-                                ? 'bg-indigo-500'
-                                : 'bg-gray-500' // pour tout autre cas
-                        }`}
-                    >
-                      {order.statut === 'TERMINE'
-                        ? 'Terminée'
-                        : order.statut === 'EN_ATTENTE'
-                          ? 'En attente'
-                          : order.statut === 'RECU'
-                            ? 'Reçue'
-                            : order.statut === 'EN_COURS_IMPRESSION'
-                              ? 'En cours impression'
-                              : order.statut === 'EN_COURS_LIVRAISON'
-                                ? 'Livraison en cours'
-                                : order.statut === 'LIVREE'
-                                  ? 'Livrée'
-                                  : order.statut}
+                    <h2 className="font-semibold text-lg">
+                      {t("mesCommandes.title")} {order.id}
+                    </h2>
+                    <span className={`text-sm px-2 py-1 rounded-full text-white ${order.statut === 'TERMINE' ? 'bg-green-500' :
+                      order.statut === 'EN_ATTENTE' || order.statut === 'RECU' ? 'bg-yellow-500' :
+                        order.statut === 'EN_COURS_IMPRESSION' || order.statut === 'EN_COURS_LIVRAISON' ? 'bg-blue-500' :
+                          order.statut === 'LIVREE' ? 'bg-indigo-500' : 'bg-gray-500'
+                      }`}>
+                      {t(`mesCommandes.orderStatus.${order.statut}`, { defaultValue: order.statut })}
                     </span>
-
                   </div>
-                  <p className="text-sm text-base-content mt-2">Date: {new Date(order.date_commande).toLocaleDateString()}</p>
-                  <p className="text-sm text-base-content mt-2 font-medium">Montant: {order.montant_total.toLocaleString()} Ariary</p>
+                  <p className="text-sm text-base-content mt-2">
+                    {t("mesCommandes.modal.date", { defaultValue: "Date" })} : {new Date(order.date_commande).toLocaleDateString()}
+                  </p>
+                  <p className="text-sm text-base-content mt-2 font-medium">
+                    {t("mesCommandes.modal.amount", { defaultValue: "Montant" })} : {order.montant_total.toLocaleString()} Ariary
+                  </p>
                 </div>
 
                 <div className="flex flex-col items-center gap-2">
                   <button
-                    title="Voir"
+                    title={t("mesCommandes.view")}
                     onClick={() => handleViewDetail(order)}
                     className="p-2 rounded-lg border border-gray-100 hover:bg-blue-300"
                   >
@@ -190,7 +179,7 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
                   </button>
 
                   <button
-                    title="Supprimer"
+                    title={t("mesCommandes.delete")}
                     onClick={() => handleDeleteClick(order)}
                     className="p-2 rounded-lg border border-gray-100 hover:bg-blue-300 text-red-600"
                   >
@@ -207,35 +196,34 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
       {showDetailModal && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
-            <h3 className="text-xl font-bold mb-4">📄 Résumé de la commande</h3>
+            <h3 className="text-xl font-bold mb-4">{t("mesCommandes.orderSummary")}</h3>
             <div className="space-y-2 text-sm">
               {selectedOrder.fichiers.map((f, idx) => (
                 <div key={idx} className="border-b border-gray-200 pb-2 mb-2">
-                  <p><strong>Fichier :</strong> {f.nom_fichier}</p>
-                  <p><strong>DPI :</strong> {f.resolution_dpi}</p>
-                  <p><strong>Profil :</strong> {f.profil_couleur}</p>
-                  <p><strong>Format :</strong> {f.format} {selectedOrder.configuration.format_type === "petit"
+                  <p><strong>{t("mesCommandes.modal.file")}:</strong> {f.nom_fichier}</p>
+                  <p><strong>{t("mesCommandes.modal.dpi")}:</strong> {f.resolution_dpi}</p>
+                  <p><strong>{t("mesCommandes.modal.colorProfile")}:</strong> {f.profil_couleur}</p>
+                  <p><strong>{t("mesCommandes.modal.format")}:</strong> {f.format} {selectedOrder.configuration.format_type === "petit"
                     ? `- ${selectedOrder.configuration.small_format}`
                     : `- ${selectedOrder.configuration.largeur}x${selectedOrder.configuration.hauteur} cm`
                   }</p>
-                  <p><strong>Type format :</strong> {selectedOrder.configuration.format_type}</p>
-                  <p><strong>Papier :</strong> {selectedOrder.configuration.paper_type}</p>
-                  <p><strong>Finition :</strong> {selectedOrder.configuration.finish}</p>
-                  <p><strong>Quantité :</strong> {selectedOrder.configuration.quantity}</p>
-                  <p><strong>Nombre de page :</strong> {selectedOrder.configuration.book_pages || "Il n'y à pas"} </p>
-                  {selectedOrder.configuration.duplex && <p><strong>Duplex :</strong> {selectedOrder.configuration.duplex}</p>}
-                  {selectedOrder.configuration.binding && <p><strong>Reliure :</strong> {selectedOrder.configuration.binding}</p>}
-                  {selectedOrder.configuration.cover_paper && <p><strong>Couverture :</strong> {selectedOrder.configuration.cover_paper}</p>}
-                  <p><strong>Téléphone :</strong> {selectedOrder.phone}</p>
-                  <p><strong>Montant :</strong> {selectedOrder.montant_total} Ariary</p>
-                  <p><strong>Options :</strong> {selectedOrder.configuration.options || "-"}</p>
+                  <p><strong>{t("mesCommandes.modal.formatType")}:</strong> {selectedOrder.configuration.format_type}</p>
+                  <p><strong>{t("mesCommandes.modal.paper")}:</strong> {selectedOrder.configuration.paper_type}</p>
+                  <p><strong>{t("mesCommandes.modal.finish")}:</strong> {selectedOrder.configuration.finish}</p>
+                  <p><strong>{t("mesCommandes.modal.quantity")}:</strong> {selectedOrder.configuration.quantity}</p>
+                  <p><strong>{t("mesCommandes.modal.bookPages")}:</strong> {selectedOrder.configuration.book_pages || "-"}</p>
+                  {selectedOrder.configuration.duplex && <p><strong>{t("mesCommandes.modal.duplex")}:</strong> {selectedOrder.configuration.duplex}</p>}
+                  {selectedOrder.configuration.binding && <p><strong>{t("mesCommandes.modal.binding")}:</strong> {selectedOrder.configuration.binding}</p>}
+                  {selectedOrder.configuration.cover_paper && <p><strong>{t("mesCommandes.modal.coverPaper")}:</strong> {selectedOrder.configuration.cover_paper}</p>}
+                  <p><strong>{t("mesCommandes.modal.phone")}:</strong> {selectedOrder.phone}</p>
+                  <p><strong>{t("mesCommandes.modal.amount")}:</strong> {selectedOrder.montant_total} Ariary</p>
+                  <p><strong>{t("mesCommandes.modal.options")}:</strong> {selectedOrder.configuration.options || "-"}</p>
                 </div>
               ))}
-
             </div>
             <div className="flex justify-end gap-4 mt-4">
               <button onClick={handleCancel} className="px-4 py-2 rounded-lg border flex items-center gap-2 hover:bg-red-600 hover:text-white">
-                <X size={16} /> Annuler
+                <X size={16} /> {t("mesCommandes.cancel")}
               </button>
             </div>
           </div>
@@ -247,15 +235,19 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
           <div className="bg-base-100 rounded-xl p-6 w-full max-w-md">
             <div className="flex items-start justify-between">
-              <h3 className="text-lg font-semibold">Confirmer la suppression</h3>
+              <h3 className="text-lg font-semibold">{t("mesCommandes.confirmDeleteTitle")}</h3>
               <button onClick={cancelDelete} className="p-1 rounded">
                 <X />
               </button>
             </div>
-            <p className="mt-4 text-sm text-base-content">Es-tu sûr(e) de vouloir supprimer la commande <span className="font-mono">{selectedOrder.id}</span> ?</p>
+            <p className="mt-4 text-sm text-base-content">{t("mesCommandes.confirmDeleteText", { orderId: selectedOrder.id })}</p>
             <div className="mt-6 flex justify-end gap-3">
-              <button onClick={cancelDelete} className="px-4 py-2 rounded-lg border">Annuler</button>
-              <button onClick={confirmDelete} className="px-4 py-2 rounded-lg bg-red-500 text-white">Supprimer</button>
+              <button onClick={cancelDelete} className="px-4 py-2 rounded-lg border">
+                {t("mesCommandes.cancelButton")}
+              </button>
+              <button onClick={confirmDelete} className="px-4 py-2 rounded-lg bg-red-500 text-white">
+                {t("mesCommandes.confirmButton")}
+              </button>
             </div>
           </div>
         </div>

@@ -2,11 +2,13 @@ import { useState, useEffect, type ChangeEvent } from "react";
 import { ArrowRight, ArrowLeft, Check, X } from "lucide-react";
 // import axios from "axios";
 import { authFetch } from "../../Components/Utils";
+import { useTranslation } from "react-i18next";
 
 
 type Step = 1 | 2 | 3 | 4;
 
 export default function PrintingOrderForm() {
+  const { t } = useTranslation();
   const [step, setStep] = useState<Step>(1);
   const [isBook, setIsBook] = useState(false);
   const [bookPages, setBookPages] = useState<number | "">("");
@@ -47,7 +49,7 @@ export default function PrintingOrderForm() {
     if (!selectedFile) return;
     const ext = selectedFile.name.split(".").pop()?.toLowerCase();
     if (!["pdf", "jpg", "jpeg"].includes(ext || "")) {
-      setFileError("Seuls les fichiers PDF et JPG sont acceptés");
+      setFileError(t("printingOrder.errors.invalidFile"));
       setFile(null);
       return;
     }
@@ -58,7 +60,7 @@ export default function PrintingOrderForm() {
   // Validation Étape 1
   const validateStep1 = () => {
     if (!file || !fileName) {
-      setFileError("Veuillez remplir tous les champs de l'étape 1");
+      setFileError(t("printingOrder.errors.fillStep1"));
       return false;
     }
     setFileError("");
@@ -68,7 +70,7 @@ export default function PrintingOrderForm() {
   // Validation Étape 2
   const validateStep2 = () => {
     if (!paperType || !finish || !quantity) {
-      setFormatError("Veuillez remplir tous les champs obligatoires de l'étape 2");
+      setFormatError(t("printingOrder.errors.fillStep2"));
       return false;
     }
 
@@ -76,7 +78,7 @@ export default function PrintingOrderForm() {
     if (isBook) {
       const minBookQty = 4;
       if (quantity < minBookQty) {
-        setFormatError(`Pour un livre, la quantité doit être au moins ${minBookQty}`);
+        setFormatError(t("printingOrder.errors.minBookQty", { min: minBookQty }));
         return false;
       }
     } else {
@@ -88,7 +90,7 @@ export default function PrintingOrderForm() {
               smallFormat === "A3" ? 10 : 50;
 
         if (quantity < minQty) {
-          setFormatError(`Quantité minimale pour ${smallFormat} : ${minQty}`);
+          setFormatError(t("printingOrder.errors.minQty", { format: smallFormat, min: minQty }));
           return false;
         }
       }
@@ -97,11 +99,11 @@ export default function PrintingOrderForm() {
         const w = parseFloat(customSize.width || "0");
         const h = parseFloat(customSize.height || "0");
         if (!w || !h) {
-          setFormatError("Veuillez saisir largeur et hauteur pour le grand format");
+          setFormatError(t("printingOrder.errors.grandSize"));
           return false;
         }
         if (w > 160 || h > 100) {
-          setFormatError("La limite du grand format est 160x100 cm");
+          setFormatError(t("printingOrder.errors.grandMaxSize"));
           return false;
         }
       }
@@ -115,11 +117,11 @@ export default function PrintingOrderForm() {
   // Validation Étape 3
   const validateStep3 = () => {
     if (!phone.match(/^\d{10}$/)) {
-      setStep3Error("Veuillez entrer un numéro de téléphone valide à 10 chiffres");
+      setStep3Error(t("printingOrder.errors.invalidPhone"));
       return false;
     }
     if (!amount || amount <= 0) {
-      setStep3Error("Le montant doit être supérieur à 0");
+      setStep3Error(t("printingOrder.errors.invalidAmount"));
       return false;
     }
     setStep3Error("");
@@ -139,7 +141,7 @@ export default function PrintingOrderForm() {
   // Fonction pour envoyer la commande au backend
   const handleSubmit = async () => {
     if (!file) {
-      alert("Veuillez sélectionner un fichier.");
+      alert(t("printingOrder.errors.selectFile"));
       return;
     }
 
@@ -199,7 +201,7 @@ export default function PrintingOrderForm() {
       const data = await res.json();
 
       if (data.success) {
-        alert(`✅ Commande créée ! Paiement status : ${data.paiement_status}`);
+        alert(t("printingOrder.success.created", { status: data.paiement_status }));
 
         // 🔹 Reset formulaire
         setStep(1);
@@ -215,11 +217,11 @@ export default function PrintingOrderForm() {
         setCustomSize({ width: "", height: "" });
         setShowModal(false);
       } else {
-        alert(`❌ Erreur : ${data.error}`);
+        alert(t("printingOrder.errors.creationFailed", { message: data.error }));
       }
     } catch (error: any) {
       console.error(error);
-      alert(error.message || "❌ Une erreur est survenue lors de la création de la commande.");
+      alert(error.message || t("printingOrder.errors.creationError"));
     }
   };
 
@@ -230,9 +232,18 @@ export default function PrintingOrderForm() {
 
   // Options de papier selon format
   const paperOptions =
-    smallFormat === "A4" ? ["glace", "mat"] :
-      smallFormat === "A3" ? ["standard", "brillant"] :
-        ["standard"];
+    smallFormat === "A4"
+      ? [
+        { key: "glace", label: t("printingOrder.paper.glossy") },
+        { key: "mat", label: t("printingOrder.paper.matte") },
+      ]
+      : smallFormat === "A3"
+        ? [
+          { key: "standard", label: t("printingOrder.paper.standard") },
+          { key: "brillant", label: t("printingOrder.paper.shiny") },
+        ]
+        : [{ key: "standard", label: t("printingOrder.paper.standard") }];
+
 
   // Calcul automatique du montant
   useEffect(() => {
@@ -291,12 +302,12 @@ export default function PrintingOrderForm() {
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-base-100 rounded-xl shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-base-content">📄 Commande d'impression</h2>
+      <h2 className="text-2xl font-bold mb-6 text-base-content">📄 {t("printingOrder.title")}</h2>
 
       {/* Étape 1 */}
       {step === 1 && (
         <div className="space-y-4">
-          <input type="text" placeholder="Nom du fichier" value={fileName} onChange={(e) => setFileName(e.target.value)} className="input input-bordered w-full" />
+          <input type="text" placeholder={t("printingOrder.placeholders.fileName")} value={fileName} onChange={(e) => setFileName(e.target.value)} className="input input-bordered w-full" />
           <input type="file" accept=".pdf,.jpg,.jpeg" onChange={handleFileChange} className="input input-bordered w-full" />
           {fileError && <p className="text-red-500">{fileError}</p>}
 
@@ -313,7 +324,7 @@ export default function PrintingOrderForm() {
           </div>
 
           <button onClick={nextStep} className="btn btn-primary flex items-center gap-2">
-            Suivant <ArrowRight size={16} />
+            {t("printingOrder.buttons.next")} <ArrowRight size={16} />
           </button>
         </div>
       )}
@@ -322,8 +333,8 @@ export default function PrintingOrderForm() {
       {step === 2 && (
         <div className="space-y-4">
           <select value={formatType} onChange={(e) => setFormatType(e.target.value)} className="select select-bordered">
-            <option value="petit">Petit format</option>
-            <option value="grand">Grand format</option>
+            <option value="petit">{t("printingOrder.format.small") || "Petit format"}</option>
+            <option value="grand">{t("printingOrder.format.large") || "Grand format"}</option>
           </select>
 
           {formatType === "petit" && (
@@ -331,25 +342,25 @@ export default function PrintingOrderForm() {
               <option value="A5">A5</option>
               <option value="A4">A4</option>
               <option value="A3">A3</option>
-              <option value="custom">Personnalisé (A6 ou autre)</option>
+              <option value="custom">{t("printingOrder.format.custom") || "Personnalisé"}</option>
             </select>
           )}
 
           {/* Champs largeur/hauteur */}
           {(formatType === "grand" || (formatType === "petit" && smallFormat === "custom")) && (
             <div className="flex flex-col gap-2">
-              {formatType === "grand" && <p className="text-yellow-600">⚠️ Limite imprimante : 160x100 cm</p>}
+              {formatType === "grand" && <p className="text-yellow-600">{t("printingOrder.warning.maxSize") || "⚠️ Limite imprimante : 160x100 cm"}</p>}
               <div className="flex gap-2">
                 <input
                   type="text"
-                  placeholder="Largeur (cm)"
+                  placeholder={t("printingOrder.placeholders.width")}
                   value={customSize.width}
                   onChange={(e) => setCustomSize({ ...customSize, width: e.target.value })}
                   className="input input-bordered"
                 />
                 <input
                   type="text"
-                  placeholder="Hauteur (cm)"
+                  placeholder={t("printingOrder.placeholders.height")}
                   value={customSize.height}
                   onChange={(e) => setCustomSize({ ...customSize, height: e.target.value })}
                   className="input input-bordered"
@@ -366,61 +377,68 @@ export default function PrintingOrderForm() {
               id="isBook"
               className="checkbox"
             />
-            <label htmlFor="isBook">Je veux imprimer un livre</label>
+            <label htmlFor="isBook">{t("printingOrder.bookOption") || "Je veux imprimer un livre"}</label>
           </div>
 
           {isBook && (
             <input
               type="number"
-              placeholder="Nombre de pages"
+              placeholder={t("printingOrder.placeholders.pages")}
               value={bookPages}
               onChange={(e) => setBookPages(parseInt(e.target.value))}
               className="input input-bordered w-full mb-2"
             />
           )}
 
-          <select value={paperType} onChange={(e) => setPaperType(e.target.value)} className="select select-bordered w-full">
-            <option value="">Sélectionnez le type de papier</option>
-            {paperOptions.map((p) => <option key={p} value={p}>{p}</option>)}
+          <select
+            value={paperType}
+            onChange={(e) => setPaperType(e.target.value)}
+            className="select select-bordered w-full"
+          >
+            <option value="">{t("printingOrder.placeholders.paperType")}</option>
+            {paperOptions.map((p) => (
+              <option key={p.key} value={p.key}>{p.label}</option>
+            ))}
           </select>
+
 
           <select value={finish} onChange={(e) => setFinish(e.target.value)} className="select select-bordered w-full">
-            <option value="">Finition</option>
-            <option value="brillant">Brillant</option>
-            <option value="mate">Mate</option>
-            <option value="standard">Standard</option>
+            <option value="">{t("printingOrder.placeholders.finish") || "Finition"}</option>
+            <option value="brillant">{t("printingOrder.finish.glossy") || "Brillant"}</option>
+            <option value="mate">{t("printingOrder.finish.matte") || "Mate"}</option>
+            <option value="standard">{t("printingOrder.finish.standard") || "Standard"}</option>
           </select>
 
-          <input type="number" placeholder="Quantité" value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value))} className="input input-bordered w-full" />
+          <input type="number" placeholder={t("printingOrder.placeholders.quantity")} value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value))} className="input input-bordered w-full" />
 
           {/* Options facultatives */}
           <select value={duplex} onChange={(e) => setDuplex(e.target.value)} className="select select-bordered w-full">
-            <option value="">Version Recto seul ou Recto/verso ?</option>
-            <option value="recto">Recto seul</option>
-            <option value="recto_verso">Recto/verso</option>
+            <option value="">{t("printingOrder.placeholders.duplex") || "Version Recto seul ou Recto/verso ?"}</option>
+            <option value="recto">{t("printingOrder.duplex.single") || "Recto seul"}</option>
+            <option value="recto_verso">{t("printingOrder.duplex.double") || "Recto/verso"}</option>
           </select>
 
           <select value={binding} onChange={(e) => setBinding(e.target.value)} className="select select-bordered w-full">
-            <option value="">Pas de reliure</option>
-            <option value="spirale">Spirale</option>
-            <option value="dos_colle">Dos collé</option>
-            <option value="agrafé">Agrafé</option>
+            <option value="">{t("printingOrder.binding.none") || "Pas de reliure"}</option>
+            <option value="spirale">{t("printingOrder.binding.spiral") || "Spirale"}</option>
+            <option value="dos_colle">{t("printingOrder.binding.glue") || "Dos collé"}</option>
+            <option value="agrafé">{t("printingOrder.binding.stapled") || "Agrafé"}</option>
           </select>
 
           <select value={coverPaper} onChange={(e) => setCoverPaper(e.target.value)} className="select select-bordered w-full">
-            <option value="">Pas de couverture spéciale</option>
-            <option value="simple">Papier simple</option>
-            <option value="photo">Papier photo</option>
+            <option value="">{t("printingOrder.cover.none") || "Pas de couverture spéciale"}</option>
+            <option value="simple">{t("printingOrder.cover.simple") || "Papier simple"}</option>
+            <option value="photo">{t("printingOrder.cover.photo") || "Papier photo"}</option>
           </select>
 
           {formatError && <p className="text-red-500">{formatError}</p>}
 
           <div className="flex justify-between">
             <button onClick={prevStep} className="btn btn-outline flex items-center gap-2">
-              <ArrowLeft size={16} /> Retour
+              <ArrowLeft size={16} /> {t("printingOrder.buttons.back")}
             </button>
             <button onClick={nextStep} className="btn btn-primary flex items-center gap-2">
-              Suivant <ArrowRight size={16} />
+              {t("printingOrder.buttons.next")} <ArrowRight size={16} />
             </button>
           </div>
         </div>
@@ -429,16 +447,16 @@ export default function PrintingOrderForm() {
       {/* Étape 3 */}
       {step === 3 && (
         <div className="space-y-4">
-          <input type="tel" placeholder="Téléphone" value={phone} onChange={(e) => setPhone(e.target.value)} className="input input-bordered w-full" />
-          <input type="number" placeholder="Montant (ARIARY)" value={amount} readOnly className="input input-bordered w-full" />
-          <textarea placeholder="Options supplémentaires" value={options} onChange={(e) => setOptions(e.target.value)} className="textarea textarea-bordered w-full" />
+          <input type="tel" placeholder={t("printingOrder.placeholders.phone")} value={phone} onChange={(e) => setPhone(e.target.value)} className="input input-bordered w-full" />
+          <input type="number" placeholder={t("printingOrder.placeholders.amount")} value={amount} readOnly className="input input-bordered w-full" />
+          <textarea placeholder={t("printingOrder.placeholders.options")} value={options} onChange={(e) => setOptions(e.target.value)} className="textarea textarea-bordered w-full" />
           {step3Error && <p className="text-red-500">{step3Error}</p>}
 
           <div className="flex justify-between">
             <button onClick={prevStep} className="btn btn-outline flex items-center gap-2">
-              <ArrowLeft size={16} /> Retour
+              <ArrowLeft size={16} /> {t("printingOrder.buttons.back")}
             </button>
-            <button onClick={nextStep} className="btn btn-primary">Vérifier commande</button>
+            <button onClick={nextStep} className="btn btn-primary">{t("printingOrder.buttons.checkOrder")}</button>
           </div>
         </div>
       )}
@@ -447,33 +465,38 @@ export default function PrintingOrderForm() {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
-            <h3 className="text-xl font-bold mb-4">📄 Résumé de la commande</h3>
+            <h3 className="text-xl font-bold mb-4">📄 {t("printingOrder.summary.title")}</h3>
             <div className="space-y-2 text-sm">
-              <p><strong>Fichier :</strong> {fileName}</p>
-              <p><strong>DPI :</strong> {dpi}</p>
-              <p><strong>Profil :</strong> {colorProfile}</p>
-              <p><strong>Format :</strong> {formatType} {formatType === "petit" ? `- ${smallFormat}` : `- ${customSize.width}x${customSize.height} cm`}</p>
-              <p><strong>Papier :</strong> {paperType}</p>
-              <p><strong>Finition :</strong> {finish}</p>
-              <p><strong>Quantité :</strong> {quantity}</p>
-              {duplex && <p><strong>Duplex :</strong> {duplex}</p>}
-              {binding && <p><strong>Reliure :</strong> {binding}</p>}
-              {coverPaper && <p><strong>Couverture :</strong> {coverPaper}</p>}
-              <p><strong>Téléphone :</strong> {phone}</p>
-              <p><strong>Montant :</strong> {amount} Ariary</p>
-              <p><strong>Options :</strong> {options || "-"}</p>
+              <p><strong>{t("printingOrder.summary.file")} :</strong> {fileName}</p>
+              <p><strong>{t("printingOrder.summary.dpi")} :</strong> {dpi}</p>
+              <p><strong>{t("printingOrder.summary.colorProfile")} :</strong> {colorProfile}</p>
+              <p>
+                <strong>{t("printingOrder.summary.format")} :</strong> {formatType}{" "}
+                {formatType === "petit" ? `- ${smallFormat}` : `- ${customSize.width}x${customSize.height} cm`}
+              </p>
+              <p><strong>{t("printingOrder.summary.paper")} :</strong> {paperType}</p>
+              <p><strong>{t("printingOrder.summary.finish")} :</strong> {finish}</p>
+              <p><strong>{t("printingOrder.summary.quantity")} :</strong> {quantity}</p>
+              {isBook && bookPages && <p><strong>{t("printingOrder.summary.bookPages")} :</strong> {bookPages}</p>}
+              {duplex && <p><strong>{t("printingOrder.summary.duplex")} :</strong> {duplex}</p>}
+              {binding && <p><strong>{t("printingOrder.summary.binding")} :</strong> {binding}</p>}
+              {coverPaper && <p><strong>{t("printingOrder.summary.cover")} :</strong> {coverPaper}</p>}
+              <p><strong>{t("printingOrder.summary.phone")} :</strong> {phone}</p>
+              <p><strong>{t("printingOrder.summary.amount")} :</strong> {amount} Ariary</p>
+              <p><strong>{t("printingOrder.summary.options")} :</strong> {options || "-"}</p>
             </div>
             <div className="flex justify-end gap-4 mt-4">
               <button onClick={handleCancel} className="btn btn-outline flex items-center gap-2">
-                <X size={16} /> Annuler
+                <X size={16} /> {t("printingOrder.buttons.cancel")}
               </button>
               <button onClick={handleSubmit} className="btn btn-primary flex items-center gap-2">
-                <Check size={16} /> Confirmer
+                <Check size={16} /> {t("printingOrder.buttons.confirm")}
               </button>
             </div>
           </div>
         </div>
       )}
+
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { RotateCcw, Trash, X, Check } from "lucide-react";
 import { authFetch } from "../../Components/Utils";
+import { useTranslation } from "react-i18next";
 
 // ------------------- Types -------------------
 interface Fichier {
@@ -52,6 +53,7 @@ interface DeletedNotification {
 
 // ------------------- Component -------------------
 export default function AdminCorbeille() {
+  const { t } = useTranslation();
   // Commandes
   const [deletedOrders, setDeletedOrders] = useState<DeletedOrder[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<DeletedOrder | null>(null);
@@ -169,12 +171,12 @@ export default function AdminCorbeille() {
   // ------------------- Render -------------------
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">🗑️ Corbeille</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("trash.title")}</h1>
 
       {/* ------------------- SECTION COMMANDES ------------------- */}
-      <h2 className="text-xl font-semibold mb-4">📦 Commandes supprimées</h2>
+      <h2 className="text-xl font-semibold mb-4">{t("trash.deletedOrders")}</h2>
       {deletedOrders.length === 0 ? (
-        <p className="text-base-content">Aucune commande supprimée.</p>
+        <p className="text-base-content">{t("trash.noOrders")}</p>
       ) : (
         <div className="grid md:grid-cols-2 gap-4">
           {deletedOrders.map(order => (
@@ -202,9 +204,9 @@ export default function AdminCorbeille() {
       )}
 
       {/* ------------------- SECTION NOTIFICATIONS ------------------- */}
-      <h2 className="text-xl font-semibold mt-8 mb-4">🔔 Notifications supprimées</h2>
+      <h2 className="text-xl font-semibold mt-8 mb-4">{t("trash.deletedNotifications")}</h2>
       {deletedNotifications.length === 0 ? (
-        <p className="text-base-content">Aucune notification supprimée.</p>
+        <p className="text-base-content">{t("trash.noNotifications")}</p>
       ) : (
         <div className="grid md:grid-cols-2 gap-4">
           {deletedNotifications.map(notif => (
@@ -225,30 +227,30 @@ export default function AdminCorbeille() {
 
       {/* ------------------- MODALS COMMANDES ------------------- */}
       {showRestoreModal && selectedOrder && (
-        <Modal title="⚡ Restaurer la commande"
-          message={`Voulez-vous vraiment restaurer ${selectedOrder.name} ?`}
+        <Modal title={t("trash.restore_commande")}
+          message={t("trash.confirmRestore")}
           onCancel={() => setShowRestoreModal(false)}
           onConfirm={confirmRestore} />
       )}
 
       {showDeletePermanentModal && selectedOrder && (
-        <Modal title="⚠️ Suppression définitive"
-          message={`La commande ${selectedOrder.name} sera supprimée définitivement.`}
+        <Modal title={t("trash.deletePermanent")}
+          message={t("trash.confirmDelete")}
           onCancel={() => setShowDeletePermanentModal(false)}
           onConfirm={confirmDeletePermanent} danger />
       )}
 
       {/* ------------------- MODALS NOTIFICATIONS ------------------- */}
       {showRestoreNotifModal && selectedNotif && (
-        <Modal title="⚡ Restaurer la notification"
-          message={`Voulez-vous vraiment restaurer cette notification ?`}
+        <Modal title={t("trash.restore_notification")}
+          message={t("trash.confirmRestore")}
           onCancel={() => setShowRestoreNotifModal(false)}
           onConfirm={confirmRestoreNotification} />
       )}
 
       {showDeleteNotifModal && selectedNotif && (
-        <Modal title="⚠️ Suppression définitive"
-          message={`Cette notification sera supprimée définitivement.`}
+        <Modal title={t("trash.deletePermanent")}
+          message={t("trash.confirmDelete")}
           onCancel={() => setShowDeleteNotifModal(false)}
           onConfirm={confirmDeletePermanentNotif} danger />
       )}
@@ -258,7 +260,9 @@ export default function AdminCorbeille() {
 
 // ------------------- Modal générique -------------------
 function Modal({ title, message, onCancel, onConfirm, danger = false }:
+
   { title: string, message: string, onCancel: () => void, onConfirm: () => void, danger?: boolean }) {
+  const { t } = useTranslation();
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
@@ -266,11 +270,11 @@ function Modal({ title, message, onCancel, onConfirm, danger = false }:
         <p className="mb-4">{message}</p>
         <div className="flex justify-end gap-4">
           <button onClick={onCancel} className="px-3 py-1 rounded-lg border flex items-center gap-2">
-            <X size={16} /> Annuler
+            <X size={16} /> {t("trash.cancel")}
           </button>
           <button onClick={onConfirm}
             className={`px-3 py-1 rounded-lg text-white flex items-center gap-2 ${danger ? "bg-red-500 hover:bg-red-600" : "bg-blue-500 hover:bg-blue-600"}`}>
-            <Check size={16} /> Confirmer
+            <Check size={16} /> {t("trash.confirm")}
           </button>
         </div>
       </div>

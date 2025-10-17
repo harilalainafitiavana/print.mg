@@ -1,0 +1,629 @@
+{
+  "settings": {
+    "title": "Fikirana",
+    "theme": "Lohahevitra",
+    "chooseTheme": "Safidio ny maody mazava na maizina",
+    "light": "Mazava",
+    "dark": "Maizina",
+    "language": "Fiteny",
+    "chooseLanguage": "Safidio ny fiteny tianao"
+  },
+  "dashboard": {
+    "sidebar": {
+      "title": "Print.mg",
+      "logout": "Hivoaka",
+      "confirmLogout": "Tianao ve ny hivoaka amin'ny kaontinao ?"
+    },
+    "menus": {
+      "profil": "Mombamomba",
+      "parametres": "Fikirana",
+      "notification": "Fampandrenesana",
+      "home": "Tabilao lehibe",
+      "orders": "Baiko",
+      "products": "Vokatra",
+      "users": "Mpampiasa",
+      "trash": "Fako"
+    },
+    "header": {
+      "calendar": "Kalandrie"
+    },
+    "quickLinks": {
+      "title": "Rohy haingana 😉"
+    }
+  },
+  "TableauAdmin": {
+    "title": "Tabilao fitantanana",
+    "weather": "Toetrandro amin'izao",
+    "users": "Mpampiasa",
+    "orders": "Baiko",
+    "products": "Vokatra",
+    "files": "Rakitra",
+    "revenue": "Vola miditra",
+    "ordersByMonth": "Baiko isam-bolana",
+    "ordersByStatus": "Baiko araka ny sata",
+    "latestOrders": "Baiko farany",
+    "recentUsers": "Mpampiasa vao haingana",
+    "loading": "Eo am-pamenoana ny tabilao...",
+    "overview": "Topimasin'ny hetsika ao amin'ny",
+    "table": {
+      "id": "ID",
+      "user": "Mpampiasa",
+      "status": "Sata",
+      "amount": "Vola",
+      "date": "Daty"
+    }
+  },
+  "orders": {
+    "title": "📋 Lisitry ny baiko",
+    "table": {
+      "id": "ID",
+      "name": "Anarana sy Fanampiny",
+      "email": "Email",
+      "phone": "Telefaonina",
+      "actions": "Hetsika"
+    },
+    "status": {
+      "pending": "Miandry",
+      "received": "Ekena",
+      "printing": "Amin'ny fanontana",
+      "finished": "Vita",
+      "shipping": "Amin'ny fanaterana",
+      "delivered": "Natolotra"
+    },
+    "modal": {
+      "close": "Hakatona",
+      "cancel": "Manafoana",
+      "send": "Alefa",
+      "actions_for_order": "Hetra ho an'ny baiko #{{id}}",
+      "details_for_order": "Antsipirihan'ny baiko #{{id}}",
+      "send_notification_to": "Mandefa fampahatsiahivana ho an'i {{user}}",
+      "your_message": "Hafatrao...",
+      "confirm_delete": "Manamafy ny famafana",
+      "order_will_be_moved": "Ny baiko {{user}} dia hifindra any amin'ny korontana.",
+      "confirm_action": "Manamafy ny hetsika",
+      "confirm_finish_text": "Azonao antoka ve fa te-hametraka ny baiko #{{id}} avy amin'i {{email}} ho vita?",
+      "confirm_in_progressing_text": "Azonao antoka ve fa te-hametraka ny baiko #{{id}} avy amin'i {{email}} ho andalam-pavitana?",
+      "user": "Mpampiasa",
+      "order_date": "Daty baiko",
+      "total_amount": "Totalin'ny vola",
+      "payment_status": "Toetran'ny fandoavana",
+      "phone": "Telefaona",
+      "files": "Rakitra",
+      "name": "Anarana",
+      "format": "Endrika",
+      "dpi": "Profil de couleur",
+      "color_profile": "Profil",
+      "size": "Habe",
+      "configuration": "Fikirakirana",
+      "format_type": "Karazana endrika",
+      "largeur_hauteur": "Sakany x Haavo",
+      "paper": "Taratasim-panontana",
+      "finish": "Famaranana",
+      "quantity": "Habetsahana",
+      "number_page": "Isam-pejy",
+      "duplex": "Tsara roa lafiny",
+      "binding": "Famatorana",
+      "cover": "Fonontaratasy",
+      "options": "Safidy"
+    },
+    "actions": {
+      "in_progress": "Eo am-panaovana",
+      "finished": "Vita",
+      "download": "Sintomy",
+      "details": "Antsipirihany",
+      "notification": "Fampahatsiahivana",
+      "delete": "Fafao"
+    }
+  },
+  "trash": {
+    "title": "🗑️ Fanariam-pako",
+    "deletedOrders": "📦 Kaomandy voafafa",
+    "deletedNotifications": "🔔 Fampahatsiahivana voafafa",
+    "noOrders": "Tsy misy kaomandy voafafa.",
+    "noNotifications": "Tsy misy fampahatsiahivana voafafa.",
+    "restore_commande": "Averina ny fangatahana ?",
+    "restore_notification": "Averina ny Fampahatsiahivana ?",
+    "deletePermanent": "⚠️ Fafao tanteraka",
+    "confirmRestore": "Tena tianao averina ve ?",
+    "confirmDelete": "ho fafàna tanteraka",
+    "cancel": "Manafoana",
+    "confirm": "Manamarina"
+  },
+  "notification": {
+    "title": "Fampahatsiahivana avy amin’ny mpampiasa",
+    "noNotification": "Tsy misy fampahatsiahivana amin’izao fotoana izao",
+    "sender": "Mpandefa tsy fantatra",
+    "modal": {
+      "confirmDeletion": "Hanamarina ny famafana",
+      "cancel": "Manafoana",
+      "confirm": "Manamarina",
+      "trashNotification": "Hafindra ao anaty fanariam-pako ny fampahatsiahivana",
+      "title": "Fampahatsiahivana"
+    }
+  },
+  "products": {
+    "title": "Lisitr'ireo vokatra",
+    "add": "Hanampy",
+    "edit": "Hanova",
+    "delete": "Fafana",
+    "modal": {
+      "title": "Hanampy vokatra vaovao",
+      "choise": "Misafidiana sary",
+      "product": "Vokatra asongadina",
+      "cancel": "Fanafoanana",
+      "confirmDelete": "Hamafiso ny famafana",
+      "confirm": "Hamafiso",
+      "editproduct": "Ovay ny vokatra",
+      "change": "Ovao ny sary",
+      "deleteConfirm": "Te-hamafa tanteraka ny vokatra ve ianao",
+      "category": "Sokajy",
+      "price": "Vidiny"
+    }
+  },
+  "usersadmin": {
+    "title": "Lisitry ny mpampiasa",
+    "name": "Anarana",
+    "firstname": "Fanampiny",
+    "email": "Rohy",
+    "action": "Hetsika",
+    "previous": "Teo aloha",
+    "next": "Manaraka",
+    "userdetails": "Antsipirihan'ny mpampiasa",
+    "phone": "Laharana",
+    "postalcode": "Kaody paositra",
+    "city": "Tanàna",
+    "country": "Firenena",
+    "role": "Anjara",
+    "registrationDate": "Daty nisoratana",
+    "page": "Pejy",
+    "search": "Karohy ny mpampiasa...."
+  },
+  "userDashboard": {
+    "orders": "Ny baikoko",
+    "trash": "Fako",
+    "stats": "Antontan'isa",
+    "settings": "Toe-javatra",
+    "search": "Mitadiava baiko......"
+  },
+  "TableauUser": {
+    "title": "Manao ahoana",
+    "secondtitle": "Ity ny topimaso momba ny asanao ao amin'ny",
+    "total": "Total'ny baiko",
+    "totalprice": "Total'ny vola",
+    "files": "Fichier nalefana",
+    "notification": "Fampandrenesana tsy vakiana",
+    "evolution": "Fivoaran'ny baiko",
+    "depence": "Fandaniana isam-bolana",
+    "firstcommande": "Baiko farany",
+    "date": "Daty",
+    "price": "Vola",
+    "firstnotification": "Fampandrenesana farany",
+    "number": "Isa",
+    "month": "Volana"
+  },
+  "notifications": {
+    "title": "Ny fampandrenesako",
+    "bouton": "Mandefa hafatra amin'ny admin",
+    "noNotification": "Tsy misy fampandrenesana amin'izao fotoana izao.",
+    "modal": {
+      "title": "Mandefa hafatra amin'ny admin",
+      "deleteConfirm": "⚠️ Hamafiso ny famafana",
+      "notif": "Ny fampandrenesana dia ho afindra any amin'ny fako.",
+      "send": "Alefa",
+      "placeholder": "Ny hafatrao..."
+    }
+  },
+  "mesCommandes": {
+    "title": "Ny baikoko",
+    "description": "Ny baiko rehetra izay nataonao tamin'ny sehatra.",
+    "newOrder": "Vaovao",
+    "noOrder": "Tsy misy baiko hita.",
+    "view": "Jereo",
+    "delete": "Fafao",
+    "orderSummary": "📄 Famintinana ny baiko",
+    "cancel": "Manafoana",
+    "confirmDeleteTitle": "Hamafiso ny famafana",
+    "confirmDeleteText": "Azonao antoka ve ny hamafa ny baiko {{orderId}}?",
+    "confirmButton": "Fafao",
+    "cancelButton": "Manafoana",
+    "orderStatus": {
+      "TERMINE": "Vita",
+      "EN_ATTENTE": "Miandry",
+      "RECU": "Naraka",
+      "EN_COURS_IMPRESSION": "Ao amin'ny fanontana",
+      "EN_COURS_LIVRAISON": "Ao amin'ny fandefasana",
+      "LIVREE": "Naterina"
+    },
+    "modal": {
+      "file": "Fichier",
+      "dpi": "DPI",
+      "colorProfile": "Profil loko",
+      "format": "Format",
+      "formatType": "Karazana format",
+      "paper": "Tariby",
+      "finish": "Finition",
+      "quantity": "Isan'ny",
+      "bookPages": "Isan'ny pejy",
+      "duplex": "Duplex",
+      "binding": "Fametahana",
+      "coverPaper": "Fonony",
+      "phone": "Finday",
+      "amount": "Vola",
+      "options": "Safidy",
+      "date": "Daty"
+    },
+    "alerts": {
+      "mustBeLoggedIn": "Tsy maintsy tafiditra ianao vao afaka manao ity asa ity.",
+      "deleteError": "Nisy olana nandritra ny famafana",
+      "deleteFail": "Olana: {{message}}"
+    }
+  },
+  "printingOrder": {
+    "title": "Filaminana fanontam-pirinty",
+    "placeholders": {
+      "fileName": "Anaran'ny rakitra",
+      "width": "Sakany (cm)",
+      "height": "Haavo (cm)",
+      "pages": "Isan'ny pejy",
+      "quantity": "Haben'ny",
+      "phone": "Telefaona",
+      "options": "Safidy fanampiny",
+      "paperType": "Karazana taratasy",
+      "finish": "Famaranana",
+      "duplex": "Takelaka tokana/miendrika roa"
+    },
+    "buttons": {
+      "next": "Manaraka",
+      "back": "Miverina",
+      "confirm": "Manaiky",
+      "cancel": "Fanafoanana",
+      "checkOrder": "Jereo ny baiko"
+    },
+    "errors": {
+      "invalidFile": "Ny rakitra PDF sy JPG ihany no ekena",
+      "fillStep1": "Fenoy ny saha rehetra amin'ny dingana 1",
+      "fillStep2": "Fenoy ny saha rehetra ilaina amin'ny dingana 2",
+      "minBookQty": "Ho an'ny boky, tsy maintsy farafahakeliny {{min}} ny habetsahana",
+      "minQty": "Haben'ny farafahakeliny ho an'ny {{format}}: {{min}}",
+      "grandSize": "Ampidiro ny sakany sy haavo ho an'ny endrika lehibe",
+      "grandMaxSize": "Ny farafahakeliny ho an'ny endrika lehibe dia 160x100 cm",
+      "invalidPhone": "Ampidiro ny laharan-telefaona 10 isa manankery",
+      "invalidAmount": "Tokony ho mihoatra ny 0 ny vola",
+      "selectFile": "Safidio ny rakitra",
+      "creationFailed": "Nisy olana tamin'ny famoronana baiko: {{message}}",
+      "creationError": "Nisy olana tamin'ny famoronana baiko"
+    },
+    "success": {
+      "created": "✅ Baiko noforonina! Status paiement: {{status}}"
+    },
+    "format": {
+      "small": "Endrika kely",
+      "large": "Endrika lehibe",
+      "custom": "Namboarina"
+    },
+    "warning": {
+      "maxSize": "⚠️ Fetran'ny milina fanontam-pirinty : 160x100 cm"
+    },
+    "bookOption": "Te hanonta boky aho",
+    "finish": {
+      "glossy": "Mamirapiratra",
+      "matte": "Maty",
+      "standard": "Mahazatra"
+    },
+    "duplex": {
+      "single": "Takelaka tokana",
+      "double": "Miendrika roa"
+    },
+    "binding": {
+      "none": "Tsy misy famatorana",
+      "spiral": "Spirale",
+      "glue": "Dos collé",
+      "stapled": "Agrafé"
+    },
+    "cover": {
+      "none": "Tsy misy fonony manokana",
+      "simple": "Taratasy tsotra",
+      "photo": "Taratasy sary"
+    },
+    "summary": {
+      "title": "Famintinana ny baiko",
+      "file": "Rakitra",
+      "dpi": "DPI",
+      "colorProfile": "Mombamomba ny loko",
+      "format": "Endrika",
+      "paper": "Taratasy",
+      "finish": "Famaranana",
+      "quantity": "Haben'ny",
+      "bookPages": "Isan'ny pejy",
+      "duplex": "Duplex",
+      "binding": "Famatorana",
+      "cover": "Fonony",
+      "phone": "Telefaona",
+      "amount": "Vola",
+      "options": "Safidy"
+    },
+    "paper": {
+      "glossy": "Taratasy mamirapiratra",
+      "matte": "Taratasy malefaka",
+      "standard": "Taratasy mahazatra",
+      "shiny": "Taratasy manjelanjelatra"
+    }
+  },
+  "corbeille": {
+    "title": "🗑️ Fako",
+    "deletedOrders": "Baiko voafafa",
+    "noDeletedOrders": "Tsy misy baiko voafafa.",
+    "deletedNotifications": "Fampahafantarana voafafa",
+    "noDeletedNotifications": "Tsy misy fampahafantarana voafafa.",
+    "restore": "Averina",
+    "delete": "Fafana",
+    "sentBy": "Nalefa avy amin’i",
+    "date": "Daty",
+    "cancel": "Foanana",
+    "confirm": "Hamafiso",
+    "orderTitle": "Baiko",
+    "phone": "Telefaona",
+    "amount": "Vola",
+    "format": "Endrika",
+    "quantity": "Isan'ny takelaka",
+    "options": "Safidy",
+    "files": "Rakitra",
+    "modal": {
+      "restoreTitle": "⚡ Averina",
+      "deleteTitle": "⚠️ Fafana tanteraka",
+      "restoreConfirm": "Tianao ve ny hamerenana ity zavatra ity?",
+      "deleteConfirm": "Tianao ve ny hamafa tanteraka ity zavatra ity? Tsy azo averina intsony izany."
+    }
+  },
+  "navbar": {
+    "slogan": "🎯 Fanontam-pirinty tsara — Haingana, azo antoka ary mora ampiasaina!",
+    "searchPlaceholder": "Karohy vokatra...",
+    "connexion": "Hiditra",
+    "creerCompte": "Hamorona kaonty",
+    "commander": "Hanafatra",
+    "changerLangue": "Hanova fiteny",
+    "tousProduits": "Vokatra rehetra",
+    "produits": "Vokatra",
+    "papier": {
+      "grand": {
+        "titre": "Sary lehibe",
+        "prix": "1 350 Ar / pirinty",
+        "min": "Farafahakeliny: 4 pirinty",
+        "description": "Endrika lehibe, mety amin’ny afisy sy doka."
+      },
+      "petit": {
+        "titre": "Sary kely",
+        "prix": "600 Ar / pirinty",
+        "min": "Farafahakeliny: 30 pirinty",
+        "description": "Tena mety amin’ny antontan-taratasy andavanandro."
+      },
+      "perso": {
+        "titre": "Sary manokana",
+        "prix": "450 Ar / pirinty",
+        "min": "Farafahakeliny: 50 pirinty",
+        "description": "Mety amin’ny fanontana manokana na araka ny fangatahanao."
+      }
+    }
+  },
+  "slider": {
+    "texts": [
+      "Fanontam-pirinty haingana sy azo itokisana",
+      "Vahaolana matihanina sy tsara kalitao",
+      "Famoronana sy fanavaozana ho an'ny serivisinao"
+    ],
+    "description": "Mampanofa ny fanontam-pirintinao amin'ny aterineto ary raiso haingana any an-trano.",
+    "commander": "Manomboka ny baikonao",
+    "tousProduits": "Ny vokatra rehetra"
+  },
+  "sectionMarquepages": {
+    "titre": "Marque-pages: Mpiara-miasa tonga lafatra",
+    "paragraphe1": "Ataovy printy ny antontan-taratasy, sary, ary ny famoronanao mora foana! Ny sehatra anay dia mamela anao handefa ny printy amin'ny Internet, tsy mila mivoaka ny trano. Safidio ny endrika, ny taratasy, ary ny famaranana, ary raiso mivantana ao an-tranonao ny printy.",
+    "paragraphe2": "Manome printy haingana, azo itokisana ary avo lenta izahay. Na ho an'ny tetikasa matihanina, asa fianarana, na fahatsiarovana manokana, dia manome tolotra mifanaraka amin'ny filanao izahay. Miaraka amin'ny ekipanay natokana sy milina mahomby, ny printy anao dia eo am-pelatanana tsara!😘"
+  },
+  "sectionCallToAction": {
+    "titre": "Vonona hanonta ve ianao?",
+    "texte": "Atombohy izao ny baiko-nao ary ankafizo ny fanaterana haingana.",
+    "bouton": "Manao baiko Ankehitriny"
+  },
+  "sectionCreativite": {
+    "titre": "Ny famoronanao, ny fanontantsika",
+    "texte": "Ampio velona ny tetikasanao amin'ny fanontana avo lenta, haingana ary azo antoka.",
+    "bouton": "Atombohy izao"
+  },
+  "sectionServices": {
+    "titre": "Sampana fanontana vitsivitsy",
+    "items": [
+      {
+        "title": "Boky Fanaova Sakafo",
+        "text": "Zarao ny fomba fahandro tianao amin'ny boky voa‑printy tsara."
+      },
+      {
+        "title": "Mari‑pahaizana & Tèsy",
+        "text": "Printo ny asa akademika miaraka amin'ny famaranana matihanina."
+      },
+      {
+        "title": "Tapakila & Fanasa",
+        "text": "Manaova tapakila sy fanasa namboarina ho an'ny hetsikao."
+      },
+      {
+        "title": "Roman & Boky Kely",
+        "text": "Ampio velona ny tantaranao amin'ny fanontana mazava sy maharitra."
+      },
+      {
+        "title": "Albums & Fahatsiarovana",
+        "text": "Tazomy ny fahatsiarovana amin'ny albums miloko sy avo lenta."
+      },
+      {
+        "title": "Boky Sary & Lookbook",
+        "text": "Printo ny boky sary sy lookbooks miaraka amin'ny kalitao matihanina."
+      }
+    ]
+  },
+  "sectionImpression": {
+    "titre": "Print mora amin'ny Print.mg 🚀",
+    "description": "Ao amin'ny Print.mg, ataonay tsotra, haingana ary avo lenta ny fanontana an-tserasera. Alefaso ny rakitrao, safidio ny safidinao, ary raiso mivantana ao an-tranonao ny fanontana.",
+    "cards": [
+      {
+        "title": "Fandefasana haingana",
+        "text": "Manomeza baiko amin'ny tsindry vitsivitsy ary raiso haingana ny fanontana."
+      },
+      {
+        "title": "Kalitao azo antoka",
+        "text": "Manàna fanontana matihanina amin'ny taratasy premium sy loko mamiratra."
+      },
+      {
+        "title": "Fahatsorana",
+        "text": "Sehatra intuitif natao hitahiry fotoana sy hery ho anao."
+      }
+    ]
+  },
+  "sectionPrêt": {
+    "titre": "Vonona ve ianao😀?? Tsindrio ny baiko izao ary safidio ny safidinao",
+    "subtitle": "Fanontana an-tserasera",
+    "description": "Mitsitsy fotoana ary mankafy kalitao tsy misy lesoka. Ny serivisy fanontana an-tserasera dia mamela anao hanome baiko amin'ny tsindry vitsivitsy ary handray ny fanontana tsy mivoaka trano.",
+    "btn": "Manomeza baiko izao"
+  },
+  "sliders": {
+    "title": "Ny Asa Vita amin'ny Fanontam-pirinty",
+    "carteVisite": {
+      "title": "Karatra Fampahafantarana Mahafinaritra",
+      "description": "Fanontam-pirinty avo lenta amin'ny taratasy premium"
+    },
+    "flyers": {
+      "title": "Flyers Fampiroboroboana",
+      "description": "Mahatonga ny olona hahita amin'ny endrika mamirapiratra"
+    },
+    "affiches": {
+      "title": "Afisy Habe Lehibe",
+      "description": "Fanontam-pirinty mamirapiratra ho an'ny hetsika rehetra"
+    },
+    "stickers": {
+      "title": "Sticker Namboarina",
+      "description": "Amboary ny vokatrao amin'ny sticker-nay"
+    },
+    "brochures": {
+      "title": "Boky Fampahafantarana Matihanina",
+      "description": "Asehoy ny orinasanao amin'ny fomba manara-penitra"
+    },
+    "emballages": {
+      "title": "Fonon-taratasy Namboarina",
+      "description": "Fonon-taratasy izay mahatonga fahasamihafana"
+    },
+    "photos": {
+      "title": "Sary avo lenta",
+      "description": "Ataovy pirinty ny fahatsiarovana amin'ny kalitao premium"
+    }
+  },
+  "footer": {
+    "logoTitle": "Print.mg",
+    "description": "Vahaolana fanontam-pirinty an-tserasera tsotra, haingana ary tsara kalitao eto Madagasikara. Mandefasa ny fanontam-pirintinao amin'ny tsindry vitsivitsy ary raiso ao an-tranonao!",
+    "socials": {
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "twitter": "Twitter",
+      "mail": "Email"
+    },
+    "quickLinksTitle": "Rohy haingana",
+    "quickLinks": {
+      "home": "Fandraisana",
+      "services": "Serivisy",
+      "about": "Momba anay",
+      "contact": "Mifandraisa"
+    },
+    "popularServicesTitle": "Serivisy malaza",
+    "popularServices": {
+      "businessCards": "Karatra Fampahafantarana",
+      "flyersBrochures": "Flyers & Brochures",
+      "posters": "Afisy",
+      "stickers": "Sticker",
+      "photoPrinting": "Fanontam-pirinty sary"
+    },
+    "contactTitle": "Mifandraisa aminay",
+    "contactInfo": {
+      "phone": "033 66 919 09 / 034 79 647 92",
+      "email": "contact@print.mg",
+      "facebook": "Facebook Print.mg",
+      "address": "BII A5 Mahazo Ambatomaro"
+    },
+    "copyright": "© {{year}} Print.mg — Zo rehetra voatokana."
+  },
+  "detaille": {
+    "sectionHero": {
+      "title": "Ny tolotra fanontananay",
+      "description": "Fantaro ny karazana vokatra fanontana avo lenta ananantsika. Manomboka amin'ny karatra fandraharahana ka hatamin'ny afisy lehibe, manana izay rehetra ilainao izahay",
+      "button": "Manafatra izao",
+      "link": "Miverina any amin'ny pejy fandraisana"
+    },
+    "feature": [
+      {
+        "title": "Kalitao azo antoka",
+        "text": "Vokatra fanontana avo lenta misy famaranana lavorary."
+      },
+      {
+        "title": "Fanaterana haingana",
+        "text": "Mahazoa ny vokatrao ara-potoana, na dia amin'ny hamehana aza."
+      },
+      {
+        "title": "Teknolojia mandroso",
+        "text": "Fampiasana ny teknolojia fanontana farany mba hahazoana vokatra lavorary."
+      }
+    ],
+    "product": {
+      "title": "Ny vokatray",
+      "placeholder": "Mitady vokatra...",
+      "noProduct": "Tsy misy vokatra mifanaraka amin'ny fikarohanao.",
+      "price": "Vidiny rehetra",
+      "modal": {
+        "format": "Endrika",
+        "custom": "Namboarina",
+        "largeformat": "Endrika lehibe",
+        "binding": "Famatorana",
+        "spiral": "Spiraly",
+        "perfectBinding": "Famatorana miraikitra",
+        "stapled": "Voatsindry amin’ny agrafe",
+        "cover": "Fonony",
+        "photopaper": "Taratasy sary",
+        "simple": "Tsotra",
+        "doubleSided": "Roaboky",
+        "validPrice": "Vidiny manankery",
+        "delivery": "Fandefasana",
+        "deliveryFees": "Saran’ny fandefasana",
+        "close": "Hidio"
+      }
+    },
+    "action": {
+      "title": "Vonona hanonta ny tetikasanao ve ianao?",
+      "text": "Midira amin'ireo mpanjifa an'arivony afa-po izay nino anay tamin'ny filàny fanontana.",
+      "button": "Manafatra izao"
+    }
+  },
+  "profil": {
+    "title": "Salama",
+    "code": "Kaody paositra",
+    "codePlaceholder": "Ny kaody paositra",
+    "Ville": "Tanàna",
+    "villePlaceholder": "Ny tanànanao",
+    "pays": "Firenena",
+    "paysPlaceholder": "Ny firenenao",
+    "photo": "Sary mombamomba",
+    "change": "Hanova",
+    "no": "Tsy misy",
+    "edit": "Hanova ny mombamomba anao",
+    "name": "Anarana",
+    "namePlaceholder": "Ny anaranao",
+    "firstname": "Fanampin'anarana",
+    "firstPlaceholder": "Ny fanampin'anaranao",
+    "email": "Adiresy mailaka",
+    "phone": "Laharana",
+    "Save": "Tehirizo",
+    "pass": "Teny miafina taloha",
+    "new": "Teny miafina vaovao",
+    "confirm": "Hamafiso ny teny miafina",
+    "changepass": "Hanova teny miafina",
+    "profilAlert": "Tontosa ny fanovana sary",
+    "errorAlert": "Misy tsy fietezana ny fanovana",
+    "errorPassword": "Tsy mifanaraka ny teny miafinao",
+    "succesPassword": "Voahova ny teny miafina !",
+    "nosuccessPassword": "Misy tsy fihetezana ny fanovana teny miafina"
+  }
+}

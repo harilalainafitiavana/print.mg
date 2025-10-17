@@ -1,26 +1,107 @@
 import { useEffect, useState, useRef } from "react";
 import { ShoppingCart, Menu, Globe, UserPlus, UserCheck, ShoppingBasket, Search, Printer, Grid } from "lucide-react";
-// import axios from "axios";
 import Image from "../assets/album photo.jpg"
 import Photo from "../assets/album photo.jpg"
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+
+interface Produit {
+    id: number;
+    name: string;
+    description: string;
+    categorie: string;
+    prix: string;
+    image: string;
+    featured: boolean;
+}
 
 export default function Navbar() {
     const [cartCount, setCartCount] = useState(0);
     const [search, setSearch] = useState("");
+    const [suggestions, setSuggestions] = useState<Produit[]>([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
 
+    // Fetch des suggestions produits avec debounce
+    useEffect(() => {
+        const fetchSuggestions = async () => {
+            if (search.trim().length > 1) {
+                try {
+                    const res = await fetch(
+                        `http://localhost:8000/api/search-produits/?search=${encodeURIComponent(search)}`
+                    );
+                    const data: Produit[] = await res.json();
+                    setSuggestions(data.slice(0, 5)); // max 5 suggestions
+                    setShowSuggestions(true);
+                } catch (error) {
+                    console.error("Erreur de recherche :", error);
+                }
+            } else {
+                setShowSuggestions(false);
+            }
+        };
+
+        const timeout = setTimeout(fetchSuggestions, 300); // debounce 300ms
+        return () => clearTimeout(timeout);
+    }, [search]);
+
+    // Fermer le dropdown si on clique ailleurs
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+                setShowSuggestions(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    // Quand on sélectionne une suggestion
+    const handleSelect = (produit: Produit) => {
+        // Passer le mot clé qui correspond à la recherche
+        const keyword = search.trim();
+        setSearch(keyword);
+        setShowSuggestions(false);
+        navigate(`/detaille?search=${encodeURIComponent(keyword)}`);
+    };
+
+    // Quand on soumet le formulaire de recherche
+    const handleSearchSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (search.trim() !== "") {
+            navigate(`/detaille?search=${encodeURIComponent(search)}`);
+            setShowSuggestions(false);
+        }
+    };
+
+
+    // Nombre de commande
     useEffect(() => {
         fetch("http://localhost:8000/api/admin/commandes/count/")
             .then(res => res.json())
             .then(data => setCartCount(data.count))
             .catch(err => console.error(err));
     }, []);
-    const [language, setLanguage] = useState("fr");
+    
+    const { t, i18n } = useTranslation();
+    const [language, setLanguage] = useState(i18n.language);
 
     const changeLanguage = (lang: string) => {
         setLanguage(lang);
-        console.log("Langue sélectionnée :", lang);
+        i18n.changeLanguage(lang);
+        localStorage.setItem("lang", lang); // ✅ garde la langue même après rechargement
     };
+
+    useEffect(() => {
+        const savedLang = localStorage.getItem("lang");
+        if (savedLang) {
+            setLanguage(savedLang);
+            i18n.changeLanguage(savedLang);
+        }
+    }, []);
 
     const [hovered, setHovered] = useState<string | null>(null);
     const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
@@ -28,35 +109,10 @@ export default function Navbar() {
     // const navbarRef = useRef<HTMLDivElement>(null);
     const timeoutRef = useRef<number | null>(null);
 
-    // Les informations des trois papier
-    const papiers = [
-        {
-            name: "Grand format",
-            price: "1 350 Ar / impression",
-            min: 4,
-            description: "Format large, adapté aux affiches (minimum 4 impressions).",
-            image: "https://img.freepik.com/photos-gratuite/belle-femme-souriante-s-appuyant-tableau-blanc-vide_329181-3924.jpg"
-        },
-        {
-            name: "Petit format",
-            price: "600 Ar / impression",
-            min: 30,
-            description: "Idéal pour documents standards (minimum 30 impressions).",
-            image: "https://www.printoclock.com/media/image/e8/57/fd2d1edaf5cab744059dc3117f9d.jpeg"
-        },
-        {
-            name: "Personnalisé",
-            price: "450 Ar / impression",
-            min: 50,
-            description: "Petit format pratique (minimum 50 impressions).",
-            image: "https://facimprimeur.fr/wp-content/uploads/2023/12/impression-A5-300x300.jpg"
-        },
-    ];
-
     // Données pour le sous-menu de produits avec images spécifiques
     const menuItems = [
         {
-            name: "Tous les produits",
+            name: t("navbar.tousProduits"),
             images: [
                 "https://img.freepik.com/photos-gratuite/belle-femme-souriante-s-appuyant-tableau-blanc-vide_329181-3924.jpg",
                 "https://www.printoclock.com/media/image/e8/57/fd2d1edaf5cab744059dc3117f9d.jpeg",
@@ -164,13 +220,30 @@ export default function Navbar() {
         };
     }, []);
 
+
+    // Papiers avec clé identique au JSON
+    const papiers = [
+        {
+            key: "grand",
+            image: "https://img.freepik.com/photos-gratuite/belle-femme-souriante-s-appuyant-tableau-blanc-vide_329181-3924.jpg"
+        },
+        {
+            key: "petit",
+            image: "https://www.printoclock.com/media/image/e8/57/fd2d1edaf5cab744059dc3117f9d.jpeg"
+        },
+        {
+            key: "perso",
+            image: "https://facimprimeur.fr/wp-content/uploads/2023/12/impression-A5-300x300.jpg"
+        }
+    ];
+
     return (
         <div className="w-full bg-base-100">
             {/* Conteneur fixe pour le premier navbar */}
             <div className="fixed top-0 left-0 w-full z-50">
                 {/* Bandeau publicitaire */}
                 <div className="bg-blue-500 text-white text-center py-1 animate-pulse text-sm md:text-base">
-                    🎯 La bonne impression — Rapide, fiable et facile à utiliser !
+                    {t("navbar.slogan")}
                 </div>
 
                 {/* Premier navbar */}
@@ -183,36 +256,37 @@ export default function Navbar() {
                         </nav>
                     </div>
 
-                    {/* Trois menues du papier */}
+                    {/* Trois menus papier */}
                     <div className="container mx-auto hidden lg:block px-4 lg:flex items-center justify-center gap-6">
                         {papiers.map((papier) => (
                             <div
-                                key={papier.name}
+                                key={papier.key}
                                 className="relative"
-                                onMouseEnter={() => setHovered(papier.name)}
+                                onMouseEnter={() => setHovered(papier.key)}
                                 onMouseLeave={() => setHovered(null)}
                             >
-                                {/* Menu item */}
                                 <span className="text-gray-700 font-semibold cursor-pointer hover:text-blue-500 text-lg">
-                                    {papier.name}
+                                    {t(`navbar.papier.${papier.key}.titre`)}
                                 </span>
 
-                                {/* Info tooltip au survol */}
-                                {hovered === papier.name && (
+                                {hovered === papier.key && (
                                     <div className="absolute top-10 left-1/2 -translate-x-1/2 w-80 bg-white border rounded-lg shadow-lg p-5 text-md text-gray-600 z-50">
                                         <div className="flex items-center gap-6">
-                                            {/* Texte */}
                                             <div className="w-2/3 leading-relaxed">
-                                                <p className="font-bold text-gray-800 text-md">{papier.price}</p>
-                                                <p className="text-md">Minimum : {papier.min} impressions</p>
-                                                <p className="text-sm">{papier.description}</p>
+                                                <p className="font-bold text-gray-800 text-md">
+                                                    {t(`navbar.papier.${papier.key}.prix`)}
+                                                </p>
+                                                <p className="text-md">
+                                                    {t(`navbar.papier.${papier.key}.min`)}
+                                                </p>
+                                                <p className="text-sm">
+                                                    {t(`navbar.papier.${papier.key}.description`)}
+                                                </p>
                                             </div>
-
-                                            {/* Image */}
                                             <div className="w-1/2 flex justify-center">
                                                 <img
                                                     src={papier.image}
-                                                    alt="Papier"
+                                                    alt={t(`navbar.papier.${papier.key}.titre`)}
                                                     className="w-40 h-40 object-cover rounded-md shadow-sm"
                                                 />
                                             </div>
@@ -225,41 +299,117 @@ export default function Navbar() {
 
                     {/* Barre de recherche + Actions */}
                     <div className="flex items-center gap-4">
-                        <div className="relative hidden md:block md:w-100 lg:w-80">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 z-10" size={20} />
-                            <input
-                                type="text"
-                                placeholder="Rechercher un produit..."
-                                className="input input-bordered w-full bg-white text-black pl-10"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                            />
+                        {/* Barre de recherche */}
+                        <div className="relative hidden md:block md:w-100 lg:w-80" ref={dropdownRef}>
+                            <form onSubmit={handleSearchSubmit}>
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 z-10" size={20} />
+                                <input
+                                    type="text"
+                                    placeholder="Rechercher un produit..."
+                                    className="input input-bordered w-full bg-white text-black pl-10"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    onFocus={() => search && setShowSuggestions(true)}
+                                />
+                            </form>
+
+                            {/* Suggestions Dropdown */}
+                            {showSuggestions && (
+                                <div className="absolute left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-64 overflow-y-auto animate-fadeIn">
+
+                                    {suggestions.length > 0 ? (
+                                        suggestions.map((item) => (
+                                            <div
+                                                key={item.id}
+                                                onClick={() => handleSelect(item)}
+                                                className="p-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3"
+                                            >
+                                                <img
+                                                    src={
+                                                        item.image.startsWith("http")
+                                                            ? item.image
+                                                            : `http://localhost:8000${item.image}`
+                                                    }
+                                                    alt={item.name}
+                                                    className="w-10 h-10 rounded object-cover"
+                                                />
+                                                <div>
+                                                    {/* Affiche le nom et la catégorie */}
+                                                    <p className="text-sm font-medium text-gray-800">{item.name}</p>
+                                                    <p className="text-xs text-gray-500">{item.categorie} • {item.prix} Ar</p>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        // Message si aucune suggestion
+                                        <div className="p-2 text-gray-500 text-sm">
+                                            Aucun produit ne correspond à votre recherche
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
 
                         {/* Dropdown Changer de langue  */}
                         <div className="dropdown dropdown-end hidden md:block">
-                            <label tabIndex={0} className="btn btn-ghost btn-sm gap-1">
-                                <Globe size={18} />
-                                {language.toUpperCase()}
+
+                            <label
+                                tabIndex={0}
+                                className="btn btn-ghost btn-sm flex items-center gap-2 border rounded-lg px-3 py-1 hover:bg-base-200 transition"
+                            >
+                                {/* 🇫🇷 Drapeau animé à gauche */}
+                                <motion.span
+                                    className="text-xl"
+                                    whileHover={{ scale: 1.3, rotate: 5 }}
+                                    transition={{ type: "spring", stiffness: 300 }}
+                                >
+                                    {language === "fr" && "🇫🇷"}
+                                    {language === "en" && "🇬🇧"}
+                                    {language === "mlg" && "🇲🇬"}
+                                </motion.span>
+
+                                {/* Texte + globe animé à droite */}
+                                <div className="flex items-center gap-1">
+                                    <span className="font-medium text-gray-700">
+                                        {language.toUpperCase()}
+                                    </span>
+
+                                    <motion.div
+                                        whileHover={{ rotate: 360 }}
+                                        transition={{ duration: 1, ease: "easeInOut" }}
+                                    >
+                                        <Globe size={16} className="text-blue-500" />
+                                    </motion.div>
+                                </div>
                             </label>
+
                             <ul
                                 tabIndex={0}
-                                className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32"
+                                className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-36"
                             >
                                 <li>
-                                    <a href="#" onClick={() => changeLanguage('fr')}>
-                                        Français
-                                    </a>
+                                    <button
+                                        onClick={() => changeLanguage("fr")}
+                                        className="flex items-center gap-2"
+                                    >
+                                        <span>🇫🇷</span> Français
+                                    </button>
                                 </li>
                                 <li>
-                                    <a href="#" onClick={() => changeLanguage('en')}>
-                                        English
-                                    </a>
+                                    <button
+                                        onClick={() => changeLanguage("en")}
+                                        className="flex items-center gap-2"
+                                    >
+                                        <span>🇬🇧</span> English
+                                    </button>
                                 </li>
                                 <li>
-                                    <a href="#" onClick={() => changeLanguage('mg')}>
-                                        Malagasy
-                                    </a>
+                                    <button
+                                        onClick={() => changeLanguage("mlg")}
+                                        className="flex items-center gap-2"
+                                    >
+                                        <span>🇲🇬</span> Malagasy
+                                    </button>
                                 </li>
                             </ul>
                         </div>
@@ -270,7 +420,7 @@ export default function Navbar() {
                                 tabIndex={0}
                                 className="btn bg-blue-500 text-white py-3 px-6 text-sm rounded-lg hover:bg-blue-600 transition-colors duration-200"
                             >
-                                Connexion
+                                {t("navbar.connexion")}
                             </button>
                             <ul
                                 tabIndex={0}
@@ -279,50 +429,20 @@ export default function Navbar() {
                                 <li>
                                     <Link to="/register">
                                         <UserPlus />
-                                        Créer un compte
+                                        {t("navbar.creerCompte")}
                                     </Link>
                                 </li>
                                 <li>
                                     <Link to="/login">
                                         <UserCheck />
-                                        Connexion
+                                        {t("navbar.connexion")}
                                     </Link>
                                 </li>
                                 <li>
                                     <Link to="/login">
                                         <ShoppingBasket />
-                                        Commander
+                                        {t("navbar.commander")}
                                     </Link>
-                                </li>
-                                <li>
-                                    <a
-                                        href="#"
-                                        className="flex items-center gap-2 px-3 py-2 rounded bg-gray-300 hover:bg-blue-400 transition"
-                                    >
-                                        <svg
-                                            className="w-5 h-5"
-                                            viewBox="0 0 533.5 544.3"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M533.5 278.4c0-17.7-1.6-34.7-4.6-51.2H272.1v96.9h147.1c-6.3 34-25.6 62.8-54.6 82v68h88.1c51.7-47.7 81.8-118 81.8-195.7z"
-                                                fill="#4285F4"
-                                            />
-                                            <path
-                                                d="M272.1 544.3c73.8 0 135.6-24.4 180.8-66.3l-88.1-68c-24.5 16.4-55.9 26-92.7 26-71.3 0-131.7-48.1-153.2-112.9H29.1v70.8C74.3 485 167 544.3 272.1 544.3z"
-                                                fill="#34A853"
-                                            />
-                                            <path
-                                                d="M118.9 323.9c-8-23.9-12.6-49.6-12.6-76 0-26.4 4.6-52.1 12.6-76v-70.8H29.1C10.4 144.7 0 207.3 0 272.1c0 64.8 10.4 127.4 29.1 187.9l89.8-70.8z"
-                                                fill="#FBBC05"
-                                            />
-                                            <path
-                                                d="M272.1 107.6c39.8 0 75.4 13.7 103.6 40.5l77.7-77.7C407.7 22.8 345.9 0 272.1 0 167 0 74.3 59.3 29.1 146.1l89.8 70.8c21.5-64.8 81.9-112.9 153.2-112.9z"
-                                                fill="#EA4335"
-                                            />
-                                        </svg>
-                                        Google
-                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -347,7 +467,7 @@ export default function Navbar() {
                                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 z-10" size={20} />
                                         <input
                                             type="text"
-                                            placeholder="Rechercher..."
+                                            placeholder={t("navbar.searchPlaceholder")}
                                             className="input input-bordered w-full bg-white text-black pl-10"
                                             value={search}
                                             onChange={(e) => setSearch(e.target.value)}
@@ -357,19 +477,19 @@ export default function Navbar() {
                                 <li>
                                     <Link to="/login">
                                         <UserCheck />
-                                        Connexion
+                                        {t("navbar.connexion")}
                                     </Link>
                                 </li>
                                 <li>
                                     <Link to="#">
                                         <Globe />
-                                        Changer de langue
+                                        {t("navbar.changerLangue")}
                                     </Link>
                                 </li>
                                 <li>
                                     <Link to="/detaille">
                                         <Grid />
-                                        Tout les produits
+                                        {t("navbar.tousProduits")}
                                     </Link>
                                 </li>
                             </ul>
@@ -412,7 +532,7 @@ export default function Navbar() {
                 >
                     <div className="flex justify-between items-center mb-3">
                         <h3 className="text-lg font-bold text-gray-800">
-                            Produits : <span className="text-blue-500">{hoveredProduct}</span>
+                            {t("navbar.produits")} : <span className="text-blue-500">{hoveredProduct}</span>
                         </h3>
                         <button
                             className="text-gray-400 hover:text-gray-600"
@@ -424,7 +544,7 @@ export default function Navbar() {
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                         {getProductImages(hoveredProduct).slice(0, 4).map((image, index) => (
                             <div key={index} className="relative group">
                                 <img

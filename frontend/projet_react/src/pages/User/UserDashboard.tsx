@@ -8,8 +8,10 @@ import Notification from "./NotificationsUser"
 import Corbeille from "./Corbeille";
 import MesCommande from "./Mes_commande";
 import TableauDeBord from "./TableauDeBord";
+import { useTranslation } from "react-i18next";
 
 export default function UserDashboard() {
+    const { t } = useTranslation();
     const [activeMenu, setActiveMenu] = useState("home");
     const [user, setUser] = useState<{ nom: string; prenom: string; profils?: string } | null>(null);
     const [query, setQuery] = useState("");
@@ -35,11 +37,11 @@ export default function UserDashboard() {
     }, []);
 
     const menus = [
-        { id: "home", label: "Tableau de bord", icon: <Home size={20} /> },
-        { id: "orders", label: "Mes Commandes", icon: <Folder size={20} /> },
-        { id: "trash", label: "Corbeille", icon: <Trash size={20} /> },
-        { id: "stats", label: "Statistiques", icon: <BarChart3 size={20} /> },
-        { id: "settings", label: "Paramètres", icon: <Settings size={20} /> },
+        { id: "home", label: t("dashboard.menus.home"), icon: <Home size={20} /> },
+        { id: "orders", label: t("userDashboard.orders"), icon: <Folder size={20} /> },
+        { id: "trash", label: t("userDashboard.trash"), icon: <Trash size={20} /> },
+        { id: "stats", label: t("userDashboard.stats"), icon: <BarChart3 size={20} /> },
+        { id: "settings", label: t("userDashboard.settings"), icon: <Settings size={20} /> },
     ];
 
     const renderContent = () => {
@@ -59,8 +61,6 @@ export default function UserDashboard() {
             default:
                 return (
                     <div>
-                        {/* <h2 className="text-4xl font-bold mb-4">Bonjour  <span className="text-blue-500">{user?.prenom} ☺️!</span> Bienvenue</h2>
-                        <p>Ceci est ton tableau de bord.</p> */}
                         <TableauDeBord />
                     </div>
                 );
@@ -78,7 +78,7 @@ export default function UserDashboard() {
                     <input
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
-                        placeholder="Rechercher une commande........."
+                        placeholder={t("userDashboard.search")}
                         className="w-full pl-10 pr-3 py-2 rounded-lg border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2" size={18} />

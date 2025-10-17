@@ -1,17 +1,629 @@
 {
-    "banner": "🎯 High-quality printing — Fast, reliable, and easy to use!",
-    "all_products": "All products",
-    "book": "Book",
-    "stationery": "Stationery",
-    "papeterie": "Papeterie",
-    "signage": "Signage",
-    "sticker": "Sticker",
-    "kakemono": "Kakemono",
-    "welcome": "Order your print here",
-    "subtitle": "We take care of the rest",
-    "search_placeholder": "Search for a product...",
-    "login": "Log in",
-    "register": "Register",
-    "order": "Order"
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "chooseTheme": "Choose between light or dark mode",
+    "light": "Light",
+    "dark": "Dark",
+    "language": "Language",
+    "chooseLanguage": "Select your preferred language"
+  },
+  "dashboard": {
+    "sidebar": {
+      "title": "Print.mg",
+      "logout": "Logout",
+      "confirmLogout": "Do you really want to log out?"
+    },
+    "menus": {
+      "profil": "Profile",
+      "parametres": "Settings",
+      "notification": "Notifications",
+      "home": "Dashboard",
+      "orders": "Orders",
+      "products": "Products",
+      "users": "Users",
+      "trash": "Trash"
+    },
+    "header": {
+      "calendar": "Calendar"
+    },
+    "quickLinks": {
+      "title": "Quick link 😉"
+    }
+  },
+  "TableauAdmin": {
+    "title": "Dashboard",
+    "weather": "Current Weather",
+    "users": "Users",
+    "orders": "Orders",
+    "products": "Products",
+    "files": "Files",
+    "revenue": "Revenue",
+    "ordersByMonth": "Orders by Month",
+    "ordersByStatus": "Orders by Status",
+    "latestOrders": "Latest Orders",
+    "recentUsers": "Recent Users",
+    "loading": "Loading dashboard...",
+    "overview": "Activity overview on",
+    "table": {
+      "id": "ID",
+      "user": "User",
+      "status": "Status",
+      "amount": "Amount",
+      "date": "Date"
+    }
+  },
+  "orders": {
+    "title": "📋 Orders List",
+    "table": {
+      "id": "ID",
+      "name": "First and Last Name",
+      "email": "Email",
+      "phone": "Phone",
+      "actions": "Actions"
+    },
+    "status": {
+      "pending": "Pending",
+      "received": "Received",
+      "printing": "Printing",
+      "finished": "Finished",
+      "shipping": "Shipping",
+      "delivered": "Delivered"
+    },
+    "modal": {
+      "close": "Close",
+      "cancel": "Cancel",
+      "send": "Send",
+      "actions_for_order": "Actions for order #{{id}}",
+      "details_for_order": "Order details #{{id}}",
+      "send_notification_to": "Send notification to {{user}}",
+      "your_message": "Your message...",
+      "confirm_delete": "Confirm deletion",
+      "order_will_be_moved": "The order {{user}} will be moved to the trash.",
+      "confirm_action": "Confirm action",
+      "confirm_finish_text": "Are you sure you want to mark order #{{id}} from {{email}} as finished?",
+      "confirm_in_progressing_text": "Are you sure you want to mark order #{{id}} from {{email}} as in progress?",
+      "user": "User",
+      "order_date": "Order date",
+      "total_amount": "Total amount",
+      "payment_status": "Payment status",
+      "phone": "Phone",
+      "files": "Files",
+      "name": "Name",
+      "format": "Format",
+      "dpi": "DPI",
+      "color_profile": "Profile",
+      "size": "Size",
+      "configuration": "Configuration",
+      "format_type": "Format type",
+      "largeur_hauteur": "Width x Height",
+      "paper": "Paper",
+      "finish": "Finish",
+      "quantity": "Quantity",
+      "number_page": "Number of page",
+      "duplex": "Duplex",
+      "binding": "Binding",
+      "cover": "Cover",
+      "options": "Options"
+    },
+    "actions": {
+      "in_progress": "In progress",
+      "finished": "Finished",
+      "download": "Download",
+      "details": "Details",
+      "notification": "Notification",
+      "delete": "Delete"
+    }
+  },
+  "trash": {
+    "title": "🗑️ Trash",
+    "deletedOrders": "📦 Deleted Orders",
+    "deletedNotifications": "🔔 Deleted Notifications",
+    "noOrders": "No deleted orders.",
+    "noNotifications": "No deleted notifications.",
+    "restore_commande": "⚡ Restore the order ?",
+    "restore_notification": "⚡ Restore the notification ?",
+    "deletePermanent": "⚠️ Delete Permanently",
+    "confirmRestore": "Are you sure you want to restore",
+    "confirmDelete": "will be permanently deleted",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "notification": {
+    "title": "User notifications",
+    "noNotification": "No notifications at the moment",
+    "sender": "Unknown sender",
+    "modal": {
+      "confirmDeletion": "Confirm deletion",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "trashNotification": "The notification will be moved to the trash",
+      "title": "Notification"
+    }
+  },
+  "products": {
+    "title": "Product list",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "modal": {
+      "title": "Add a new product",
+      "choise": "Choose an image",
+      "product": "Featured product",
+      "cancel": "Cancel",
+      "confirmDelete": "Confim deletion",
+      "confirm": "Confirm",
+      "editproduct": "Edit the product",
+      "change": "Change image",
+      "deleteConfirm": "Do you want to permanently delete the product",
+      "category": "Catégory",
+      "price": "Price"
+    }
+  },
+  "usersadmin": {
+    "title": "User list",
+    "name": "Name",
+    "firstname": "Firstname",
+    "email": "E-mail",
+    "action": "Action",
+    "previous": "Previous",
+    "next": "Next",
+    "userdetails": "Details user",
+    "phone": "Phone",
+    "postalcode": "Postal code",
+    "city": "city",
+    "country": "Country",
+    "role": "Role",
+    "registrationDate": "Registration date",
+    "page": "Page",
+    "search": "Search for a user...."
+  },
+  "userDashboard": {
+    "orders": "My Orders",
+    "trash": "Trash",
+    "stats": "Statistics",
+    "settings": "Settings",
+    "search": "Search for an order......"
+  },
+  "TableauUser": {
+    "title": "Hello",
+    "secondtitle": "Here is an overview of your activity on",
+    "total": "Total orders",
+    "totalprice": "Total amount",
+    "files": "Uploaded files",
+    "notification": "Unread notifications",
+    "evolution": "Order evolution",
+    "depence": "Monthly expenses",
+    "firstcommande": "Latest orders",
+    "date": "Date",
+    "price": "Amount",
+    "firstnotification": "Latest notifications",
+    "number": "Number",
+    "month": "Month"
+  },
+  "notifications": {
+    "title": "My notifications",
+    "bouton": "Send a message to admin",
+    "noNotification": "No notifications at the moment.",
+    "modal": {
+      "title": "Send a message to admin",
+      "deleteConfirm": "⚠️ Confirm deletion",
+      "notif": "The notification will be moved to trash.",
+      "send": "Send",
+      "placeholder": "Your message..."
+    }
+  },
+  "mesCommandes": {
+    "title": "My Orders",
+    "description": "All the orders you have placed on the platform.",
+    "newOrder": "New",
+    "noOrder": "No orders found.",
+    "view": "View",
+    "delete": "Delete",
+    "orderSummary": "📄 Order Summary",
+    "cancel": "Cancel",
+    "confirmDeleteTitle": "Confirm Deletion",
+    "confirmDeleteText": "Are you sure you want to delete order {{orderId}}?",
+    "confirmButton": "Delete",
+    "cancelButton": "Cancel",
+    "orderStatus": {
+      "TERMINE": "Completed",
+      "EN_ATTENTE": "Pending",
+      "RECU": "Received",
+      "EN_COURS_IMPRESSION": "Printing",
+      "EN_COURS_LIVRAISON": "In Delivery",
+      "LIVREE": "Delivered"
+    },
+    "modal": {
+      "file": "File",
+      "dpi": "DPI",
+      "colorProfile": "Color Profile",
+      "format": "Format",
+      "formatType": "Format Type",
+      "paper": "Paper",
+      "finish": "Finish",
+      "quantity": "Quantity",
+      "bookPages": "Number of Pages",
+      "duplex": "Duplex",
+      "binding": "Binding",
+      "coverPaper": "Cover",
+      "phone": "Phone",
+      "amount": "Amount",
+      "options": "Options",
+      "date": "Date"
+    },
+    "alerts": {
+      "mustBeLoggedIn": "You must be logged in to perform this action.",
+      "deleteError": "Error during deletion",
+      "deleteFail": "Error: {{message}}"
+    }
+  },
+  "printingOrder": {
+    "title": "Printing Order",
+    "placeholders": {
+      "fileName": "File name",
+      "width": "Width (cm)",
+      "height": "Height (cm)",
+      "pages": "Number of pages",
+      "quantity": "Quantity",
+      "phone": "Phone",
+      "options": "Additional options",
+      "paperType": "Paper type",
+      "finish": "Finish",
+      "duplex": "Single/Double-sided"
+    },
+    "buttons": {
+      "next": "Next",
+      "back": "Back",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "checkOrder": "Check order"
+    },
+    "errors": {
+      "invalidFile": "Only PDF and JPG files are allowed",
+      "fillStep1": "Please fill all fields in step 1",
+      "fillStep2": "Please fill all required fields in step 2",
+      "minBookQty": "For a book, quantity must be at least {{min}}",
+      "minQty": "Minimum quantity for {{format}}: {{min}}",
+      "grandSize": "Please enter width and height for large format",
+      "grandMaxSize": "Maximum large format is 160x100 cm",
+      "invalidPhone": "Please enter a valid 10-digit phone number",
+      "invalidAmount": "Amount must be greater than 0",
+      "selectFile": "Please select a file",
+      "creationFailed": "Error creating order: {{message}}",
+      "creationError": "An error occurred while creating the order"
+    },
+    "success": {
+      "created": "✅ Order created! Payment status: {{status}}"
+    },
+    "format": {
+      "small": "Small format",
+      "large": "Large format",
+      "custom": "Custom"
+    },
+    "warning": {
+      "maxSize": "⚠️ Printer limit: 160x100 cm"
+    },
+    "bookOption": "I want to print a book",
+    "finish": {
+      "glossy": "Glossy",
+      "matte": "Matte",
+      "standard": "Standard"
+    },
+    "duplex": {
+      "single": "Single-sided",
+      "double": "Double-sided"
+    },
+    "binding": {
+      "none": "No binding",
+      "spiral": "Spiral",
+      "glue": "Glue",
+      "stapled": "Stapled"
+    },
+    "cover": {
+      "none": "No special cover",
+      "simple": "Simple paper",
+      "photo": "Photo paper"
+    },
+    "summary": {
+      "title": "Order Summary",
+      "file": "File",
+      "dpi": "DPI",
+      "colorProfile": "Profile",
+      "format": "Format",
+      "paper": "Paper",
+      "finish": "Finish",
+      "quantity": "Quantity",
+      "bookPages": "Number of pages",
+      "duplex": "Duplex",
+      "binding": "Binding",
+      "cover": "Cover",
+      "phone": "Phone",
+      "amount": "Amount",
+      "options": "Options"
+    },
+    "paper": {
+      "glossy": "Glossy paper",
+      "matte": "Matte paper",
+      "standard": "Standard paper",
+      "shiny": "Shiny paper"
+    }
+  },
+  "corbeille": {
+    "title": "🗑️ Trash",
+    "deletedOrders": "Deleted orders",
+    "noDeletedOrders": "No deleted orders.",
+    "deletedNotifications": "Deleted notifications",
+    "noDeletedNotifications": "No deleted notifications.",
+    "restore": "Restore",
+    "delete": "Delete",
+    "sentBy": "Sent by",
+    "date": "Date",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "orderTitle": "Order",
+    "phone": "Phone",
+    "amount": "Amount",
+    "format": "Format",
+    "quantity": "Quantity",
+    "options": "Options",
+    "files": "Files",
+    "modal": {
+      "restoreTitle": "⚡ Restore",
+      "deleteTitle": "⚠️ Delete permanently",
+      "restoreConfirm": "Do you really want to restore this item?",
+      "deleteConfirm": "Are you sure you want to permanently delete this item? This action cannot be undone."
+    }
+  },
+  "navbar": {
+    "slogan": "🎯 The right print — Fast, reliable, and easy to use!",
+    "searchPlaceholder": "Search a product...",
+    "connexion": "Login",
+    "creerCompte": "Create an account",
+    "commander": "Order now",
+    "changerLangue": "Change language",
+    "tousProduits": "All products",
+    "produits": "Products",
+    "papier": {
+      "grand": {
+        "titre": "Large format",
+        "prix": "1,350 Ar / print",
+        "min": "Minimum: 4 prints",
+        "description": "Large size, perfect for posters and banners."
+      },
+      "petit": {
+        "titre": "Small format",
+        "prix": "600 Ar / print",
+        "min": "Minimum: 30 prints",
+        "description": "Perfect for standard documents and flyers."
+      },
+      "perso": {
+        "titre": "Custom format",
+        "prix": "450 Ar / print",
+        "min": "Minimum: 50 prints",
+        "description": "Ideal for personalized or unique print jobs."
+      }
+    }
+  },
+  "slider": {
+    "texts": [
+      "Fast and reliable printing",
+      "High-quality professional solutions",
+      "Creativity and innovation at your service"
+    ],
+    "description": "Order your prints online and receive them quickly at your home.",
+    "commander": "Order now",
+    "tousProduits": "All products"
+  },
+  "sectionMarquepages": {
+    "titre": "Bookmarks: The Perfect Companion",
+    "paragraphe1": "Print your documents, photos, and creations with ease! Our platform allows you to order your prints online, without leaving your home. Choose the format, paper, and finish, and receive your prints directly at your doorstep.",
+    "paragraphe2": "We provide fast, reliable, and high-quality printing. Whether for your professional projects, school assignments, or personal memories, we guarantee a service tailored to your needs. With our dedicated team and efficient machines, your prints are in good hands!😘"
+  },
+  "sectionCallToAction": {
+    "titre": "Ready to print?",
+    "texte": "Start your order now and enjoy fast delivery.",
+    "bouton": "Order Now"
+  },
+  "sectionCreativite": {
+    "titre": "Your creativity, our printing",
+    "texte": "Bring your projects to life with high-quality, fast, and reliable printing.",
+    "bouton": "Start now"
+  },
+  "sectionServices": {
+    "titre": "Some Printing Services",
+    "items": [
+      {
+        "title": "Cookbooks",
+        "text": "Share your favorite recipes in a quality printed book."
+      },
+      {
+        "title": "Theses & Dissertations",
+        "text": "Print your academic work with professional finishing."
+      },
+      {
+        "title": "Tickets & Invitations",
+        "text": "Create personalized tickets and invitations for your events."
+      },
+      {
+        "title": "Novels & Paperbacks",
+        "text": "Bring your stories to life with sharp and durable prints."
+      },
+      {
+        "title": "Albums & Memories",
+        "text": "Preserve your memories in colorful, high-quality albums."
+      },
+      {
+        "title": "Comics & Lookbooks",
+        "text": "Print your comics and lookbooks with professional quality."
+      }
+    ]
+  },
+  "sectionImpression": {
+    "titre": "Print easily with Print.mg 🚀",
+    "description": "At Print.mg, we make online printing simple, fast, and high quality. Upload your files, choose your options, and receive your prints directly at home.",
+    "cards": [
+      {
+        "title": "Fast Delivery",
+        "text": "Order in a few clicks and receive your prints in record time."
+      },
+      {
+        "title": "Guaranteed Quality",
+        "text": "Enjoy professional printing on premium paper with vibrant colors."
+      },
+      {
+        "title": "Simplicity",
+        "text": "An intuitive platform designed to save you time and energy."
+      }
+    ]
+  },
+  "sectionPrêt": {
+    "titre": "Are you ready😀?? Click on order now and make your choices",
+    "subtitle": "Online printing",
+    "description": "Save time and enjoy impeccable quality. Our online printing service allows you to order in just a few clicks and receive your prints without leaving home.",
+    "btn": "Order now"
+  },
+  "sliders": {
+    "title": "Our Printing Achievements",
+    "carteVisite": {
+      "title": "Elegant Business Cards",
+      "description": "High-quality printing on premium paper"
+    },
+    "flyers": {
+      "title": "Promotional Flyers",
+      "description": "Grab attention with our striking designs"
+    },
+    "affiches": {
+      "title": "Large Format Posters",
+      "description": "Vibrant prints for any event"
+    },
+    "stickers": {
+      "title": "Custom Stickers",
+      "description": "Personalize your products with our stickers"
+    },
+    "brochures": {
+      "title": "Professional Brochures",
+      "description": "Present your business with elegance"
+    },
+    "emballages": {
+      "title": "Custom Packaging",
+      "description": "Packaging that makes a difference"
+    },
+    "photos": {
+      "title": "High-Definition Photos",
+      "description": "Print your memories in premium quality"
+    }
+  },
+  "footer": {
+    "logoTitle": "Print.mg",
+    "description": "Your online printing solution, simple, fast, and high-quality in Madagascar. Order your prints in a few clicks and receive them at home!",
+    "socials": {
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "twitter": "Twitter",
+      "mail": "Email"
+    },
+    "quickLinksTitle": "Quick Links",
+    "quickLinks": {
+      "home": "Home",
+      "services": "Services",
+      "about": "About",
+      "contact": "Contact"
+    },
+    "popularServicesTitle": "Popular Services",
+    "popularServices": {
+      "businessCards": "Business Cards",
+      "flyersBrochures": "Flyers & Brochures",
+      "posters": "Posters",
+      "stickers": "Stickers",
+      "photoPrinting": "Photo Printing"
+    },
+    "contactTitle": "Contact Us",
+    "contactInfo": {
+      "phone": "033 66 919 09 / 034 79 647 92",
+      "email": "contact@print.mg",
+      "facebook": "Facebook Print.mg",
+      "address": "BII A5 Mahazo Ambatomaro"
+    },
+    "copyright": "© {{year}} Print.mg — All rights reserved."
+  },
+  "detaille": {
+    "sectionHero": {
+      "title": "Our printing services",
+      "description": "Discover our full range of high-quality printing products. From business cards to large-format posters, we have everything to meet your needs.",
+      "button": "Order now",
+      "link": "Back to home"
+    },
+    "feature": [
+      {
+        "title": "Guaranteed Quality",
+        "text": "High-quality printing products with flawless finishing."
+      },
+      {
+        "title": "Fast Delivery",
+        "text": "Receive your products on time, no matter the urgency."
+      },
+      {
+        "title": "Advanced Technology",
+        "text": "Using the latest printing technologies for perfect results."
+      }
+    ],
+    "product": {
+      "title": "Our products",
+      "placeholder": "Search for a product...",
+      "noProduct": "No product matches your search.",
+      "price": "All prices",
+      "modal": {
+        "format": "Formats",
+        "custom": "Custom",
+        "largeformat": "Large format",
+        "binding": "Binding",
+        "spiral": "Spiral",
+        "perfectBinding": "Perfect binding",
+        "stapled": "Stapled",
+        "cover": "Cover",
+        "photopaper": "Photo paper",
+        "simple": "Single-sided",
+        "doubleSided": "Double-sided",
+        "validPrice": "Valid price",
+        "delivery": "Delivery",
+        "deliveryFees": "Delivery fees",
+        "close": "Close"
+      }
+    },
+    "action": {
+      "title": "Ready to print your projects?",
+      "text": "Join thousands of satisfied customers who trusted us for their printing needs.",
+      "button": "Order now"
+    }
+  },
+  "profil": {
+    "title": "Hello",
+    "code": "Postal code",
+    "codePlaceholder": "Your postal code",
+    "Ville": "City",
+    "villePlaceholder": "Your city",
+    "pays": "Country",
+    "paysPlaceholder": "Your country",
+    "photo": "Profile photo",
+    "change": "Change",
+    "no": "None",
+    "edit": "Edit your information",
+    "name": "Name",
+    "namePlaceholder": "Your name",
+    "firstname": "First name",
+    "firstPlaceholder": "Your first name",
+    "email": "E-mail",
+    "phone": "Phone",
+    "Save": "Save",
+    "pass": "Old password",
+    "new": "New password",
+    "confirm": "Confirm password",
+    "changepass": "Change password",
+    "profilAlert": "Update profil success",
+    "errorAlert": "Update error",
+    "errorPassword": "The password does not match",
+    "succesPassword": "Password success change !",
+    "nosuccessPassword": "Error while changing the password !"
   }
-  
+}

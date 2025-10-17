@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { RotateCcw, Trash2, X, Check } from "lucide-react";
+import { useTranslation } from "react-i18next";
+
 
 // ================================
 // 🔹 Types
@@ -28,7 +30,7 @@ type Configuration = {
 type Commande = {
   id: number;
   montant_total: number;
-  phone: string;
+  user_phone: string;
   configuration: Configuration;
   fichiers: Fichier[];
   is_deleted: boolean;
@@ -37,8 +39,19 @@ type Commande = {
 type DeletedNotification = {
   id: number;
   message: string;
-  user_email: string;
   created_at: string;
+  sender_info?: {
+    id: number;
+    nom: string;
+    prenom: string;
+    email: string;
+  } | null;
+  recipient_info?: {
+    id: number;
+    nom: string;
+    prenom: string;
+    email: string;
+  } | null;
 };
 
 type SelectedItem = {
@@ -52,6 +65,7 @@ type SelectedItem = {
 // 🔹 Composant principal
 // ================================
 export default function Trash() {
+  const { t } = useTranslation();
   // 🔹 États
   const [deletedOrders, setDeletedOrders] = useState<Commande[]>([]);
   const [deletedNotifications, setDeletedNotifications] = useState<DeletedNotification[]>([]);
@@ -152,31 +166,31 @@ export default function Trash() {
   // ================================
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">🗑️ Corbeille</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("corbeille.title")}</h1>
 
       {/* -------------------- Commandes -------------------- */}
-      <h2 className="text-xl font-bold mb-4">Commandes supprimées</h2>
+      <h2 className="text-xl font-bold mb-4">{t("corbeille.deletedOrders")}</h2>
       {deletedOrders.length === 0 ? (
-        <p className="text-base-content mb-6">Aucune commande supprimée.</p>
+        <p className="text-base-content mb-6">{t("corbeille.noDeletedOrders")}</p>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-6">
           {deletedOrders.map(order => (
             <div key={order.id} className="border rounded-xl p-4 shadow-sm bg-base-100 flex flex-col justify-between">
               <div>
-                <h3 className="font-semibold text-lg">Commande #{order.id}</h3>
-                <p className="text-sm">Téléphone: {order.phone}</p>
-                <p className="text-sm">Montant: {order.montant_total} Ariary</p>
+                <h3 className="font-semibold text-lg">{t("corbeille.orderTitle")} #{order.id}</h3>
+                <p className="text-sm">{t("corbeille.phone")}: {order.user_phone}</p>
+                <p className="text-sm">{t("corbeille.amount")}: {order.montant_total} Ariary</p>
                 <p className="text-sm">
-                  Format: {order.configuration.format_type}{" "}
+                  {t("corbeille.format")}: {order.configuration.format_type}{" "}
                   {order.configuration.format_type === "petit"
                     ? `- ${order.configuration.small_format}`
                     : `- ${order.configuration.largeur}x${order.configuration.hauteur} cm`}
                 </p>
-                <p className="text-sm">Quantité: {order.configuration.quantity}</p>
-                <p className="text-sm">Options: {order.configuration.options || "-"}</p>
+                <p className="text-sm">{t("corbeille.quantity")}: {order.configuration.quantity}</p>
+                <p className="text-sm">{t("corbeille.options")}: {order.configuration.options || "-"}</p>
 
                 <div className="mt-2">
-                  <strong>Fichiers:</strong>
+                  <strong>{t("corbeille.files")}:</strong>
                   {order.fichiers.map((f, idx) => (
                     <div key={idx} className="text-sm ml-2">
                       {f.nom_fichier} ({f.format}, {f.resolution_dpi} DPI, {f.profil_couleur})
@@ -191,13 +205,13 @@ export default function Trash() {
                   className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 shadow"
                   onClick={() => handleRestore({ type: "order", id: order.id })}
                 >
-                  <RotateCcw size={16} /> Restaurer
+                  <RotateCcw size={16} /> {t("corbeille.restore")}
                 </button>
                 <button
                   className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 shadow"
                   onClick={() => handleDeleteForever({ type: "order", id: order.id })}
                 >
-                  <Trash2 size={16} /> Supprimer
+                  <Trash2 size={16} /> {t("corbeille.delete")}
                 </button>
               </div>
             </div>
@@ -206,30 +220,30 @@ export default function Trash() {
       )}
 
       {/* -------------------- Notifications -------------------- */}
-      <h2 className="text-xl font-bold mb-4">Notifications supprimées</h2>
+      <h2 className="text-xl font-bold mb-4">{t("corbeille.deletedNotifications")}</h2>
       {deletedNotifications.length === 0 ? (
-        <p className="text-base-content">Aucune notification supprimée.</p>
+        <p className="text-base-content">{t("corbeille.noDeletedNotifications")}</p>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {deletedNotifications.map(notif => (
             <div key={notif.id} className="border rounded-xl p-4 shadow-sm bg-base-100 flex flex-col justify-between">
               <div>
                 <p className="font-semibold">{notif.message}</p>
-                <p className="text-sm text-gray-500">Envoyée par: {notif.user_email}</p>
-                <p className="text-sm text-gray-500">Date: {new Date(notif.created_at).toLocaleString()}</p>
+                <p className="text-sm text-gray-500">{t("corbeille.sentBy")}: {notif.sender_info?.email || "Admin"}</p>
+                <p className="text-sm text-gray-500">{t("corbeille.date")}: {new Date(notif.created_at).toLocaleString()}</p>
               </div>
               <div className="flex gap-2 mt-4">
                 <button
                   className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 shadow"
                   onClick={() => handleRestore({ type: "notification", id: notif.id, message: notif.message })}
                 >
-                  <RotateCcw size={16} /> Restaurer
+                  <RotateCcw size={16} /> {t("corbeille.restore")}
                 </button>
                 <button
                   className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 shadow"
                   onClick={() => handleDeleteForever({ type: "notification", id: notif.id, message: notif.message })}
                 >
-                  <Trash2 size={16} /> Supprimer
+                  <Trash2 size={16} /> {t("corbeille.delete")}
                 </button>
               </div>
             </div>
@@ -242,31 +256,26 @@ export default function Trash() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
             <h3 className="text-xl font-bold mb-4">
-              {showModal === "restore" ? "⚡ Restaurer" : "⚠️ Supprimer définitivement"}
+              {showModal === "restore" ? t("corbeille.modal.restoreTitle") : t("corbeille.modal.deleteTitle")}
             </h3>
             <p className="mb-4">
               {showModal === "restore"
-                ? `Voulez-vous vraiment restaurer ${
-                    selectedItem.type === "order" ? `la commande #${selectedItem.id}` : `"${selectedItem.message}"`
-                  } ?`
-                : `Êtes-vous sûr de supprimer définitivement ${
-                    selectedItem.type === "order" ? `la commande #${selectedItem.id}` : `"${selectedItem.message}"`
-                  } ? Cette action est irréversible.`}
+                ? t("corbeille.modal.restoreConfirm")
+                : t("corbeille.modal.deleteConfirm")}
             </p>
             <div className="flex justify-end gap-4">
               <button
                 onClick={() => setShowModal(false)}
                 className="flex items-center gap-2 px-3 py-1 rounded-lg border"
               >
-                <X size={16} /> Annuler
+                <X size={16} /> {t("corbeille.cancel")}
               </button>
               <button
                 onClick={confirmAction}
-                className={`flex items-center gap-2 px-3 py-1 rounded-lg ${
-                  showModal === "restore" ? "bg-blue-500 text-white hover:bg-blue-600" : "bg-red-500 text-white hover:bg-red-600"
-                }`}
+                className={`flex items-center gap-2 px-3 py-1 rounded-lg ${showModal === "restore" ? "bg-blue-500 text-white hover:bg-blue-600" : "bg-red-500 text-white hover:bg-red-600"
+                  }`}
               >
-                <Check size={16} /> Confirmer
+                <Check size={16} /> {t("corbeille.confirm")}
               </button>
             </div>
           </div>

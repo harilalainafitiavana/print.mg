@@ -1,7 +1,7 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { X, Check, PlusCircle, ImageIcon, Trash, Edit } from "lucide-react";
-import {authFetch} from "../../Components/Utils"
-
+import { authFetch } from "../../Components/Utils"
+import { useTranslation } from "react-i18next";
 
 interface Product {
     future: string;
@@ -16,6 +16,7 @@ interface Product {
 }
 
 export default function ProductList() {
+    const { t } = useTranslation();
     const [products, setProducts] = useState<Product[]>([]);
     const [showAddModal, setShowAddModal] = useState(false);
     const [newProduct, setNewProduct] = useState<Partial<Product> & { imageFile?: File }>({});
@@ -23,7 +24,7 @@ export default function ProductList() {
     const [productToDelete, setProductToDelete] = useState<Product | null>(null);
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-    
+
 
     // --- Fetch des produits existants ---
     useEffect(() => {
@@ -183,12 +184,12 @@ export default function ProductList() {
     return (
         <div className="p-6">
             <div className="flex items-center justify-between mb-6">
-                <h1 className="text-2xl font-bold">📦 Liste des produits</h1>
+                <h1 className="text-2xl font-bold">📦 {t("products.title")}</h1>
                 <button
                     onClick={() => setShowAddModal(true)}
                     className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
                 >
-                    <PlusCircle size={18} /> Ajouter
+                    <PlusCircle size={18} /> {t("products.add")}
                 </button>
             </div>
 
@@ -204,10 +205,10 @@ export default function ProductList() {
 
                         <h2 className="text-lg font-bold text-blue-500">{product.name}</h2>
                         <p className="text-sm text-base-content">{product.description}</p>
-                        <p className="text-sm text-base-content"><strong>Catégorie : </strong>{product.categorie}</p>
-                        <p className="text-sm font-medium"><strong>Prix : </strong>{product.prix} Ariary</p>
+                        <p className="text-sm text-base-content"><strong>{t("products.modal.category")} : </strong>{product.categorie}</p>
+                        <p className="text-sm font-medium"><strong>{t("products.modal.price")} : </strong>{product.prix} Ariary</p>
                         <p className="text-sm text-base-content">
-                            <strong>Produit mis en avant : </strong>{product.future === "Oui" ? "✅" : "❌"}
+                            <strong>{t("products.modal.product")} : </strong>{product.future === "Oui" ? "✅" : "❌"}
                         </p>
 
                         <div className="flex gap-2 mt-3">
@@ -218,14 +219,14 @@ export default function ProductList() {
                                     setShowEditModal(true);
                                 }}
                             >
-                                <Edit size={16} /> Modifier
+                                <Edit size={16} /> {t("products.edit")}
                             </button>
                             {/* Supprimer */}
                             <button
                                 onClick={() => handleDeleteClick(product)}
                                 className="flex-1 flex items-center justify-center gap-2 px-3 py-1 rounded-lg bg-red-500 text-white hover:bg-red-600"
                             >
-                                <Trash size={16} /> Supprimer
+                                <Trash size={16} /> {t("products.delete")}
                             </button>
                         </div>
                     </div>
@@ -253,7 +254,7 @@ export default function ProductList() {
             {showAddModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-base-100 p-6 rounded-xl max-w-lg w-full">
-                        <h3 className="text-xl font-bold mb-4">➕ Ajouter un nouveau produit</h3>
+                        <h3 className="text-xl font-bold mb-4">➕ {t("products.modal.title")}</h3>
                         <form onSubmit={handleSubmit} className="space-y-3">
                             <input
                                 type="text"
@@ -272,7 +273,7 @@ export default function ProductList() {
                             />
                             <input
                                 type="text"
-                                name="categorie"      // ← correction ici
+                                name="categorie"
                                 placeholder="Catégorie"
                                 value={newProduct.categorie || ""}
                                 onChange={handleInputChange}
@@ -280,7 +281,7 @@ export default function ProductList() {
                             />
                             <input
                                 type="text"
-                                name="prix"           // ← correction ici
+                                name="prix"
                                 placeholder="Prix"
                                 value={newProduct.prix || ""}
                                 onChange={handleInputChange}
@@ -288,7 +289,7 @@ export default function ProductList() {
                             />
 
                             <label className="flex items-center gap-2 cursor-pointer hover:text-primary">
-                                <ImageIcon size={20} /> Choisir une image
+                                <ImageIcon size={20} /> {t("products.modal.choise")}
                                 <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
                             </label>
                             {newProduct.image && <img src={newProduct.image} alt="preview" className="w-32 h-32 object-cover rounded-lg mt-2" />}
@@ -299,7 +300,7 @@ export default function ProductList() {
                                     onChange={(e) => setNewProduct((prev) => ({ ...prev, featured: e.target.checked }))}
                                 />
 
-                                Produit mis en avant
+                                {t("products.modal.product")}
                             </label>
 
                             <div className="flex justify-end gap-4 mt-4">
@@ -308,13 +309,13 @@ export default function ProductList() {
                                     onClick={() => setShowAddModal(false)}
                                     className="btn btn-outline flex items-center gap-2"
                                 >
-                                    <X size={16} /> Annuler
+                                    <X size={16} /> {t("products.modal.cancel")}
                                 </button>
                                 <button
                                     type="submit"
                                     className="btn btn-primary flex items-center gap-2"
                                 >
-                                    <Check size={16} /> Ajouter
+                                    <Check size={16} /> {t("products.add")}
                                 </button>
                             </div>
                         </form>
@@ -326,22 +327,22 @@ export default function ProductList() {
             {showDeleteModal && productToDelete && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
-                        <h3 className="text-xl font-bold mb-4">⚠️ Confirmer la suppression</h3>
+                        <h3 className="text-xl font-bold mb-4">⚠️ {t("products.modal.confirmDelete")}</h3>
                         <p className="mb-4">
-                            Le produit <strong>{productToDelete.name}</strong> sera supprimé définitivement.
+                            {t("products.modal.deleteConfirm")} <strong>{productToDelete.name}</strong> ?
                         </p>
                         <div className="flex justify-end gap-4">
                             <button
                                 onClick={() => setShowDeleteModal(false)}
                                 className="btn btn-outline flex items-center gap-2"
                             >
-                                <X size={16} /> Annuler
+                                <X size={16} /> {t("products.modal.cancel")}
                             </button>
                             <button
                                 onClick={confirmDelete}
                                 className="btn btn-primary flex items-center gap-2"
                             >
-                                <Check size={16} /> Confirmer
+                                <Check size={16} /> {t("products.modal.confirm")}
                             </button>
                         </div>
                     </div>
@@ -352,7 +353,7 @@ export default function ProductList() {
             {showEditModal && selectedProduct && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-base-100 p-6 rounded-xl max-w-lg w-full">
-                        <h3 className="text-xl font-bold mb-4">✏️ Modifier le produit</h3>
+                        <h3 className="text-xl font-bold mb-4">✏️ {t("products.modal.editproduct")}</h3>
                         <div className="space-y-3">
                             <input
                                 type="text"
@@ -390,7 +391,7 @@ export default function ProductList() {
                                 className="input input-bordered w-full"
                             />
                             <label className="flex items-center gap-2 cursor-pointer hover:text-primary">
-                                <ImageIcon size={20} /> Changer l’image
+                                <ImageIcon size={20} /> {t("products.modal.change")}
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -420,7 +421,7 @@ export default function ProductList() {
                                         setSelectedProduct({ ...selectedProduct, featured: e.target.checked })
                                     }
                                 />
-                                Produit mis en avant
+                                {t("products.modal.product")}
                             </label>
                         </div>
                         <div className="flex justify-end gap-4 mt-4">
@@ -428,13 +429,13 @@ export default function ProductList() {
                                 onClick={() => setShowEditModal(false)}
                                 className="btn btn-outline flex items-center gap-2"
                             >
-                                <X size={16} /> Annuler
+                                <X size={16} /> {t("products.modal.cancel")}
                             </button>
                             <button
                                 onClick={handleUpdate}
                                 className="btn btn-primary flex items-center gap-2"
                             >
-                                <Check size={16} /> Modifier
+                                <Check size={16} /> {t("products.edit")}
                             </button>
 
                         </div>

@@ -1,15 +1,23 @@
 import { useEffect, useState } from "react";
 import { authFetch } from "../../Components/Utils";
 import { Bell, Check, Send, Trash, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 type NotificationType = {
   id: number;
   message: string;
   is_read: boolean;
   created_at: string;
+  sender_info?: {
+    nom: string;
+    prenom: string;
+    email: string;
+  } | null;
 };
 
+
 export default function UserNotifications() {
+  const { t } = useTranslation();
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(5); // notifications par page
@@ -86,18 +94,18 @@ export default function UserNotifications() {
     <div className="p-6 max-w-3xl mx-auto">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold flex items-center gap-2">
-          <Bell size={24} /> Mes notifications
+          <Bell size={24} /> {t("notifications.title")}
         </h2>
         <button
           className="btn btn-primary flex items-center gap-2"
           onClick={() => setShowModal(true)}
         >
-          <Send size={16} /> Envoyer un message à l'admin
+          <Send size={16} /> {t("notifications.bouton")}
         </button>
       </div>
 
       {paginatedNotifications.length === 0 ? (
-        <p className="text-base-content">Aucune notification pour le moment.</p>
+        <p className="text-base-content">{t("notifications.noNotification")}</p>
       ) : (
         <ul className="space-y-3">
           {paginatedNotifications.map((n) => (
@@ -106,8 +114,14 @@ export default function UserNotifications() {
               className={`p-4 border rounded-lg shadow-sm flex justify-between items-start ${n.is_read}`}
             >
               <div>
-                <p className="text-base-content">{n.message}</p>
-                <small className="text-base-content">
+                <p className="text-base-content"><strong>{n.message}</strong></p>
+                <hr className="my-2 border-gray-300" />
+                {n.sender_info && (
+                  <small className="text-base-content block">
+                    {t("corbeille.sentBy")} : {n.sender_info.email}
+                  </small>
+                )}
+                <small className="text-base-content block">
                   {new Date(n.created_at).toLocaleString()}
                 </small>
               </div>
@@ -130,17 +144,17 @@ export default function UserNotifications() {
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((p) => p - 1)}
           >
-            Précédent
+            {t("usersadmin.previous")}
           </button>
           <span>
-            Page {currentPage} / {totalPages}
+            {t("usersadmin.page")} {currentPage} / {totalPages}
           </span>
           <button
             className="btn btn-outline"
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage((p) => p + 1)}
           >
-            Suivant
+            {t("usersadmin.next")}
           </button>
         </div>
       )}
@@ -149,11 +163,11 @@ export default function UserNotifications() {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
-            <h2 className="text-xl font-bold mb-4">📨 Envoyer un message à l'admin</h2>
+            <h2 className="text-xl font-bold mb-4">📨 {t("notifications.modal.title")}</h2>
             <textarea
               className="textarea textarea-bordered w-full mb-4"
               rows={4}
-              placeholder="Votre message..."
+              placeholder={t("notifications.modal.placeholder")}
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
             />
@@ -162,13 +176,13 @@ export default function UserNotifications() {
                 onClick={() => setShowModal(false)}
                 className="btn btn-outline"
               >
-                Annuler
+                {t("trash.cancel")}
               </button>
               <button
                 onClick={sendNotificationToAdmin}
                 className="btn btn-primary"
               >
-                Envoyer
+                {t("notifications.modal.send")}
               </button>
             </div>
           </div>
@@ -179,11 +193,11 @@ export default function UserNotifications() {
       {showDeleteModal && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
-            <h2 className="text-xl font-bold mb-4">⚠️ Confirmer la suppression</h2>
-            <p>La notification sera déplacée dans la corbeille.</p>
+            <h2 className="text-xl font-bold mb-4">{t("notifications.modal.deleteConfirm")}</h2>
+            <p>{t("notifications.modal.notif")}</p>
             <div className="flex justify-end gap-4 mt-4">
-              <button onClick={() => setShowDeleteModal(false)} className="btn btn-outline flex items-center gap-2"><X size={16} /> Annuler</button>
-              <button onClick={confirmDelete} className="btn btn-primary flex items-center gap-2"><Check size={16} /> Confirmer</button>
+              <button onClick={() => setShowDeleteModal(false)} className="btn btn-outline flex items-center gap-2"><X size={16} /> {t("trash.cancel")}</button>
+              <button onClick={confirmDelete} className="btn btn-primary flex items-center gap-2"><Check size={16} /> {t("trash.confirm")}</button>
             </div>
           </div>
         </div>

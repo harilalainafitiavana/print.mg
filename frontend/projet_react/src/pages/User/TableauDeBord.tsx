@@ -5,8 +5,10 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   BarChart, Bar
 } from "recharts";
+import { useTranslation } from "react-i18next";
 
 const TableauDeBord = () => {
+  const { t } = useTranslation();
   const [stats, setStats] = useState<any>(null);
 
   // 🔹 Récupérer le token directement depuis localStorage/sessionStorage
@@ -17,8 +19,8 @@ const TableauDeBord = () => {
     axios.get("http://localhost:8000/api/user/dashboard-stats/", {
       headers: { Authorization: `Bearer ${token}` }
     })
-    .then(res => setStats(res.data))
-    .catch(err => console.error(err));
+      .then(res => setStats(res.data))
+      .catch(err => console.error(err));
   }, [token]);
 
   if (!stats) return <p className="text-center mt-10 text-gray-500">Chargement des statistiques...</p>;
@@ -29,7 +31,7 @@ const TableauDeBord = () => {
     montant: item.montant || 0
   }));
 
-//   const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444"];
+  //   const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444"];
 
   return (
     <div className="p-6 space-y-8 bg-base-200 min-h-screen">
@@ -37,29 +39,29 @@ const TableauDeBord = () => {
       {/* Header */}
       <div className="text-center">
         <h2 className="text-3xl font-bold text-base-content">
-          Bonjour <span className="text-blue-600">{stats.user_email}</span> 👋
+          {t("TableauUser.title")} <span className="text-blue-600">{stats.user_email}</span> 👋
         </h2>
         <p className="text-gray-500 mt-2">
-          Voici un aperçu de votre activité sur <span className="font-semibold">Print.mg</span>
+          {t("TableauUser.secondtitle")}<span className="font-semibold">Print.mg</span>
         </p>
       </div>
 
       {/* Cartes statistiques */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-base-100 shadow-lg rounded-xl p-6 hover:shadow-xl transition">
-          <p className="text-base-content">Total Commandes</p>
+          <p className="text-base-content">{t("TableauUser.total")}</p>
           <p className="text-3xl font-bold text-blue-600">{stats.total_commandes}</p>
         </div>
         <div className="bg-base-100 shadow-lg rounded-xl p-6 hover:shadow-xl transition">
-          <p className="text-base-content">Montant Total</p>
+          <p className="text-base-content">{t("TableauUser.totalprice")}</p>
           <p className="text-3xl font-bold text-green-600">{stats.montant_total} Ar</p>
         </div>
         <div className="bg-base-100 shadow-lg rounded-xl p-6 hover:shadow-xl transition">
-          <p className="text-base-content">Fichiers Uploadés</p>
+          <p className="text-base-content">{t("TableauUser.files")}</p>
           <p className="text-3xl font-bold text-purple-600">{stats.total_fichiers}</p>
         </div>
         <div className="bg-base-100 shadow-lg rounded-xl p-6 hover:shadow-xl transition">
-          <p className="text-base-content">Notifications Non Lues</p>
+          <p className="text-base-content">{t("TableauUser.notification")}</p>
           <p className="text-3xl font-bold text-red-600">{stats.notifications_non_lues}</p>
         </div>
       </div>
@@ -69,7 +71,7 @@ const TableauDeBord = () => {
 
         {/* Commandes par mois */}
         <div className="bg-base-100 p-6 shadow rounded-xl">
-          <h3 className="text-lg font-semibold mb-4">Évolution des commandes</h3>
+          <h3 className="text-lg font-semibold mb-4">{t("TableauUser.evolution")}</h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={commandesParMois}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -84,7 +86,7 @@ const TableauDeBord = () => {
 
         {/* Dépenses par mois */}
         <div className="bg-base-100 p-6 shadow rounded-xl">
-          <h3 className="text-lg font-semibold mb-4">Dépenses par mois</h3>
+          <h3 className="text-lg font-semibold mb-4">{t("TableauUser.depence")}</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={commandesParMois}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -103,13 +105,13 @@ const TableauDeBord = () => {
 
         {/* Dernières commandes */}
         <div className="bg-base-100 p-6 shadow rounded-xl">
-          <h3 className="text-lg font-semibold mb-4">Dernières commandes</h3>
+          <h3 className="text-lg font-semibold mb-4">{t("TableauUser.firstcommande")}</h3>
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b text-base-content">
                 <th className="p-2">ID</th>
-                <th className="p-2">Date</th>
-                <th className="p-2">Montant</th>
+                <th className="p-2">{t("TableauUser.date")}</th>
+                <th className="p-2">{t("TableauUser.price")}</th>
               </tr>
             </thead>
             <tbody>
@@ -126,7 +128,7 @@ const TableauDeBord = () => {
 
         {/* Dernières notifications */}
         <div className="bg-base-100 p-6 shadow rounded-xl">
-          <h3 className="text-lg font-semibold mb-4">Dernières notifications</h3>
+          <h3 className="text-lg font-semibold mb-4">{t("TableauUser.firstnotification")}</h3>
           <ul className="space-y-3">
             {stats.dernières_notifications.map((notif: any) => (
               <li key={notif.id} className="p-3 border rounded-lg hover:bg-blue-50 transition">

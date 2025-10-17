@@ -1,20 +1,19 @@
 import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next"
 
 
 
 export default function Footer() {
+  const { t } = useTranslation();
   return (
     <footer className="bg-white text-gray-700 py-10 mt-12 border-t">
       <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
 
         {/* Logo + description */}
         <div>
-          <h2 className="text-2xl font-bold text-blue-800 mb-3">Print.mg</h2>
-          <p className="text-md text-gray-600">
-            Votre solution d'impression en ligne simple, rapide et de qualité à Madagascar.
-            Commandez vos impressions en quelques clics et recevez-les chez vous !
-          </p>
+          <h2 className="text-2xl font-bold text-blue-800 mb-3">{t("footer.logoTitle")}</h2>
+          <p className="text-md text-gray-600">{t("footer.description")}</p>
           <div className="flex space-x-4 mt-5">
             <a href="#" className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition">
               <Facebook size={20} />
@@ -33,69 +32,61 @@ export default function Footer() {
 
         {/* Liens rapides */}
         <div className="md:ml-10">
-          <h3 className="text-xl font-bold text-blue-800 mb-3">Liens rapides</h3>
+          <h3 className="text-xl font-bold text-blue-800 mb-3">{t("footer.quickLinksTitle")}</h3>
           <ul className="space-y-1 text-md">
             <li>
-              <Link to='/' className="hover:text-blue-800 transition flex items-center">Acceuil</Link>
+              <Link to="/" className="hover:text-blue-800 transition flex items-center">{t("footer.quickLinks.home")}</Link>
             </li>
             <li>
-              <Link to='/#services' className="hover:text-blue-800 transition flex items-center">Services</Link>
+              <Link to="/#services" className="hover:text-blue-800 transition flex items-center">{t("footer.quickLinks.services")}</Link>
             </li>
-            <li><a href="/about" className="hover:text-blue-800 transition flex items-center">À propos</a></li>
-            <li><a href="/contact" className="hover:text-blue-800 transition flex items-center">Contact</a></li>
+            <li>
+              <Link to="/about" className="hover:text-blue-800 transition flex items-center">{t("footer.quickLinks.about")}</Link>
+            </li>
+            <li>
+              <Link to="/contact" className="hover:text-blue-800 transition flex items-center">{t("footer.quickLinks.contact")}</Link>
+            </li>
           </ul>
         </div>
 
         {/* Services populaires */}
         <div>
-          <h3 className="text-xl font-bold text-blue-800 mb-3">Services populaires</h3>
+          <h3 className="text-xl font-bold text-blue-800 mb-3">{t("footer.popularServicesTitle")}</h3>
           <ul className="space-y-2 text-md">
-            <li><a href="#" className="hover:text-blue-800 transition flex items-center">Cartes de visite</a></li>
-            <li><a href="#" className="hover:text-blue-800 transition flex items-center">Flyers & Brochures</a></li>
-            <li><a href="#" className="hover:text-blue-800 transition flex items-center">Affiches</a></li>
-            <li><a href="#" className="hover:text-blue-800 transition flex items-center">Stickers</a></li>
-            <li><a href="#" className="hover:text-blue-800 transition flex items-center">Impression photo</a></li>
+            <li><a href="#" className="hover:text-blue-800 transition flex items-center">{t("footer.popularServices.businessCards")}</a></li>
+            <li><a href="#" className="hover:text-blue-800 transition flex items-center">{t("footer.popularServices.flyersBrochures")}</a></li>
+            <li><a href="#" className="hover:text-blue-800 transition flex items-center">{t("footer.popularServices.posters")}</a></li>
+            <li><a href="#" className="hover:text-blue-800 transition flex items-center">{t("footer.popularServices.stickers")}</a></li>
+            <li><a href="#" className="hover:text-blue-800 transition flex items-center">{t("footer.popularServices.photoPrinting")}</a></li>
           </ul>
         </div>
 
         {/* Contact */}
         <div>
-          <h3 className="text-xl font-bold text-blue-800 mb-4">Contactez-nous</h3>
+          <h3 className="text-xl font-bold text-blue-800 mb-4">{t("footer.contactTitle")}</h3>
           <ul className="space-y-3 text-gray-700">
             <li>
-              <a
-                href="tel:+33336691909"
-                className="hover:text-blue-800 transition flex items-center gap-2"
-              >
+              <a href="tel:+33336691909" className="hover:text-blue-800 transition flex items-center gap-2">
                 <Phone size={18} className="text-blue-600" />
-                <span>033 66 919 09 / 034 79 647 92</span>
+                <span>{t("footer.contactInfo.phone")}</span>
               </a>
             </li>
             <li>
-              <a
-                href="#"
-                className="hover:text-blue-800 transition flex items-center gap-2"
-              >
+              <a href="mailto:contact@print.mg" className="hover:text-blue-800 transition flex items-center gap-2">
                 <Mail size={18} className="text-blue-600" />
-                <span>contact@print.mg</span>
+                <span>{t("footer.contactInfo.email")}</span>
               </a>
             </li>
             <li>
-              <a
-                href="#"
-                className="hover:text-blue-800 transition flex items-center gap-2"
-              >
+              <a href="#" className="hover:text-blue-800 transition flex items-center gap-2">
                 <Facebook size={18} className="text-blue-600" />
-                <span>Facebook Print.mg</span>
+                <span>{t("footer.contactInfo.facebook")}</span>
               </a>
             </li>
             <li>
-              <a
-                href="#"
-                className="hover:text-blue-800 transition flex items-center gap-2"
-              >
+              <a href="#" className="hover:text-blue-800 transition flex items-center gap-2">
                 <MapPin size={18} className="text-blue-600" />
-                <span>BII A5 Mahazo Ambatomaro</span>
+                <span>{t("footer.contactInfo.address")}</span>
               </a>
             </li>
           </ul>
@@ -104,7 +95,7 @@ export default function Footer() {
 
       {/* Copyright */}
       <div className="text-center text-gray-500 text-sm mt-10 border-t pt-4 max-w-6xl mx-auto px-6">
-        © {new Date().getFullYear()} Print.mg — Tous droits réservés.
+        {t("footer.copyright", { year: new Date().getFullYear() })}
       </div>
     </footer>
   );

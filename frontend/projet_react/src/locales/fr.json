@@ -1,17 +1,629 @@
 {
-    "banner": "🎯 La bonne impression — Rapide, fiable et facile à utiliser !",
-    "all_products": "Tous les produits",
-    "book": "Livre",
-    "stationery": "Carterie",
-    "papeterie": "Papeterie",
-    "signage": "Signalétique",
-    "sticker": "Sticker",
-    "kakemono": "Kakémono",
-    "welcome": "Commander votre impression ici",
-    "subtitle": "Nous occupons le reste",
-    "search_placeholder": "Rechercher un produit...",
-    "login": "Se connecter",
-    "register": "Créer un compte",
-    "order": "Commander"
+  "settings": {
+    "title": "Paramètres",
+    "theme": "Thème",
+    "chooseTheme": "Choisissez entre le mode clair ou sombre",
+    "light": "Clair",
+    "dark": "Sombre",
+    "language": "Langue",
+    "chooseLanguage": "Sélectionnez votre langue préférée"
+  },
+  "dashboard": {
+    "sidebar": {
+      "title": "Print.mg",
+      "logout": "Déconnexion",
+      "confirmLogout": "Voulez-vous vraiment vous déconnecter ?"
+    },
+    "menus": {
+      "profil": "Profil",
+      "parametres": "Paramètres",
+      "notification": "Notifications",
+      "home": "Tableau de bord",
+      "orders": "Commandes",
+      "products": "Produits",
+      "users": "Utilisateurs",
+      "trash": "Corbeille"
+    },
+    "header": {
+      "calendar": "Calendrier"
+    },
+    "quickLinks": {
+      "title": "Lien rapide 😉"
+    }
+  },
+  "TableauAdmin": {
+    "title": "Tableau de bord",
+    "weather": "Météo actuelle",
+    "users": "Utilisateurs",
+    "orders": "Commandes",
+    "products": "Produits",
+    "files": "Fichiers",
+    "revenue": "Revenu",
+    "ordersByMonth": "Commandes par mois",
+    "ordersByStatus": "Commandes par statut",
+    "latestOrders": "Dernières commandes",
+    "recentUsers": "Utilisateurs récents",
+    "loading": "Chargement du tableau de bord...",
+    "overview": "Aperçu de l’activité sur",
+    "table": {
+      "id": "ID",
+      "user": "Utilisateur",
+      "status": "Statut",
+      "amount": "Montant",
+      "date": "Date"
+    }
+  },
+  "orders": {
+    "title": "📋 Liste des commandes",
+    "table": {
+      "id": "ID",
+      "name": "Prénom et nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "actions": "Actions"
+    },
+    "status": {
+      "pending": "En attente",
+      "received": "Reçue",
+      "printing": "En cours impression",
+      "finished": "Terminée",
+      "shipping": "Livraison en cours",
+      "delivered": "Livrée"
+    },
+    "modal": {
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "send": "Envoyer",
+      "actions_for_order": "Actions pour la commande #{{id}}",
+      "details_for_order": "Détails de la commande #{{id}}",
+      "send_notification_to": "Envoyer notification à {{user}}",
+      "your_message": "Votre message...",
+      "confirm_delete": "Confirmer la suppression",
+      "order_will_be_moved": "La commande {{user}} sera déplacée dans la corbeille.",
+      "confirm_action": "Confirmer l’action",
+      "confirm_finish_text": "Êtes-vous sûr de vouloir marquer la commande #{{id}} de {{email}} comme terminée ?",
+      "confirm_in_progressing_text": "Êtes-vous sûr de vouloir marquer la commande #{{id}} de {{email}} comme en cours ?",
+      "user": "Utilisateur",
+      "order_date": "Date commande",
+      "total_amount": "Montant",
+      "payment_status": "Statut paiement",
+      "phone": "Téléphone",
+      "files": "Fichiers",
+      "name": "Nom",
+      "format": "Format",
+      "dpi": "Profil couleur",
+      "color_profile": "Profil",
+      "size": "Taille",
+      "configuration": "Configuration",
+      "format_type": "Type format",
+      "largeur_hauteur": "Largeur x Hauteur",
+      "paper": "Papier",
+      "finish": "Finition",
+      "quantity": "Quantité",
+      "number_page": "Nombre de page",
+      "duplex": "Duplex",
+      "binding": "Reliure",
+      "cover": "Couverture",
+      "options": "Options"
+    },
+    "actions": {
+      "in_progress": "En cours",
+      "finished": "Terminé",
+      "download": "Télécharger",
+      "details": "Détails",
+      "notification": "Notification",
+      "delete": "Supprimer"
+    }
+  },
+  "trash": {
+    "title": "🗑️ Corbeille",
+    "deletedOrders": "📦 Commandes supprimées",
+    "deletedNotifications": "🔔 Notifications supprimées",
+    "noOrders": "Aucune commande supprimée.",
+    "noNotifications": "Aucune notification supprimée.",
+    "restore_commande": "⚡ Restaurer la commande ?",
+    "restore_notification": "⚡ Restaurer la notifications ?",
+    "deletePermanent": "⚠️ Suppression définitive",
+    "confirmRestore": "Voulez-vous vraiment restaurer",
+    "confirmDelete": "Cette action sera supprimé définitivement",
+    "cancel": "Annuler",
+    "confirm": "Confirmer"
+  },
+  "notification": {
+    "title": "Notifications des utilisateurs",
+    "noNotification": "Aucune notitication pour le moment",
+    "sender": "Expéditeur inconnu",
+    "modal": {
+      "confirmDeletion": "Confirmer la suppression",
+      "cancel": "Annuler",
+      "confirm": "Confirmer",
+      "trashNotification": "La notification sera déplacée dans la corbeille",
+      "title": "Nofitication"
+    }
+  },
+  "products": {
+    "title": "Liste des produits",
+    "add": "Ajouter",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "modal": {
+      "title": "Ajouter un nouveau produit",
+      "choise": "Choisir une image",
+      "product": "Produit mis en avant",
+      "cancel": "Annuler",
+      "confirmDelete": "Confirmer la suppression",
+      "confirm": "Confirmer",
+      "editproduct": "Modifier le produit",
+      "change": "Changer l'image",
+      "deleteConfirm": "Voulez vous supprimer définitivement le produit",
+      "category": "Catégorie",
+      "price": "Prix"
+    }
+  },
+  "usersadmin": {
+    "title": "Liste des Utilisateurs",
+    "name": "Nom",
+    "firstname": "Prénom",
+    "email": "E-mail",
+    "action": "Actions",
+    "previous": "Précédent",
+    "next": "Next",
+    "userdetails": "Détails de l'utilisteur",
+    "phone": "Téléphone",
+    "postalcode": "Code postale",
+    "city": "Ville",
+    "country": "Pays",
+    "role": "Rôle",
+    "registrationDate": "Date d'inscription",
+    "page": "Page",
+    "search": "Rechercher un utilisateur...."
+  },
+  "userDashboard": {
+    "orders": "Mes commandes",
+    "trash": "Corbeille",
+    "stats": "Statistiques",
+    "settings": "Paramètre",
+    "search": "Rechercher une commande......"
+  },
+  "TableauUser": {
+    "title": "Bonjour",
+    "secondtitle": "Voici un aperçu de votre activité sur",
+    "total": "Total commandes",
+    "totalprice": "Montant total",
+    "files": "Fichiers uploadés",
+    "notification": "Nofitications Non lues",
+    "evolution": "Évolution des commandes",
+    "depence": "Dépenses par mois",
+    "firstcommande": "Dérnières commandes",
+    "date": "Date",
+    "price": "Montant",
+    "firstnotification": "Dérnières notifications",
+    "number": "Nombre",
+    "month": "Mois"
+  },
+  "notifications": {
+    "title": "Mes notifications",
+    "bouton": "Envoyer un message à l'admin",
+    "noNotification": "Aucune notification pour le moment.",
+    "modal": {
+      "title": "Envoyer un message à l'admin",
+      "deleteConfirm": "⚠️ Confirmer la suppression",
+      "notif": "La notification sera déplacée dans la corbeille.",
+      "send": "Envoyer",
+      "placeholder": "Votre message..."
+    }
+  },
+  "mesCommandes": {
+    "title": "Mes commandes",
+    "description": "Toutes les commandes que tu as passées sur la plateforme.",
+    "newOrder": "Nouvelle",
+    "noOrder": "Aucune commande trouvée.",
+    "view": "Voir",
+    "delete": "Supprimer",
+    "orderSummary": "📄 Résumé de la commande",
+    "cancel": "Annuler",
+    "confirmDeleteTitle": "Confirmer la suppression",
+    "confirmDeleteText": "Est-vous sûr(e) de vouloir supprimer la commande {{orderId}} ?",
+    "confirmButton": "Supprimer",
+    "cancelButton": "Annuler",
+    "orderStatus": {
+      "TERMINE": "Terminée",
+      "EN_ATTENTE": "En attente",
+      "RECU": "Reçue",
+      "EN_COURS_IMPRESSION": "En cours",
+      "EN_COURS_LIVRAISON": "Livraison en cours",
+      "LIVREE": "Livrée"
+    },
+    "modal": {
+      "file": "Fichier",
+      "dpi": "DPI",
+      "colorProfile": "Profil",
+      "format": "Format",
+      "formatType": "Type format",
+      "paper": "Papier",
+      "finish": "Finition",
+      "quantity": "Quantité",
+      "bookPages": "Nombre de page",
+      "duplex": "Duplex",
+      "binding": "Reliure",
+      "coverPaper": "Couverture",
+      "phone": "Téléphone",
+      "amount": "Montant",
+      "options": "Options",
+      "date": "Date"
+    },
+    "alerts": {
+      "mustBeLoggedIn": "Vous devez être connecté pour effectuer cette action.",
+      "deleteError": "Erreur lors de la suppression",
+      "deleteFail": "Erreur : {{message}}"
+    }
+  },
+  "printingOrder": {
+    "title": "Commande d'impression",
+    "placeholders": {
+      "fileName": "Nom du fichier",
+      "width": "Largeur (cm)",
+      "height": "Hauteur (cm)",
+      "pages": "Nombre de pages",
+      "quantity": "Quantité",
+      "phone": "Téléphone",
+      "options": "Options supplémentaires",
+      "paperType": "Type de papier",
+      "finish": "Finition",
+      "duplex": "Version Recto/verso"
+    },
+    "buttons": {
+      "next": "Suivant",
+      "back": "Retour",
+      "confirm": "Confirmer",
+      "cancel": "Annuler",
+      "checkOrder": "Vérifier commande"
+    },
+    "errors": {
+      "invalidFile": "Seuls les fichiers PDF et JPG sont acceptés",
+      "fillStep1": "Veuillez remplir tous les champs de l'étape 1",
+      "fillStep2": "Veuillez remplir tous les champs obligatoires de l'étape 2",
+      "minBookQty": "Pour un livre, la quantité doit être au moins {{min}}",
+      "minQty": "Quantité minimale pour {{format}} : {{min}}",
+      "grandSize": "Veuillez saisir largeur et hauteur pour le grand format",
+      "grandMaxSize": "La limite du grand format est 160x100 cm",
+      "invalidPhone": "Veuillez entrer un numéro de téléphone valide à 10 chiffres",
+      "invalidAmount": "Le montant doit être supérieur à 0",
+      "selectFile": "Veuillez sélectionner un fichier",
+      "creationFailed": "Erreur lors de la création de la commande : {{message}}",
+      "creationError": "Une erreur est survenue lors de la création de la commande"
+    },
+    "success": {
+      "created": "✅ Commande créée ! Paiement status : {{status}}"
+    },
+    "format": {
+      "small": "Petit format",
+      "large": "Grand format",
+      "custom": "Personnalisé"
+    },
+    "warning": {
+      "maxSize": "⚠️ Limite imprimante : 160x100 cm"
+    },
+    "bookOption": "Je veux imprimer un livre",
+    "finish": {
+      "glossy": "Brillant",
+      "matte": "Mate",
+      "standard": "Standard"
+    },
+    "duplex": {
+      "single": "Recto seul",
+      "double": "Recto/verso"
+    },
+    "binding": {
+      "none": "Pas de reliure",
+      "spiral": "Spirale",
+      "glue": "Dos collé",
+      "stapled": "Agrafé"
+    },
+    "cover": {
+      "none": "Pas de couverture spéciale",
+      "simple": "Papier simple",
+      "photo": "Papier photo"
+    },
+    "summary": {
+      "title": "Résumé de la commande",
+      "file": "Fichier",
+      "dpi": "DPI",
+      "colorProfile": "Profil",
+      "format": "Format",
+      "paper": "Papier",
+      "finish": "Finition",
+      "quantity": "Quantité",
+      "bookPages": "Nombre de pages",
+      "duplex": "Duplex",
+      "binding": "Reliure",
+      "cover": "Couverture",
+      "phone": "Téléphone",
+      "amount": "Montant",
+      "options": "Options"
+    },
+    "paper": {
+      "glossy": "Papier glacé",
+      "matte": "Papier mat",
+      "standard": "Papier standard",
+      "shiny": "Papier brillant"
+    }
+  },
+  "corbeille": {
+    "title": "🗑️ Corbeille",
+    "deletedOrders": "Commandes supprimées",
+    "noDeletedOrders": "Aucune commande supprimée.",
+    "deletedNotifications": "Notifications supprimées",
+    "noDeletedNotifications": "Aucune notification supprimée.",
+    "restore": "Restaurer",
+    "delete": "Supprimer",
+    "sentBy": "Envoyée par",
+    "date": "Date",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "orderTitle": "Commande",
+    "phone": "Téléphone",
+    "amount": "Montant",
+    "format": "Format",
+    "quantity": "Quantité",
+    "options": "Options",
+    "files": "Fichiers",
+    "modal": {
+      "restoreTitle": "⚡ Restaurer",
+      "deleteTitle": "⚠️ Supprimer définitivement",
+      "restoreConfirm": "Voulez-vous vraiment restaurer cet élément ?",
+      "deleteConfirm": "Êtes-vous sûr de vouloir supprimer définitivement cet élément ? Cette action est irréversible."
+    }
+  },
+  "navbar": {
+    "slogan": "🎯 La bonne impression — Rapide, fiable et facile à utiliser !",
+    "searchPlaceholder": "Rechercher un produit...",
+    "connexion": "Connexion",
+    "creerCompte": "Créer un compte",
+    "commander": "Commander",
+    "changerLangue": "Changer de langue",
+    "tousProduits": "Tous les produits",
+    "produits": "Produits",
+    "papier": {
+      "grand": {
+        "titre": "Grand format",
+        "prix": "1 350 Ar / impression",
+        "min": "Minimum : 4 impressions",
+        "description": "Format large, idéal pour les affiches et posters."
+      },
+      "petit": {
+        "titre": "Petit format",
+        "prix": "600 Ar / impression",
+        "min": "Minimum : 30 impressions",
+        "description": "Format pratique pour les documents standards."
+      },
+      "perso": {
+        "titre": "Personnalisé",
+        "prix": "450 Ar / impression",
+        "min": "Minimum : 50 impressions",
+        "description": "Format adapté aux impressions sur mesure."
+      }
+    }
+  },
+  "slider": {
+    "texts": [
+      "Impression rapide et fiable",
+      "Solutions professionnelles de qualité",
+      "Créativité et innovation à votre service"
+    ],
+    "description": "Commandez vos impressions en ligne et recevez-les rapidement chez vous.",
+    "commander": "Commander maintenant",
+    "tousProduits": "Tous les produits"
+  },
+  "sectionMarquepages": {
+    "titre": "Marque-pages : Le complément parfait",
+    "paragraphe1": "Imprimez vos documents, photos et créations en toute simplicité ! Notre plateforme vous permet de commander vos impressions en ligne, sans vous déplacer. Choisissez le format, le papier et la finition, puis recevez vos impressions directement chez vous.",
+    "paragraphe2": "Nous mettons à votre disposition une impression rapide, fiable et de haute qualité. Que ce soit pour vos projets professionnels, vos travaux scolaires ou vos souvenirs personnels, nous garantissons un service adapté à vos besoins. Avec notre équipe dédiée et des machines performantes, vos impressions sont entre de bonnes mains !😘"
+  },
+  "sectionCallToAction": {
+    "titre": "Prêt à imprimer ?",
+    "texte": "Commencez votre commande dès maintenant et profitez d’une livraison rapide.",
+    "bouton": "Commander Maintenant"
+  },
+  "sectionCreativite": {
+    "titre": "Votre créativité, notre impression",
+    "texte": "Donnez vie à vos projets avec des impressions de haute qualité, rapides et fiables.",
+    "bouton": "Commencer maintenant"
+  },
+  "sectionServices": {
+    "titre": "Quelques services d'impression",
+    "items": [
+      {
+        "title": "Livres de Cuisine",
+        "text": "Partagez vos recettes préférées dans un livre imprimé de qualité."
+      },
+      {
+        "title": "Mémoires & Thèses",
+        "text": "Imprimez vos travaux universitaires avec une finition professionnelle."
+      },
+      {
+        "title": "Tickets & Invitations",
+        "text": "Créez des tickets et invitations personnalisés pour vos événements."
+      },
+      {
+        "title": "Romans & Poche",
+        "text": "Donnez vie à vos histoires avec des impressions nettes et durables."
+      },
+      {
+        "title": "Albums & Souvenirs",
+        "text": "Conservez vos souvenirs dans des albums de qualité et colorés."
+      },
+      {
+        "title": "Bande Dessinée & Lookbook",
+        "text": "Imprimez vos BD et lookbooks avec une qualité professionnelle."
+      }
+    ]
+  },
+  "sectionImpression": {
+    "titre": "Imprimez facilement avec Print.mg 🚀",
+    "description": "Chez Print.mg, nous rendons l’impression en ligne simple, rapide et de haute qualité. Téléchargez vos fichiers, choisissez vos options, et recevez vos impressions directement chez vous.",
+    "cards": [
+      {
+        "title": "Livraison rapide",
+        "text": "Commandez en quelques clics et recevez vos impressions en un temps record."
+      },
+      {
+        "title": "Qualité garantie",
+        "text": "Profitez d’une impression professionnelle sur du papier premium et des couleurs éclatantes."
+      },
+      {
+        "title": "Simplicité",
+        "text": "Une plateforme intuitive, pensée pour vous faire gagner du temps et de l’énergie."
+      }
+    ]
+  },
+  "sectionPrêt": {
+    "titre": "Êtes-vous prêt 😀?? Cliquez sur commander maintenant et faites vos choix",
+    "subtitle": "Impression en ligne",
+    "description": "Gagnez du temps et bénéficiez d’une qualité irréprochable. Notre service d’impression en ligne vous permet de commander en quelques clics et de recevoir vos impressions sans vous déplacer.",
+    "btn": "Commander maintenant"
+  },
+  "sliders": {
+    "title": "Nos Réalisations d'Impression",
+    "carteVisite": {
+      "title": "Cartes de Visite Élégantes",
+      "description": "Impression haute qualité sur papier premium"
+    },
+    "flyers": {
+      "title": "Flyers Publicitaires",
+      "description": "Attirez l'attention avec nos designs percutants"
+    },
+    "affiches": {
+      "title": "Affiches Grand Format",
+      "description": "Des impressions vibrantes pour tout événement"
+    },
+    "stickers": {
+      "title": "Stickers Personnalisés",
+      "description": "Personnalisez vos produits avec nos stickers"
+    },
+    "brochures": {
+      "title": "Brochures Professionnelles",
+      "description": "Présentez votre entreprise avec élégance"
+    },
+    "emballages": {
+      "title": "Emballages Sur Mesure",
+      "description": "Des emballages qui font la différence"
+    },
+    "photos": {
+      "title": "Photos Haute Définition",
+      "description": "Imprimez vos souvenirs en qualité premium"
+    }
+  },
+  "footer": {
+    "logoTitle": "Print.mg",
+    "description": "Votre solution d'impression en ligne simple, rapide et de qualité à Madagascar. Commandez vos impressions en quelques clics et recevez-les chez vous !",
+    "socials": {
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "twitter": "Twitter",
+      "mail": "Email"
+    },
+    "quickLinksTitle": "Liens rapides",
+    "quickLinks": {
+      "home": "Accueil",
+      "services": "Services",
+      "about": "À propos",
+      "contact": "Contact"
+    },
+    "popularServicesTitle": "Services populaires",
+    "popularServices": {
+      "businessCards": "Cartes de visite",
+      "flyersBrochures": "Flyers & Brochures",
+      "posters": "Affiches",
+      "stickers": "Stickers",
+      "photoPrinting": "Impression photo"
+    },
+    "contactTitle": "Contactez-nous",
+    "contactInfo": {
+      "phone": "033 66 919 09 / 034 79 647 92",
+      "email": "contact@print.mg",
+      "facebook": "Facebook Print.mg",
+      "address": "BII A5 Mahazo Ambatomaro"
+    },
+    "copyright": "© {{year}} Print.mg — Tous droits réservés."
+  },
+  "detaille": {
+    "sectionHero": {
+      "title": "Nos Services d'Impression",
+      "description": "Découvrez notre gamme complète de produits d'impression de haute qualité. Des cartes de visite aux affiches grand format, nous avons tout pour répondre à vos besoins.",
+      "button": "Commander maintenant",
+      "link": "Retour vers l'accueil"
+    },
+    "feature": [
+      {
+        "title": "Qualité Garantie",
+        "text": "Des produits d'impression de haute qualité avec une finition impeccable."
+      },
+      {
+        "title": "Livraison Rapide",
+        "text": "Recevez vos produits en temps voulu, peu importe l'urgence."
+      },
+      {
+        "title": "Technologie Avancée",
+        "text": "Utilisation des dernières technologies d'impression pour des résultats parfaits."
+      }
+    ],
+    "product": {
+      "title": "Nos Produits",
+      "placeholder": "Rechercher un produit...",
+      "noProduct": "Aucun produit ne correspond à votre recherche.",
+      "price": "Tous les prix",
+      "modal": {
+        "format": "Formats",
+        "custom": "Personnalisé",
+        "largeformat": "Grand format",
+        "binding": "Reliure",
+        "spiral": "Spirale",
+        "perfectBinding": "Dos collé",
+        "stapled": "Agrafé",
+        "cover": "Couverture",
+        "photopaper": "Paper photo",
+        "simple": "Simple",
+        "doubleSided": "Recto-verso",
+        "validPrice": "Prix valable",
+        "delivery": "Livraison",
+        "deliveryFees": "Frais de livraison",
+        "close": "Fermer"
+      }
+    },
+    "action": {
+      "title": "Prêt à imprimer vos projets?",
+      "text": "Rejoignez des milliers de clients satisfaits qui nous ont fait confiance pour leurs besoins d'impression.",
+      "button": "Commander maintenant"
+    }
+  },
+  "profil": {
+    "title": "Bonjour",
+    "code": "Code postal",
+    "codePlaceholder": "Votre code postal",
+    "Ville": "Ville",
+    "villePlaceholder": "Votre ville",
+    "pays": "Pays",
+    "paysPlaceholder": "Votre pays",
+    "photo": "Photo de profil",
+    "change": "Changer",
+    "no": "Aucune",
+    "edit": "Modifier votre information",
+    "name": "Nom", 
+    "namePlaceholder": "Votre nom",
+    "firstname": "Prenom",
+    "firstPlaceholder": "Votre prenom",
+    "email": "E-mail",
+    "phone": "Téléphone",
+    "Save": "Sauvegarder",
+    "pass": "Ancien mot de passe",
+    "new": "Nouveau mot de passe", 
+    "confirm": "Confirmation du mot de passe",
+    "changepass": "Changer le mot de passe",
+    "profilAlert": "Prol mis à jours",
+    "errorAlert": "Erreur lors de la mise à jour",
+    "errorPassword": "⚠️ Les mots de passe ne correspondent pas !",
+    "succesPassword": "Mot de passe changé !",
+    "nosuccessPassword": "Erreur lors du changement de mot de passe"
   }
-  
+}

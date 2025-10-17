@@ -7,8 +7,10 @@ import { Link } from "react-router-dom";
 import Chat from "./Chat";
 import RetourAccueil from "./RetourAccueil";
 import Popup from "./Popup";
+import { useTranslation } from "react-i18next";
 
 export default function HomePage() {
+  const { t } = useTranslation();
   // Service
   const items = [
     {
@@ -57,12 +59,6 @@ export default function HomePage() {
     "https://contentful.helloprint.com/wm1n7oady8a5/2R3oOrcpI9OGWTb0EOGtfH/6928e67a0db245d6e7acae7646462d4d/Branding_and_Portfolio_Showcases.png?q=75&h=600&w=600&fm=avif&fit=pad"
   ];
 
-  const texts = [
-    "Impression rapide et fiable",
-    "Solutions professionnelles de qualité",
-    "Créativité et innovation à votre service"
-  ];
-
   // Changement automatique toutes les 5 secondes
   useEffect(() => {
     const interval = setInterval(() => {
@@ -105,16 +101,18 @@ export default function HomePage() {
         >
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/50 flex flex-col justify-center items-center text-center px-4">
             <h1 className="text-white text-2xl md:text-5xl font-bold uppercase mb-6">
-              {texts[currentIndex]}
+              {t(`slider.texts.${currentIndex}`)}
             </h1>
             <p className="text-gray-200 text-lg md:text-xl mb-8 max-w-2xl">
-              Commandez vos impressions en ligne et recevez-les chez vous rapidement.
+              {t("slider.description")}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/login" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full transition-all duration-300 hover:scale-105">
-                Commander maintenant
+                {t("slider.commander")}
               </Link>
-              <Link to='/detaille' className="bg-transparent border-2 border-white hover:bg-white hover:text-black text-white font-bold py-4 px-6 rounded-full transition-all duration-300 hover:scale-105">Tout les produits </Link>
+              <Link to='/detaille' className="bg-transparent border-2 border-white hover:bg-white hover:text-black text-white font-bold py-4 px-6 rounded-full transition-all duration-300 hover:scale-105">
+                {t("slider.tousProduits")}
+              </Link>
             </div>
           </div>
         </div>
@@ -178,13 +176,13 @@ export default function HomePage() {
       {/* Call to Action */}
       <section className="py-16 bg-blue-500 text-white text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          Prêt à imprimer ?
+          {t("sectionCallToAction.titre")}
         </h2>
         <p className="text-sm md:text-lg mb-6">
-          Commencez votre commande dès maintenant et profitez d’une livraison rapide.
+          {t("sectionCallToAction.texte")}
         </p>
         <Link to="/login" className="btn btn-lg btn-white text-blue-500 font-bold">
-          Commander Maintenant
+          {t("sectionCallToAction.bouton")}
         </Link>
       </section>
       {/* Call to Action */}
@@ -196,17 +194,13 @@ export default function HomePage() {
           {/* Texte */}
           <div className="text-center md:text-left max-w-xl">
             <h1 className="text-blue-500 text-3xl md:text-3xl font-bold mb-4">
-              Marque-pages : Le complément parfait
+              {t("sectionMarquepages.titre")}
             </h1>
             <p className="text-base leading-relaxed mb-4">
-              Imprimez vos documents, photos et créations en toute simplicité !
-              Notre plateforme vous permet de commander vos impressions en ligne, sans vous déplacer.
-              Choisissez le format, le papier et la finition, puis recevez vos impressions directement chez vous.
+              {t("sectionMarquepages.paragraphe1")}
             </p>
             <p className="text-base leading-relaxed">
-              Nous mettons à votre disposition une impression rapide, fiable et de haute qualité.
-              Que ce soit pour vos projets professionnels, vos travaux scolaires ou vos souvenirs personnels, nous garantissons un service adapté à vos besoins.
-              Avec notre équipe dédiée et des machines performantes, vos impressions sont entre de bonnes mains!😘
+              {t("sectionMarquepages.paragraphe2")}
             </p>
           </div>
 
@@ -243,14 +237,13 @@ export default function HomePage() {
             <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
               <Camera className="w-12 h-12 text-blue-500 mb-4" />
               <h1 className="text-3xl md:text-5xl font-bold text-white drop-shadow-lg">
-                Votre créativité, notre impression
+                {t("sectionCreativite.titre")}
               </h1>
               <p className="mt-4 text-lg text-gray-200 max-w-2xl">
-                Donnez vie à vos projets avec des impressions de haute qualité,
-                rapides et fiables.
+                {t("sectionCreativite.texte")}
               </p>
               <Link to="/login" className="btn bg-blue-500 text-white mt-6 px-6 py-3 rounded-xl shadow-lg hover:scale-105 transition">
-                Commencer maintenant
+                {t("sectionCreativite.bouton")}
               </Link>
             </div>
           </div>
@@ -264,9 +257,8 @@ export default function HomePage() {
       <section className="py-16 bg-base-100">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            Quelque Services d'Impression
+            {t("sectionServices.titre")}
           </h2>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {items.map((item, index) => (
               <div key={index} className="flex flex-col md:flex-row items-center gap-6">
@@ -274,7 +266,7 @@ export default function HomePage() {
                 <div className="w-full md:w-1/2 rounded-xl overflow-hidden shadow-lg">
                   <img
                     src={item.img}
-                    alt={item.title}
+                    alt={t(`sectionServices.items.${index}.title`)}
                     className="w-full h-64 object-cover transition-transform duration-500 hover:scale-105"
                   />
                 </div>
@@ -282,8 +274,12 @@ export default function HomePage() {
                 {/* Texte */}
                 <div className="w-full md:w-1/2 text-center md:text-left">
                   <item.icon className="w-10 h-10 text-blue-500 mb-3 mx-auto md:mx-0" />
-                  <h3 className="text-2xl font-semibold mb-3">{item.title}</h3>
-                  <p className="text-gray-600">{item.text}</p>
+                  <h3 className="text-2xl font-semibold mb-3">
+                    {t(`sectionServices.items.${index}.title`)}
+                  </h3>
+                  <p className="text-gray-600">
+                    {t(`sectionServices.items.${index}.text`)}
+                  </p>
                 </div>
               </div>
             ))}
@@ -296,39 +292,43 @@ export default function HomePage() {
       {/* Commentaire */}
       <section className="py-12 bg-gray-50 text-center">
         <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-4">
-          Imprimez facilement avec Print.mg 🚀
+          {t("sectionImpression.titre")}
         </h2>
         <p className="max-w-2xl mx-auto text-gray-600 mb-10">
-          Chez <span className="font-semibold text-blue-800">Print.mg</span>, nous rendons l’impression
-          en ligne simple, rapide et de haute qualité. Téléchargez vos fichiers, choisissez vos options,
-          et recevez vos impressions directement chez vous.
+          {t("sectionImpression.description", { platform: "Print.mg" })}
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {/* Rapidité */}
           <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col items-center hover:shadow-lg transition">
             <Rocket className="text-blue-600 mb-4" size={40} />
-            <h3 className="text-lg font-semibold text-blue-900 mb-2">Livraison rapide</h3>
+            <h3 className="text-lg font-semibold text-blue-900 mb-2">
+              {t("sectionImpression.cards.0.title")}
+            </h3>
             <p className="text-gray-600 text-sm">
-              Commandez en quelques clics et recevez vos impressions en un temps record.
+              {t("sectionImpression.cards.0.text")}
             </p>
           </div>
 
           {/* Qualité */}
           <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col items-center hover:shadow-lg transition">
             <Printer className="text-green-600 mb-4" size={40} />
-            <h3 className="text-lg font-semibold text-blue-900 mb-2">Qualité garantie</h3>
+            <h3 className="text-lg font-semibold text-blue-900 mb-2">
+              {t("sectionImpression.cards.1.title")}
+            </h3>
             <p className="text-gray-600 text-sm">
-              Profitez d’une impression professionnelle sur du papier premium et des couleurs éclatantes.
+              {t("sectionImpression.cards.1.text")}
             </p>
           </div>
 
           {/* Simplicité */}
           <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col items-center hover:shadow-lg transition">
             <Smile className="text-yellow-500 mb-4" size={40} />
-            <h3 className="text-lg font-semibold text-blue-900 mb-2">Simplicité</h3>
+            <h3 className="text-lg font-semibold text-blue-900 mb-2">
+              {t("sectionImpression.cards.2.title")}
+            </h3>
             <p className="text-gray-600 text-sm">
-              Une plateforme intuitive, pensée pour vous faire gagner du temps et de l’énergie.
+              {t("sectionImpression.cards.2.text")}
             </p>
           </div>
         </div>
@@ -338,7 +338,9 @@ export default function HomePage() {
 
       {/* Pub */}
       <section className="py-16 bg-base-100">
-        <h1 className="mb-6 text-center text-3xl md:text-4xl font-bold">Etes vous prêt😀?? Clické sur commander maintenant et faite vos choix</h1>
+        <h1 className="mb-6 text-center text-3xl md:text-4xl font-bold">
+          {t("sectionPrêt.titre")}
+        </h1>
         <div className="container mx-auto flex flex-col md:flex-row items-center gap-8 p-6 shadow-xl rounded-2xl bg-white">
 
           {/* Carrousel */}
@@ -348,8 +350,7 @@ export default function HomePage() {
                 key={index}
                 src={src}
                 alt={`Slide ${index}`}
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${index === currentIndex ? "opacity-100" : "opacity-0"
-                  }`}
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${index === currentIndex ? "opacity-100" : "opacity-0"}`}
               />
             ))}
           </div>
@@ -358,15 +359,15 @@ export default function HomePage() {
           <div className="flex flex-col md:w-1/2 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start mb-4">
               <Sparkles className="w-8 h-8 text-blue-500 mr-2" />
-              <h2 className="text-2xl font-bold text-gray-800">Impression en ligne</h2>
+              <h2 className="text-2xl font-bold text-gray-800">
+                {t("sectionPrêt.subtitle")}
+              </h2>
             </div>
             <p className="text-gray-600 mb-6">
-              Gagnez du temps et bénéficiez d’une qualité irréprochable.
-              Notre service d’impression en ligne vous permet de commander en quelques clics
-              et de recevoir vos impressions sans vous déplacer.
+              {t("sectionPrêt.description")}
             </p>
             <Link to="/login" className="btn bg-blue-500 text-white px-6 py-3 rounded-xl shadow-md hover:scale-105 transition">
-              Commander maintenant
+              {t("sectionPrêt.btn")}
             </Link>
           </div>
         </div>

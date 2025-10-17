@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Eye, EyeOff, Mail, Lock, Printer, Truck, Shield } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Eye, EyeOff, Mail, Lock, Printer, Truck, Shield, Globe } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import Slide_show from './Slide_show';
-import { useNavigate } from 'react-router-dom';
+import { useGoogleLogin } from '@react-oauth/google';
 
 
 const LoginPage = () => {
@@ -65,6 +65,48 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
+
+
+  // Google Login
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        console.log("handleGoogleLogin triggered", tokenResponse);
+
+        const profileRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        });
+        const profile = await profileRes.json();
+        console.log("Google profile", profile);
+
+        // Envoi au backend
+        const backendRes = await fetch('http://localhost:8000/api/google-login/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: profile.email,
+            nom: profile.given_name || 'Utilisateur',
+            prenom: profile.family_name || '',
+            profil: profile.picture || null,
+          }),
+        });
+        const data = await backendRes.json();
+
+        // Stockage token et rôle USER
+        localStorage.setItem('token', data.access);
+        localStorage.setItem('role', 'USER');        
+
+        // ⚡ Redirection directe
+        window.location.href = '/dashboard-user';
+      } catch (err) {
+        console.error('Google login failed:', err);
+        setError('Connexion Google échouée 😓');
+      }
+    },
+    onError: () => setError('Connexion Google échouée 😓'),
+    flow: 'implicit',
+  });
+
 
 
   return (
@@ -167,12 +209,25 @@ const LoginPage = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition"
+                className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 px-4 rounded-2xl shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-300"
               >
-                {loading ? "Connexion..." : "Se connecter"}
+                <span className="font-semibold">{loading ? "Connexion..." : "Se connecter"}</span>
               </button>
             </div>
           </form>
+
+
+          <div className="w-full flex justify-center mt-5">
+            <button
+              type="button"
+              onClick={() => googleLogin()} // appel direct pour éviter popup bloqué
+              className="w-full flex items-center justify-center gap-3 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 px-4 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300"
+            >
+              <Globe className="w-5 h-5 text-blue-500" />
+              <span className="font-semibold">Se connecter avec Google</span>
+            </button>
+          </div>
+
 
           <div className="mt-8 text-center">
             <p className="text-sm text-base-content">

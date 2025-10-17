@@ -1,21 +1,20 @@
+// src/i18n.ts
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-import translationFR from "./locales/fr.json";
-import translationEN from "./locales/en.json";
-import translationMG from "./locales/mg.json";
+import fr from "./locales/fr.json";
+import en from "./locales/en.json";
+import mlg from "./locales/mlg.json";
 
-i18n
-  .use(initReactI18next)
-  .init({
-    resources: {
-      fr: { translation: translationFR },
-      en: { translation: translationEN },
-      mg: { translation: translationMG },
-    },
-    lng: "fr",
-    fallbackLng: "fr",
-    interpolation: { escapeValue: false },
-  });
+i18n.use(initReactI18next).init({
+  resources: {
+    fr: { translation: fr },
+    en: { translation: en },
+    mlg: { translation: mlg },
+  },
+  lng: "fr", // langue par défaut
+  fallbackLng: "fr",
+  interpolation: { escapeValue: false },
+});
 
 export default i18n;

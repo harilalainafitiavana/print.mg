@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { authFetch } from "./Utils"; // 👈 adapte le chemin
 import { Eye, EyeOff } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function Profils() {
+    const { t } = useTranslation();
     const [formData, setFormData] = useState({
         nom: "",
         prenom: "",
@@ -82,14 +84,14 @@ export default function Profils() {
             });
 
             if (res.ok) {
-                alert("Profil mis à jour !");
+                alert(t("profil.profilAlert"));
                 // Mettre à jour l'aperçu si l'image a changé
                 if (formData.photo) {
                     setUserProfilUrl(URL.createObjectURL(formData.photo));
                     setFormData({ ...formData, photo: null });
                 }
             } else {
-                alert("Erreur lors de la mise à jour");
+                alert(t("profil.errorAlert"));
                 console.error(await res.text());
             }
         } catch (error) {
@@ -102,7 +104,7 @@ export default function Profils() {
         e.preventDefault();
 
         if (newPassword !== confirmPassword) {
-            alert("⚠️ Les mots de passe ne correspondent pas !");
+            alert(t("profil.errorPassword"));
             return;
         }
 
@@ -117,12 +119,12 @@ export default function Profils() {
             });
 
             if (res.ok) {
-                alert("Mot de passe changé !");
+                alert(t("profil.succesPassword"));
                 setOldPassword("");
                 setNewPassword("");
                 setConfirmPassword("");
             } else {
-                alert("Erreur lors du changement de mot de passe");
+                alert(t("profil.nosuccessPassword"));
                 console.error(await res.text());
             }
         } catch (error) {
@@ -134,44 +136,44 @@ export default function Profils() {
         <div>
             {/* Photo de profil */}
             <div className="border p-6 rounded-xl shadow-sm bg-base-100">
-                <h3 className="text-2xl font-semibold">Bonjour <span className="text-blue-500">{formData.prenom} {formData.nom} 😀😊</span></h3>
+                <h3 className="text-2xl font-semibold">{t("profil.title")} <span className="text-blue-500">{formData.prenom} {formData.nom} 😀😊</span></h3>
                 <form className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6" onSubmit={handleSubmit}>
                     {/* Partie gauche : inputs et bouton */}
                     <div className="flex-1 space-y-4">
                         <div className="flex justify-between gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-base-content mb-1 mt-4">Code Postal</label>
+                                <label className="block text-sm font-medium text-base-content mb-1 mt-4">{t("profil.code")}</label>
                                 <input
                                     type="text"
                                     value={formData.code_postal}
                                     onChange={(e) => setFormData({ ...formData, code_postal: e.target.value })}
-                                    placeholder="Votre code postal"
+                                    placeholder={t("profil.codePlaceholder")}
                                     className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-base-content mb-1 mt-4">Ville</label>
+                                <label className="block text-sm font-medium text-base-content mb-1 mt-4">{t("profil.Ville")}</label>
                                 <input
                                     type="text"
                                     value={formData.ville}
                                     onChange={(e) => setFormData({ ...formData, ville: e.target.value })}
-                                    placeholder="Votre ville"
+                                    placeholder={t("profil.villePlaceholder")}
                                     className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-base-content mb-1">Pays</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">{t("profil.pays")}</label>
                             <input
                                 type="text"
                                 value={formData.pays}
                                 onChange={(e) => setFormData({ ...formData, pays: e.target.value })}
-                                placeholder="Votre pays"
+                                placeholder={t("profil.paysPlaceholder")}
                                 className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-base-content mb-1">Photo de profil</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">{t("profil.photo")}</label>
                             <input
                                 type="file"
                                 accept="image/*"
@@ -186,7 +188,7 @@ export default function Profils() {
                             type="submit"
                             className="px-4 mt-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition"
                         >
-                            Changer!!
+                            {t("profil.change")}!!
                         </button>
                     </div>
 
@@ -206,7 +208,7 @@ export default function Profils() {
                             />
                         ) : (
                             <div className="w-60 h-60 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
-                                Aucune
+                                {t("profil.no")}
                             </div>
                         )}
                     </div>
@@ -215,35 +217,35 @@ export default function Profils() {
             <div className="grid gap-6 lg:grid-cols-2">
                 {/* Profil utilisateur */}
                 <div className="border p-6 rounded-xl shadow-sm bg-base-100">
-                    <h3 className="text-lg font-semibold mb-4">Modifier votre information!!</h3>
+                    <h3 className="text-lg font-semibold mb-4">{t("profil.edit")}!!</h3>
                     <form className="space-y-4" onSubmit={handleSubmit}>
                         {/* Nom */}
                         <div>
-                            <label className="block text-sm font-medium text-base-content mb-1">Nom</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">{t("profil.name")}</label>
                             <input
                                 type="text"
                                 value={formData.nom}
                                 onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
-                                placeholder="Votre nom"
+                                placeholder={t("profil.namePlaceholder")}
                                 className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
 
                         {/* Prenom */}
                         <div>
-                            <label className="block text-sm font-medium text-base-content mb-1">Prenom</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">{t("profil.firstname")}</label>
                             <input
                                 type="text"
                                 value={formData.prenom}
                                 onChange={(e) => setFormData({ ...formData, prenom: e.target.value })}
-                                placeholder="Votre prenom"
+                                placeholder={t("profil.firstPlaceholder")}
                                 className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
 
                         {/* Email */}
                         <div>
-                            <label className="block text-sm font-medium text-base-content mb-1">Email</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">{t("profil.email")}</label>
                             <input
                                 type="email"
                                 value={formData.email}
@@ -255,7 +257,7 @@ export default function Profils() {
 
                         {/* Téléphone */}
                         <div>
-                            <label className="block text-sm font-medium text-base-content mb-1">Téléphone</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">{t("profil.phone")}</label>
                             <input
                                 type="tel"
                                 value={formData.phone}
@@ -270,7 +272,7 @@ export default function Profils() {
                             type="submit"
                             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
                         >
-                            Sauvegarder
+                            {t("profil.Save")}
                         </button>
                     </form>
                 </div>
@@ -280,7 +282,7 @@ export default function Profils() {
                     <form className="space-y-4" onSubmit={handlePasswordChange}>
                         {/* Ancien mot de passe */}
                         <div className="relative">
-                            <label className="block text-sm font-medium text-base-content mb-1">Ancien mot de passe</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">{t("profil.pass")}</label>
                             <input
                                 type={showOld ? "text" : "password"}
                                 value={oldPassword}
@@ -299,7 +301,7 @@ export default function Profils() {
 
                         {/* Nouveau mot de passe */}
                         <div className="relative">
-                            <label className="block text-sm font-medium text-base-content mb-1">Nouveau mot de passe</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">{t("profil.new")}</label>
                             <input
                                 type={showNew ? "text" : "password"}
                                 value={newPassword}
@@ -318,7 +320,7 @@ export default function Profils() {
 
                         {/* Confirmation du mot de passe */}
                         <div className="relative">
-                            <label className="block text-sm font-medium text-base-content mb-1">Confirmation du mot de passe</label>
+                            <label className="block text-sm font-medium text-base-content mb-1">{t("profil.confirm")}</label>
                             <input
                                 type={showConfirm ? "text" : "password"}
                                 value={confirmPassword}
@@ -339,7 +341,7 @@ export default function Profils() {
                             type="submit"
                             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
                         >
-                            Changer le mot de passe
+                            {t("profil.changepass")}
                         </button>
                     </form>
                 </div>

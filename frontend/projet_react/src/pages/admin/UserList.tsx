@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Eye } from "lucide-react";
+import { Eye, Users } from "lucide-react";
 import { authFetch } from "../../Components/Utils";
+import { useTranslation } from "react-i18next";
 
 interface User {
     id: number;
@@ -17,12 +18,13 @@ interface User {
 }
 
 const AdminUsersDashboard = () => {
+    const { t } = useTranslation();
     const [users, setUsers] = useState<User[]>([]);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const usersPerPage = 10;
-    const [theme, setTheme] = useState("light");
+    // const [theme, setTheme] = useState("light");
 
 
 
@@ -85,14 +87,14 @@ const AdminUsersDashboard = () => {
         <div className="p-6 bg-base-200 min-h-screen">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
                 {/* Titre à gauche */}
-                <h1 className="text-3xl font-bold text-blue-500 mb-4 md:mb-0">
-                    Liste des Utilisateurs
+                <h1 className="text-3xl font-bold flex gap-2 text-blue-500 mb-4 md:mb-0">
+                    <Users size={35} /> {t("usersadmin.title")}
                 </h1>
 
                 {/* Barre de recherche à droite */}
                 <input
                     type="text"
-                    placeholder="Rechercher un utilisateur..."
+                    placeholder={t("usersadmin.search")}
                     value={searchTerm}
                     onChange={(e) => {
                         setSearchTerm(e.target.value);
@@ -108,16 +110,16 @@ const AdminUsersDashboard = () => {
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-blue-500 text-white text-lg">
                         <tr>
-                            <th className="px-6 py-3 text-left text-sm font-medium">Nom</th>
-                            <th className="px-6 py-3 text-left text-sm font-medium">Prénom</th>
-                            <th className="px-6 py-3 text-left text-sm font-medium">Email</th>
-                            <th className="px-6 py-3 text-left text-sm font-medium">Date d'inscription</th>
-                            <th className="px-6 py-3 text-center text-sm font-medium">Actions</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">{t("usersadmin.name")}</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">{t("usersadmin.firstname")}</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">{t("usersadmin.email")}</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">{t("usersadmin.registrationDate")}</th>
+                            <th className="px-6 py-3 text-center text-sm font-medium">{t("usersadmin.action")}</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                         {currentUsers.map((user) => (
-                            <tr key={user.id}   className="">
+                            <tr key={user.id} className="">
                                 <td className="px-6 py-4 text-sm">{user.nom}</td>
                                 <td className="px-6 py-4 text-sm">{user.prenom}</td>
                                 <td className="px-6 py-4 text-sm">{user.email}</td>
@@ -154,17 +156,17 @@ const AdminUsersDashboard = () => {
                     disabled={currentPage === 1}
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-300"
                 >
-                    Précédent
+                    {t("usersadmin.previous")}
                 </button>
                 <span className="text-base-content">
-                    Page {currentPage} / {totalPages}
+                    {t("usersadmin.page")} {currentPage} / {totalPages}
                 </span>
                 <button
                     onClick={goToNextPage}
                     disabled={currentPage === totalPages}
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-300"
                 >
-                    Suivant
+                    {t("usersadmin.next")}
                 </button>
             </div>
 
@@ -179,21 +181,21 @@ const AdminUsersDashboard = () => {
                         >
                             ✕
                         </button>
-                        <h2 className="text-2xl font-bold text-blue-500 mb-4">Détails de l'utilisateur</h2>
+                        <h2 className="text-2xl font-bold text-blue-500 mb-4">{t("usersadmin.userdetails")}</h2>
 
                         {/* Flex container pour infos + image */}
                         <div className="flex items-start space-x-6">
                             {/* Informations à gauche */}
                             <div className="flex-1 space-y-2 text-base-content">
-                                <p><strong>Nom:</strong> {selectedUser.nom}</p>
-                                <p><strong>Prénom:</strong> {selectedUser.prenom}</p>
-                                <p><strong>Email:</strong> {selectedUser.email}</p>
-                                <p><strong>Téléphone:</strong> {selectedUser.num_tel || "N/A"}</p>
-                                <p><strong>Code Postale:</strong> {selectedUser.code_postal} </p>
-                                <p><strong>Ville:</strong> {selectedUser.ville} </p>
-                                <p><strong>Pays:</strong> {selectedUser.pays} </p>
-                                <p><strong>Rôle:</strong> {selectedUser.role || "USER"}</p>
-                                <p><strong>Date d'inscription:</strong> {new Date(selectedUser.date_inscription).toLocaleString()}</p>
+                                <p><strong>{t("usersadmin.name")}:</strong> {selectedUser.nom}</p>
+                                <p><strong>{t("usersadmin.firstname")}:</strong> {selectedUser.prenom}</p>
+                                <p><strong>{t("usersadmin.email")}:</strong> {selectedUser.email}</p>
+                                <p><strong>{t("usersadmin.phone")}:</strong> {selectedUser.num_tel || "N/A"}</p>
+                                <p><strong>{t("usersadmin.postalcode")}:</strong> {selectedUser.code_postal} </p>
+                                <p><strong>{t("usersadmin.city")}:</strong> {selectedUser.ville} </p>
+                                <p><strong>{t("usersadmin.country")}:</strong> {selectedUser.pays} </p>
+                                <p><strong>{t("usersadmin.role")}:</strong> {selectedUser.role || "USER"}</p>
+                                <p><strong>{t("usersadmin.registrationDate")}:</strong> {new Date(selectedUser.date_inscription).toLocaleString()}</p>
                             </div>
 
                             {/* Image à droite */}
