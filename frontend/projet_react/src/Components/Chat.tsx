@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { MessageCircle, X, User, Cpu } from "lucide-react";
-import { chatbotResponses, chatbotKeywords } from "./ChatbotReponses";
 
 export default function Chat() {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,33 +15,33 @@ export default function Chat() {
 
   useEffect(scrollToBottom, [messages, isTyping]);
 
-  const detectCategory = (text: string): string => {
-    const lower = text.toLowerCase();
-    for (const category in chatbotKeywords) {
-      if (chatbotKeywords[category].some(keyword => lower.includes(keyword))) {
-        return category;
-      }
-    }
-    return "default";
-  };
-
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
 
     const userMsg = { sender: "user" as const, text: input, id: messageId };
     setMessageId(prev => prev + 1);
     setMessages(prev => [...prev, userMsg]);
     setInput("");
-
     setIsTyping(true);
-    setTimeout(() => {
-      const category = detectCategory(input);
-      const botText = chatbotResponses[category] || chatbotResponses.default;
-      const botMsg = { sender: "bot" as const, text: botText, id: messageId + 1 };
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/chatbot/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: input }),
+      });
+      const data = await response.json();
+
+      const botMsg = { sender: "bot" as const, text: data.answer, id: messageId + 1 };
       setMessageId(prev => prev + 1);
       setMessages(prev => [...prev, botMsg]);
+    } catch (err) {
+      const botMsg = { sender: "bot" as const, text: "Oups 😅, une erreur est survenue.", id: messageId + 1 };
+      setMessageId(prev => prev + 1);
+      setMessages(prev => [...prev, botMsg]);
+    } finally {
       setIsTyping(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -57,7 +56,7 @@ export default function Chat() {
 
       {/* Bouton Chat flottant */}
       <button
-        className="fixed bottom-6 right-6 bg-gradient-to-r from-purple-500 to-pink-500 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform z-50"
+        className="fixed bottom-6 right-6 bg-gradient-to-r from-red-500 to-blue-500 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform z-50"
         onClick={() => setIsOpen(!isOpen)}
       >
         <MessageCircle className="w-7 h-7" />
@@ -67,7 +66,7 @@ export default function Chat() {
       {isOpen && (
         <div className="fixed bottom-20 right-6 w-96 h-[480px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 transform transition-all duration-300">
           {/* Header */}
-          <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-5 py-3 flex justify-between items-center rounded-t-2xl">
+          <div className="bg-gradient-to-r from-blue-500 to-red-500 text-white px-5 py-3 flex justify-between items-center rounded-t-2xl">
             <span className="font-bold text-lg">PrintMG Assistant</span>
             <button onClick={() => setIsOpen(false)}>
               <X className="w-5 h-5" />

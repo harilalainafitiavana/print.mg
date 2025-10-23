@@ -10,7 +10,8 @@ import UserList from "./UserList";
 import Notifications from "./NotificationAdmin"
 import AdminProfil from "../../assets/icone.png"
 import TableauDeBordAdmin from "./TableauDeBordAdmin";
-import { useTranslation } from "react-i18next"; 
+import { useTranslation } from "react-i18next";
+import Abouts from "../../Components/About";
 
 export default function AdminDashboard() {
     const { t } = useTranslation();
@@ -43,6 +44,7 @@ export default function AdminDashboard() {
         { id: "products", label: t("dashboard.menus.products"), icon: <Package size={20} /> },
         { id: "users", label: t("dashboard.menus.users"), icon: <Users size={20} /> },
         { id: "trash", label: t("dashboard.menus.trash"), icon: <Trash size={20} /> },
+        { id: "help", label: "A propos", icon: <Trash size={20} /> },
 
     ];
 
@@ -66,6 +68,9 @@ export default function AdminDashboard() {
 
             case "notification":
                 return <Notifications />;
+
+            case "help":
+                return <Abouts />;
 
             case "profil":
                 return <div className="p-6"> <Profils /> </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import DashboardLayout from "../../Components/DashboardLayout";
-import { Home, Folder, Trash, BarChart3, Settings, Search } from "lucide-react";
+import { Home, Folder, Trash, BarChart3, Settings, Search, User } from "lucide-react";
 import Commande from "./Commande";
 import Setting from "../../Components/Settings";
 import Profils from "../../Components/Profils";
@@ -9,11 +9,13 @@ import Corbeille from "./Corbeille";
 import MesCommande from "./Mes_commande";
 import TableauDeBord from "./TableauDeBord";
 import { useTranslation } from "react-i18next";
+import Abouts from "../../Components/About";
+import Logo from "../../assets/logo.png"
 
 export default function UserDashboard() {
     const { t } = useTranslation();
     const [activeMenu, setActiveMenu] = useState("home");
-    const [user, setUser] = useState<{ nom: string; prenom: string; profils?: string } | null>(null);
+    const [user, setUser] = useState<{ nom: string; prenom: string; email: string; profils?: string } | null>(null);
     const [query, setQuery] = useState("");
 
     // 🔹 Récupération des infos de l'utilisateur connecté
@@ -40,9 +42,41 @@ export default function UserDashboard() {
         { id: "home", label: t("dashboard.menus.home"), icon: <Home size={20} /> },
         { id: "orders", label: t("userDashboard.orders"), icon: <Folder size={20} /> },
         { id: "trash", label: t("userDashboard.trash"), icon: <Trash size={20} /> },
-        { id: "stats", label: t("userDashboard.stats"), icon: <BarChart3 size={20} /> },
         { id: "settings", label: t("userDashboard.settings"), icon: <Settings size={20} /> },
+        { id: "help", label: "A propos", icon: <Trash size={20} /> },
     ];
+
+    // Composant pour afficher le profil utilisateur
+    const UserProfileSection = () => (
+        <div className="p-4 border-b border-gray-200 bg-base-150 from-blue-50 to-indigo-50">
+            <div className="flex flex-col items-center space-x-3">
+                {/* Photo de profil ou icône par défaut */}
+                <div className="flex-shrink-0">
+                    {user?.profils ? (
+                        <img
+                            src={`http://localhost:8000${user.profils}`}
+                            alt="Profile"
+                            className="w-28 h-28 rounded-full object-cover border-2 border-white shadow-sm"
+                        />
+                    ) : (
+                        <div className="w-28 h-28 rounded-full bg-blue-100 flex items-center justify-center border-2 border-white shadow-sm">
+                            <User size={48} className="text-blue-600" />
+                        </div>
+                    )}
+                </div>
+
+                {/* Informations utilisateur */}
+                <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-semibold text-gray-900 truncate">
+                        {user ? `${user.prenom} ${user.nom}` : "Utilisateur"}
+                    </h3>
+                    <p className="text-xs text-gray-500 truncate">
+                        {user?.email || "email@exemple.com"}
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
 
     const renderContent = () => {
         switch (activeMenu) {
@@ -56,6 +90,8 @@ export default function UserDashboard() {
                 return <Setting />;
             case "notification":
                 return <Notification />;
+            case "help":
+                return <Abouts />;
             case "profil":
                 return <div className="p-6"><Profils /></div>;
             default:
@@ -70,11 +106,11 @@ export default function UserDashboard() {
     return (
         <DashboardLayout
             userName={user ? `${user.nom} ${user.prenom}` : "Utilisateur"}
-            userPhoto={user?.profils ? `http://localhost:8000${user.profils}` : "../../assets/Utilisateur.png"}
+            userPhoto={Logo}
             menus={menus}
             onMenuClick={setActiveMenu}
             headerContent={
-                <label className="relative flex-1">
+                <label className="relative flex-1 hidden md:block">
                     <input
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
@@ -84,10 +120,10 @@ export default function UserDashboard() {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2" size={18} />
                 </label>
             }
+            // Ajout de la section profil au-dessus du menu
+            sidebarHeader={<UserProfileSection />}
         >
             {renderContent()}
-
         </DashboardLayout>
     );
 }
-

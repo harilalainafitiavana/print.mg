@@ -3,7 +3,11 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function Settings() {
-  const [theme, setTheme] = useState("light");
+  // 🔹 Charger le thème sauvegardé ou "light" par défaut
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("theme") || "light";
+  });
+
   // const [lang, setLang] = useState("fr");
   const { t, i18n } = useTranslation();
 
@@ -11,11 +15,11 @@ export default function Settings() {
     i18n.changeLanguage(lang);
   };
 
-  // appliquer automatiquement le thème sur <html>
+  // 🔹 Appliquer le thème et le sauvegarder à chaque changement
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
   }, [theme]);
-
 
   return (
     <div className="p-6 bg-base-100 min-h-screen text-base-content">

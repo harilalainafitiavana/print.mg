@@ -92,7 +92,7 @@ export default function UserNotifications() {
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between flex-col md:flex-row items-center mb-4">
         <h2 className="text-2xl font-bold flex items-center gap-2">
           <Bell size={24} /> {t("notifications.title")}
         </h2>
