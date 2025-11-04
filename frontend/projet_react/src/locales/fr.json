@@ -25,7 +25,13 @@
       "trash": "Corbeille"
     },
     "header": {
-      "calendar": "Calendrier"
+      "calendar": "Calendrier",
+      "statut": "Statut des commandes",
+      "commande": "Commandes aujourd'hui",
+      "total": "Total commandes",
+      "traiter": "Commandes à Traiter",
+      "format": "Formats Populaires",
+      "aucun": "Aucune commande en attente"
     },
     "quickLinks": {
       "title": "Lien rapide 😉"
@@ -183,7 +189,8 @@
     "trash": "Corbeille",
     "stats": "Statistiques",
     "settings": "Paramètre",
-    "search": "Rechercher une commande......"
+    "search": "Rechercher une commande......",
+    "about": "À propos"
   },
   "TableauUser": {
     "title": "Bonjour",
@@ -606,7 +613,7 @@
     "pays": "Pays",
     "paysPlaceholder": "Votre pays",
     "photo": "Photo de profil",
-    "change": "Changer",
+    "change": "Changer l'image",
     "no": "Aucune",
     "edit": "Modifier votre information",
     "name": "Nom", 
@@ -625,5 +632,59 @@
     "errorPassword": "⚠️ Les mots de passe ne correspondent pas !",
     "succesPassword": "Mot de passe changé !",
     "nosuccessPassword": "Erreur lors du changement de mot de passe"
+  },
+  "about": {
+    "logoAlt": "Print.mg Logo",
+    "title": "Print.mg",
+    "subtitle": "Votre plateforme d’impression en ligne à Madagascar 🇲🇬",
+    "header": "À propos de Print.mg 🖨️",
+    "description1": "Print.mg est votre plateforme d’impression en ligne à Madagascar, créée pour simplifier vos commandes et livrer vos projets rapidement et en toute sécurité.",
+    "description2": "Notre objectif est de fournir un service professionnel et accessible à tous, en vous accompagnant depuis le téléversement de vos fichiers jusqu’à la livraison.",
+    "description3": "Grâce à notre plateforme, vous pouvez suivre vos commandes en temps réel et bénéficier de conseils personnalisés pour tous vos projets d’impression."
+  },
+  "order": {
+    "header": "Comment passer commande 🖨️",
+    "step1": {
+      "title": "Connexion",
+      "desc": "Accédez à votre espace client"
+    },
+    "step2": {
+      "title": "Téléversement",
+      "desc": "Importez vos fichiers à imprimer"
+    },
+    "step3": {
+      "title": "Personnalisation",
+      "desc": "Choisissez format, finition, quantité"
+    },
+    "step4": {
+      "title": "Devis",
+      "desc": "Visualisez le prix instantanément"
+    },
+    "step5": {
+      "title": "Livraison",
+      "desc": "Sélectionnez votre mode de réception"
+    },
+    "step6": {
+      "title": "Paiement",
+      "desc": "Finalisez par Mvola ou à la livraison"
+    },
+    "cta": "Prêt à donner vie à votre projet ? ✨"
+  },
+  "delivery": {
+    "header": "Livraison 🚚",
+    "zone": "Zone Antananarivo",
+    "price": "5 000 Ar",
+    "free": "Gratuite dès 200 000 Ar d'achat ✅",
+    "track": "Suivi",
+    "assist": "Accompagnement de votre commande",
+    "pro": "Professionnalisme",
+    "secure": "Livraison soignée et sécurisée"
+  },
+  "contact": {
+    "header": "Contactez-nous 📞",
+    "whatsappLink": "https://wa.me/261336691909?text=Bonjour%20Print.mg%20!%20J’aimerais%20avoir%20des%20informations%20sur%20vos%20services."
+  },
+  "foter": {
+    "rights": "Tous droits réservés"
   }
 }

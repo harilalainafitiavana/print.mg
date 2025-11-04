@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import DashboardLayout from "../../Components/DashboardLayout";
-import { Home, Folder, Trash, BarChart3, Settings, Search, User } from "lucide-react";
+import { Home, Folder, Trash, Settings, Search, User } from "lucide-react";
 import Commande from "./Commande";
 import Setting from "../../Components/Settings";
 import Profils from "../../Components/Profils";
@@ -10,7 +10,8 @@ import MesCommande from "./Mes_commande";
 import TableauDeBord from "./TableauDeBord";
 import { useTranslation } from "react-i18next";
 import Abouts from "../../Components/About";
-import Logo from "../../assets/logo.png"
+import Logo from "../../assets/logo.png";
+import { getAvatarUrl } from '../../Components/avatarUtils';
 
 export default function UserDashboard() {
     const { t } = useTranslation();
@@ -29,6 +30,13 @@ export default function UserDashboard() {
                 if (res.ok) {
                     const data = await res.json();
                     setUser(data);
+
+                    // ⭐⭐ AJOUTEZ ICI - DEBUG
+                    console.log("=== DEBUG AVATAR DASHBOARD ===");
+                    console.log("Data reçue de l'API:", data);
+                    console.log("User profils:", data.profils);
+                    console.log("Avatar URL calculée:", getAvatarUrl(data));
+                    console.log("=====================");
                 }
             } catch (error) {
                 console.error("Erreur récupération utilisateur :", error);
@@ -43,7 +51,7 @@ export default function UserDashboard() {
         { id: "orders", label: t("userDashboard.orders"), icon: <Folder size={20} /> },
         { id: "trash", label: t("userDashboard.trash"), icon: <Trash size={20} /> },
         { id: "settings", label: t("userDashboard.settings"), icon: <Settings size={20} /> },
-        { id: "help", label: "A propos", icon: <Trash size={20} /> },
+        { id: "help", label: t("userDashboard.about"), icon: <Trash size={20} /> },
     ];
 
     // Composant pour afficher le profil utilisateur
@@ -52,13 +60,15 @@ export default function UserDashboard() {
             <div className="flex flex-col items-center space-x-3">
                 {/* Photo de profil ou icône par défaut */}
                 <div className="flex-shrink-0">
-                    {user?.profils ? (
+                    {getAvatarUrl(user) ? (
+                        // Si l'utilisateur a une photo
                         <img
-                            src={`http://localhost:8000${user.profils}`}
-                            alt="Profile"
+                            src={getAvatarUrl(user)!}
+                            alt="Profile de l'utilisateur"
                             className="w-28 h-28 rounded-full object-cover border-2 border-white shadow-sm"
                         />
                     ) : (
+                        // Si l'utilisateur n'a pas de photo
                         <div className="w-28 h-28 rounded-full bg-blue-100 flex items-center justify-center border-2 border-white shadow-sm">
                             <User size={48} className="text-blue-600" />
                         </div>
@@ -67,7 +77,7 @@ export default function UserDashboard() {
 
                 {/* Informations utilisateur */}
                 <div className="flex-1 min-w-0">
-                    <h3 className="text-sm font-semibold text-gray-900 truncate">
+                    <h3 className="text-sm font-semibold text-base-content truncate">
                         {user ? `${user.prenom} ${user.nom}` : "Utilisateur"}
                     </h3>
                     <p className="text-xs text-gray-500 truncate">

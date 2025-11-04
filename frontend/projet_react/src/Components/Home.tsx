@@ -8,6 +8,13 @@ import Chat from "./Chat";
 import RetourAccueil from "./RetourAccueil";
 import Popup from "./Popup";
 import { useTranslation } from "react-i18next";
+import { motion } from 'framer-motion';
+
+// ⭐ Définir le type pour vos items
+interface ServiceItem {
+  src: string;
+  legend: string;
+}
 
 export default function HomePage() {
   const { t } = useTranslation();
@@ -80,6 +87,34 @@ export default function HomePage() {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlgmti91vA7VlciW8p74u9QIomhiADGM_8jg&s"
   ];
 
+  // Service
+  const services: ServiceItem[] = [
+    {
+      src: "https://contentful.helloprint.com/wm1n7oady8a5/1R6wzLjQLR5hZ3hp10IHNz/a8287f5e901b46f0cd883f200ba2cb9b/9.png?q=75&h=400&w=600&fm=avif&fit=pad",
+      legend: "Flayers"
+    },
+    {
+      src: "https://contentful.helloprint.com/wm1n7oady8a5/7DKekXaY1h5D33SEHj0k69/d88281e071e8e17f0561b459098d855a/7.png?q=75&h=400&w=600&fm=avif&fit=pad",
+      legend: "Dépliants"
+    },
+    {
+      src: "https://contentful.helloprint.com/wm1n7oady8a5/4fAEb6QSfpjgr18UrvKEvJ/4ccc60f64b24ee3e91b09d60bd9e0392/145.png?q=75&h=400&w=600&fm=avif&fit=pad",
+      legend: "Affiche et posters"
+    },
+    {
+      src: "https://contentful.helloprint.com/wm1n7oady8a5/3pYvI48ae9lXcF0QRqXfEn/d254c5e0984f983485d7bd0f537f688c/Product_Blocks__4_.png?q=75&h=400&w=600&fm=avif&fit=pad",
+      legend: "Kakémonos roll-up"
+    },
+    {
+      src: "https://contentful.helloprint.com/wm1n7oady8a5/6JyAKqCCTq851vrBTJNnkS/fe6871e449ea53f61291a0615059115a/6.png?q=75&h=400&w=600&fm=avif&fit=pad",
+      legend: "Cartes de visite"
+    },
+    {
+      src: "https://contentful.helloprint.com/wm1n7oady8a5/4Qvz82BR3Mec0reo8vqVlJ/0047e496dcb6582acac472f48b7f286a/67.png?q=75&h=400&w=600&fm=avif&fit=pad",
+      legend: "Banderoles"
+    }
+  ];
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % images.length);
@@ -121,51 +156,72 @@ export default function HomePage() {
 
 
       {/* Section Features / Services */}
-      <section className="py-16 bg-base-100" id="services">
-        <div className="container mx-auto space-y-8 px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {[
-              {
-                src: "https://contentful.helloprint.com/wm1n7oady8a5/1R6wzLjQLR5hZ3hp10IHNz/a8287f5e901b46f0cd883f200ba2cb9b/9.png?q=75&h=400&w=600&fm=avif&fit=pad",
-                legend: "Flayers"
-              },
-              {
-                src: "https://contentful.helloprint.com/wm1n7oady8a5/7DKekXaY1h5D33SEHj0k69/d88281e071e8e17f0561b459098d855a/7.png?q=75&h=400&w=600&fm=avif&fit=pad",
-                legend: "Dépliants"
-              },
-              {
-                src: "https://contentful.helloprint.com/wm1n7oady8a5/4fAEb6QSfpjgr18UrvKEvJ/4ccc60f64b24ee3e91b09d60bd9e0392/145.png?q=75&h=400&w=600&fm=avif&fit=pad",
-                legend: "Affiche et posters"
-              },
-              {
-                src: "https://contentful.helloprint.com/wm1n7oady8a5/3pYvI48ae9lXcF0QRqXfEn/d254c5e0984f983485d7bd0f537f688c/Product_Blocks__4_.png?q=75&h=400&w=600&fm=avif&fit=pad",
-                legend: "Kakémonos roll-up"
-              },
-              {
-                src: "https://contentful.helloprint.com/wm1n7oady8a5/6JyAKqCCTq851vrBTJNnkS/fe6871e449ea53f61291a0615059115a/6.png?q=75&h=400&w=600&fm=avif&fit=pad",
-                legend: "Cartes de visite"
-              },
-              {
-                src: "https://contentful.helloprint.com/wm1n7oady8a5/4Qvz82BR3Mec0reo8vqVlJ/0047e496dcb6582acac472f48b7f286a/67.png?q=75&h=400&w=600&fm=avif&fit=pad",
-                legend: "Banderoles"
-              }
-            ].map((item, index) => (
-              <div
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white" id="services">
+        <div className="container mx-auto space-y-12 px-4">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-4xl font-bold text-center text-gray-900"
+          >
+            Nos Services
+          </motion.h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            {services.map((item: ServiceItem, index: number) => (  // ⭐ Typage des paramètres
+              <motion.div
                 key={index}
-                className="flex flex-col rounded-xl overflow-hidden shadow-md group"
+                initial={{
+                  opacity: 0,
+                  y: 70,
+                  rotateY: 45,
+                  scale: 0.85,
+                  filter: "blur(10px)"
+                }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                  rotateY: 0,
+                  scale: 1,
+                  filter: "blur(0px)",
+                  transition: {
+                    duration: 1.1,
+                    delay: index * 0.13,
+                    ease: [0.23, 1, 0.32, 1]
+                  }
+                }}
+                viewport={{ once: true }}
+                whileHover={{
+                  y: -12,
+                  rotateY: 8,
+                  scale: 1.04,
+                  transition: { duration: 0.4 }
+                }}
+                className="flex flex-col rounded-2xl overflow-hidden shadow-2xl group bg-white transform-gpu"
+                style={{
+                  transformStyle: 'preserve-3d',
+                  perspective: '1000px'
+                }}
               >
-                <div className="relative">
-                  <img
-                    src={item.src}
-                    alt={item.legend}
+                <div className="relative overflow-hidden">
+                  <motion.img
+                    src={item.src}  // ✅ Plus d'erreur
+                    alt={item.legend}  // ✅ Plus d'erreur
                     className="w-full h-64 object-cover"
+                    whileHover={{ scale: 1.15 }}
+                    transition={{ duration: 0.6 }}
                   />
+                  {/* <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" /> */}
                 </div>
-                {/* Légende sous l'image */}
-                <p className="mt-2 text-center md:text-left md:ml-4 text-md font-bold mb-2 text-blue-500">
-                  {item.legend}
-                </p>
-              </div>
+                <div className="p-6">
+                  <motion.p
+                    className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors duration-300 text-center"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    {item.legend}{/* ✅ Plus d'erreur */}
+                  </motion.p>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>

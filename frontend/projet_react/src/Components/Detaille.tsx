@@ -20,6 +20,8 @@ interface Product {
     prix: string;
     image: string;
     featured: boolean;
+    format_defaut: "A3" | "A4" | "A5" | "A6"; // nouveau champ
+    is_grand_format: boolean;               // nouveau champ
 }
 
 
@@ -224,8 +226,16 @@ const PublicationsPage: React.FC = () => {
                                         )}
                                     </div>
                                     <div className="p-6">
-                                        <h3 className="text-xl font-bold">{product.name}</h3>
-                                        <p className="text-gray-600 mb-4">{product.description}</p>
+                                        <div className='flex flex-row justify-between mb-2'>
+                                            <div>
+                                                <h3 className="text-xl font-bold">{product.name}</h3>
+                                                <p className="text-gray-600 mb-4">{product.description}</p>
+                                            </div>
+                                            <div>
+                                                <p><strong>Format : </strong>{product.format_defaut}</p>
+                                                <p><strong>Grand format : </strong>{product.is_grand_format ? "✅" : "❌"}</p>
+                                            </div>
+                                        </div>
                                         <span className="text-blue-600 font-bold">{product.prix} Ariary</span>
                                     </div>
                                 </div>

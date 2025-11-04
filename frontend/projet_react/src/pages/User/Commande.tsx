@@ -7,6 +7,18 @@ import { useTranslation } from "react-i18next";
 
 type Step = 1 | 2 | 3 | 4;
 
+// ✅ Type complet pour les produits
+type Produit = {
+  id: number;
+  name: string;
+  prix: number;
+  format_defaut: string;
+  description?: string;
+  categorie?: string;
+  is_grand_format: boolean;
+}
+
+
 export default function PrintingOrderForm() {
   const { t } = useTranslation();
   const [step, setStep] = useState<Step>(1);
@@ -33,15 +45,192 @@ export default function PrintingOrderForm() {
   const [binding, setBinding] = useState(""); // reliure option facultative
   const [coverPaper, setCoverPaper] = useState(""); // couverture option facultative
   const [formatError, setFormatError] = useState("");
+  const [selectedProduit, setSelectedProduit] = useState("");
+  const [produits, setProduits] = useState<Produit[]>([]);
 
   // Étape 3 - Paiement
   const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const [amount, setAmount] = useState<number | "">("");
   const [options, setOptions] = useState("");
   const [step3Error, setStep3Error] = useState("");
 
   // Étape 4 - Confirmation
   const [showModal, setShowModal] = useState(false);
+
+  // Récupérer les produits avec tous les champs
+  useEffect(() => {
+    const fetchProduits = async () => {
+      try {
+        const res = await authFetch("http://localhost:8000/api/produits/");
+        const data = await res.json();
+        setProduits(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchProduits();
+  }, []);
+
+  // 🔹 Format automatique selon le produit - VERSION CORRIGÉE
+  useEffect(() => {
+    if (selectedProduit) {
+      // Trouver le produit sélectionné
+      const produit = produits.find(p => p.id === parseInt(selectedProduit));
+      if (produit) {
+        console.log(`🔍 Produit sélectionné: ${produit.name}, Format: ${produit.format_defaut}, Grand format: ${produit.is_grand_format}`);
+
+        // ⭐ CORRECTION : SI C'EST UN GRAND FORMAT
+        if (produit.is_grand_format) {
+          setFormatType("grand"); // ⬅️ FORCE le format "grand"
+          setSmallFormat("");     // ⬅️ RESET le petit format
+          console.log("✅ Produit grand format détecté - format_type forcé à 'grand'");
+        }
+        // SI C'EST UN PETIT FORMAT
+        else {
+          const formatDefaut = produit.format_defaut;
+
+          // Si le format par défaut est A6, on le considère comme "custom"
+          if (formatDefaut === "A6") {
+            setSmallFormat("custom");
+          } else {
+            setSmallFormat(formatDefaut);
+          }
+          console.log(`✅ Format automatique défini: ${formatDefaut}`);
+        }
+      }
+    } else {
+      // Reset si aucun produit sélectionné
+      setFormatType("petit");
+      setSmallFormat("A4");
+    }
+  }, [selectedProduit, produits]);
+
+
+  // ✅ Estimation simplifiée du prix - VERSION CORRIGÉE
+  useEffect(() => {
+    console.log("🔍 Déclenchement calcul:", {
+      selectedProduit,
+      quantity,
+      isBook,
+      bookPages,
+      smallFormat
+    });
+
+    if (!quantity) {
+      setAmount("");
+      return;
+    }
+
+    let estimation = 0;
+
+    // ⭐ MODIFICATION : Calcul pour livres SANS produit
+    if (isBook) {
+      // Si c'est un livre MAIS bookPages n'est pas encore rempli
+      if (!bookPages) {
+        setAmount(""); // Montant vide en attendant les pages
+        return;
+      }
+
+      console.log("📖 Calcul LIVRE activé (sans produit)");
+
+      // PRIX FIXES POUR LIVRES
+      let prixPage = 200;
+      switch (smallFormat) {
+        case "A3": prixPage = 1000; break;
+        case "A4": prixPage = 500; break;
+        case "A5": prixPage = 300; break;
+        case "A6": prixPage = 200; break;
+        case "custom": prixPage = 200; break;
+      }
+
+      const prixPages = prixPage * bookPages * quantity;
+
+      // PRIX RÉELS DES OPTIONS
+      let prixCouverture = 0;
+      if (coverPaper === "simple") prixCouverture = 1000;
+      if (coverPaper === "photo") prixCouverture = 3000;
+
+      let prixReliure = 0;
+      if (binding === "spirale") prixReliure = 2000;
+      if (binding === "dos_colle") prixReliure = 3000;
+      if (binding === "agrafé") prixReliure = 1000;
+
+      // Multiplicateur recto-verso
+      const multiplicateurDuplex = duplex === "recto_verso" ? 1.2 : 1.0;
+
+      const prixCouvertureTotal = (prixCouverture * multiplicateurDuplex) * quantity;
+      const prixReliureTotal = prixReliure * quantity;
+
+      estimation = prixPages + prixCouvertureTotal + prixReliureTotal + 5000;
+
+      console.log("💰 Calcul livre détaillé:", {
+        prixPages,
+        prixCouvertureTotal,
+        prixReliureTotal,
+        estimation
+      });
+    }
+    // ⭐ PRODUITS NORMAUX (nécessitent un produit)
+    else if (selectedProduit) {
+      const produit = produits.find(p => p.id === parseInt(selectedProduit));
+      if (produit) {
+        console.log("📄 Calcul PRODUIT normal");
+        estimation = (produit.prix * quantity) + 5000;
+      } else {
+        setAmount("");
+        return;
+      }
+    } else {
+      // Produit normal mais pas de produit sélectionné
+      setAmount("");
+      return;
+    }
+
+    setAmount(Math.round(estimation));
+    console.log("🎯 Montant final:", Math.round(estimation));
+
+  }, [selectedProduit, quantity, isBook, bookPages, smallFormat, produits, duplex, binding, coverPaper]);
+
+
+  // Erreurs et validations du numéro téléphone sur le payement
+  const validatePhone = (number: string): string => {
+    // Supprimer tous les caractères non numériques
+    const cleanNumber = number.replace(/\D/g, '');
+
+    // Vérifier la longueur
+    if (cleanNumber.length > 10) {
+      return "Le numéro ne doit pas dépasser 10 chiffres";
+    }
+
+    // Vérifier le format Telma (034 ou 038)
+    if (cleanNumber.length >= 3) {
+      const prefix = cleanNumber.substring(0, 3);
+      if (prefix !== "034" && prefix !== "038") {
+        return "Le numéro doit commencer par 034 ou 038 (Telma Madagascar) pour le payement MVola";
+      }
+    }
+
+    return ""; // Pas d'erreur
+  };
+
+  // Le numéro doit contenir 10 chiffres, commencer par 034 ou 038
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const value = e.target.value;
+
+    // Formatage automatique
+    let formattedValue = value.replace(/\D/g, ''); // Supprimer non-numériques
+
+    // Limiter à 10 chiffres
+    if (formattedValue.length > 10) {
+      formattedValue = formattedValue.substring(0, 10);
+    }
+
+    // Validation
+    const error = validatePhone(formattedValue);
+    setPhoneError(error);
+    setPhone(formattedValue);
+  };
 
   // Gestion du fichier
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -69,20 +258,32 @@ export default function PrintingOrderForm() {
 
   // Validation Étape 2
   const validateStep2 = () => {
+    // ⭐ MODIFICATION : Produit obligatoire SEULEMENT pour produits normaux
+    if (!isBook && !selectedProduit) {
+      setFormatError("Veuillez sélectionner un produit");
+      return false;
+    }
+
     if (!paperType || !finish || !quantity) {
       setFormatError(t("printingOrder.errors.fillStep2"));
       return false;
     }
 
-    // 🔹 Si c'est un livre, quantité minimale spéciale
+    // 🔹 RÈGLES POUR LES LIVRES (quantité minimale = 5 pour tous formats)
     if (isBook) {
-      const minBookQty = 4;
-      if (quantity < minBookQty) {
-        setFormatError(t("printingOrder.errors.minBookQty", { min: minBookQty }));
+      if (!bookPages || bookPages <= 0) {
+        setFormatError("Veuillez saisir le nombre de pages du livre");
         return false;
       }
-    } else {
-      // 🔹 Quantité minimale selon format
+
+      const minBookQty = 5;
+      if (quantity < minBookQty) {
+        setFormatError(`Quantité minimale pour un livre : ${minBookQty} exemplaires`);
+        return false;
+      }
+    }
+    // 🔹 RÈGLES POUR LES PRODUITS NORMAUX
+    else {
       if (formatType === "petit") {
         const minQty =
           smallFormat === "A5" ? 30 :
@@ -128,15 +329,24 @@ export default function PrintingOrderForm() {
     return true;
   };
 
+  // Modifiez la fonction nextStep
   const nextStep = () => {
     if (step === 1 && validateStep1()) setStep(2);
-    if (step === 2 && validateStep2()) setStep(3);
+    if (step === 2) {
+      // ⭐ MODIFICATION : Vérifier le produit UNIQUEMENT pour les produits normaux
+      if (!isBook && !selectedProduit) {
+        setFormatError("Veuillez sélectionner un produit pour les impressions normales");
+        return;
+      }
+      if (validateStep2()) setStep(3);
+    }
     if (step === 3 && validateStep3()) setShowModal(true);
   };
 
   const prevStep = () => {
     if (step > 1) setStep((prev) => (prev - 1) as Step);
   };
+
 
   // Fonction pour envoyer la commande au backend
   const handleSubmit = async () => {
@@ -155,9 +365,10 @@ export default function PrintingOrderForm() {
       formData.append("file_format", file.name.split('.').pop() || "");
       formData.append("colorProfile", colorProfile);
 
-      // 🔹 Configuration
+      // 🔹 Configuration - CORRIGÉ
       formData.append("format_type", formatType);
       if (smallFormat) formData.append("small_format", smallFormat);
+      if (selectedProduit) formData.append("produit_id", selectedProduit); // ✅ IMPORTANT
       if (customSize.width) formData.append("largeur", customSize.width);
       if (customSize.height) formData.append("hauteur", customSize.height);
       if (paperType) formData.append("paper_type", paperType);
@@ -169,9 +380,9 @@ export default function PrintingOrderForm() {
       formData.append("is_book", isBook ? "true" : "false");
       if (isBook && bookPages) formData.append("book_pages", bookPages.toString());
 
-      // 🔹 Paiement
+      // 🔹 Paiement - RETIREZ amount
       formData.append("phone", phone);
-      formData.append("amount", amount.toString());
+      // ⛔ SUPPRIMEZ cette ligne: formData.append("amount", amount.toString());
       if (options) formData.append("options", options);
 
       console.log("Données envoyées :", {
@@ -189,7 +400,6 @@ export default function PrintingOrderForm() {
         binding,
         coverPaper,
         phone,
-        amount,
         options,
       });
 
@@ -203,10 +413,12 @@ export default function PrintingOrderForm() {
       if (data.success) {
         alert(t("printingOrder.success.created", { status: data.paiement_status }));
 
-        // 🔹 Reset formulaire
+        // Reset formulaire
         setStep(1);
         setFile(null);
         setFileName("");
+        setSelectedProduit(""); // ⭐ Reset le produit aussi
+        setSmallFormat("A4"); // ⭐ Reset le format
         setQuantity("");
         setAmount("");
         setPhone("");
@@ -215,6 +427,8 @@ export default function PrintingOrderForm() {
         setCoverPaper("");
         setOptions("");
         setCustomSize({ width: "", height: "" });
+        setIsBook(false); // ⭐ Reset livre
+        setBookPages("");
         setShowModal(false);
       } else {
         alert(t("printingOrder.errors.creationFailed", { message: data.error }));
@@ -243,61 +457,6 @@ export default function PrintingOrderForm() {
           { key: "brillant", label: t("printingOrder.paper.shiny") },
         ]
         : [{ key: "standard", label: t("printingOrder.paper.standard") }];
-
-
-  // Calcul automatique du montant
-  useEffect(() => {
-    if (!quantity) return;
-
-    let basePrice = 0;
-
-    // ---- Format ----
-    if (formatType === "petit") {
-      switch (smallFormat) {
-        case "A6": basePrice = 200; break;
-        case "A5": basePrice = 300; break;
-        case "A4": basePrice = 500; break;
-        case "A3": basePrice = 1000; break;
-        case "custom": {
-          const w = parseFloat(customSize.width || "0");
-          const h = parseFloat(customSize.height || "0");
-          const surface = (w * h) / 10000;
-          basePrice = Math.max(surface * 5000, 200);
-          break;
-        }
-      }
-    } else if (formatType === "grand") {
-      const w = parseFloat(customSize.width || "0");
-      const h = parseFloat(customSize.height || "0");
-      const surface = (w * h) / 10000;
-      basePrice = Math.max(surface * 5000, 5000);
-    }
-
-    // ---- Calcul pour livre ----
-    let pagesTotal = basePrice;
-    let optionsTotal = 0;
-    const duplexMultiplier = duplex === "recto_verso" ? 1.2 : 1;
-
-    let bindingPrice = 0;
-    if (binding === "spirale") bindingPrice = 2000;
-    if (binding === "dos_colle") bindingPrice = 3000;
-    if (binding === "agrafé") bindingPrice = 1000;
-
-    let coverPrice = 0;
-    if (coverPaper === "photo") coverPrice = 3000;
-    if (coverPaper === "simple") coverPrice = 1000;
-
-    const deliveryFee = 5000;
-
-    if (isBook && bookPages) {
-      pagesTotal = basePrice * bookPages; // prix pour 1 livre
-      optionsTotal = (bindingPrice + coverPrice) * quantity; // options multiplié par le nombre de livres
-      setAmount(Math.round((pagesTotal * quantity + optionsTotal) * duplexMultiplier + deliveryFee));
-    } else {
-      setAmount(Math.round((basePrice * quantity * duplexMultiplier) + bindingPrice + coverPrice + deliveryFee));
-    }
-
-  }, [formatType, smallFormat, customSize, duplex, quantity, binding, coverPaper, isBook, bookPages]);
 
 
   return (
@@ -345,6 +504,72 @@ export default function PrintingOrderForm() {
               <option value="custom">{t("printingOrder.format.custom") || "Personnalisé"}</option>
             </select>
           )}
+
+          {/* Sélection du produit */}
+          <select
+            value={selectedProduit}
+            onChange={(e) => setSelectedProduit(e.target.value)}
+            className="select select-bordered w-full"
+          >
+            <option value="">-- Choisir un produit --</option>
+            {produits.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name} - {p.prix} Ar (Format: {p.is_grand_format ? "Grand format" : p.format_defaut})
+              </option>
+            ))}
+          </select>
+
+          {/* Dans l'étape 2 - Après la sélection du produit */}
+          {selectedProduit && (
+            <div className="bg-blue-50 p-3 rounded border border-blue-200">
+              <p className="text-sm text-blue-800">
+                ✅ Produit sélectionné: <strong>{produits.find(p => p.id === parseInt(selectedProduit))?.name}</strong>
+                <br />
+                {produits.find(p => p.id === parseInt(selectedProduit))?.is_grand_format ? (
+                  <>Format : <strong>Grand format</strong></>
+                ) : (
+                  <>Format par défaut: <strong>{produits.find(p => p.id === parseInt(selectedProduit))?.format_defaut}</strong>
+                    {smallFormat === "custom" && " - Format personnalisé activé"}
+                  </>
+                )}
+              </p>
+            </div>
+          )}
+
+          {/* AJOUTEZ CETTE SECTION - Règles de quantité */}
+          <div className="bg-orange-50 p-3 rounded-lg border border-orange-200">
+            <p className="text-sm text-orange-800 font-medium">
+              {isBook ? (
+                <>📖 <strong>Livre</strong> - Quantité minimale : <strong>5 exemplaires</strong> (tous formats)</>
+              ) : (
+                <>📄 <strong>Produit normal</strong> - Quantité minimale :{" "}
+                  {formatType === "petit" ? (
+                    smallFormat === "A5" ? "30 exemplaires (A5)" :
+                      smallFormat === "A4" ? "20 exemplaires (A4)" :
+                        smallFormat === "A3" ? "10 exemplaires (A3)" :
+                          "50 exemplaires (personnalisé)"
+                  ) : (
+                    "selon les dimensions"
+                  )}
+                </>
+              )}
+            </p>
+          </div>
+
+          {/* ✅ CORRECTION - Utilisez Boolean(amount) ou amount !== "" */}
+          {amount && amount > 0 && (
+            <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+              <h4 className="font-bold text-green-800 mb-2">💰 Estimation du prix</h4>
+              <div className="text-sm text-green-700">
+                <p>Montant estimé: <strong>{amount} Ar</strong></p>
+                <p className="text-xs mt-1 text-green-600">
+                  {isBook ? "📖 Calcul basé sur nombre de pages + options livre" : "📄 Calcul basé sur prix produit × quantité + livraison"}
+                </p>
+                <p className="text-xs text-green-500">Le prix final sera calculé par le serveur</p>
+              </div>
+            </div>
+          )}
+
 
           {/* Champs largeur/hauteur */}
           {(formatType === "grand" || (formatType === "petit" && smallFormat === "custom")) && (
@@ -407,6 +632,8 @@ export default function PrintingOrderForm() {
             <option value="brillant">{t("printingOrder.finish.glossy") || "Brillant"}</option>
             <option value="mate">{t("printingOrder.finish.matte") || "Mate"}</option>
             <option value="standard">{t("printingOrder.finish.standard") || "Standard"}</option>
+            <option value="vernis">Vernis Sélectif</option>
+            <option value="dorure">Dorure à chaud</option>
           </select>
 
           <input type="number" placeholder={t("printingOrder.placeholders.quantity")} value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value))} className="input input-bordered w-full" />
@@ -423,12 +650,17 @@ export default function PrintingOrderForm() {
             <option value="spirale">{t("printingOrder.binding.spiral") || "Spirale"}</option>
             <option value="dos_colle">{t("printingOrder.binding.glue") || "Dos collé"}</option>
             <option value="agrafé">{t("printingOrder.binding.stapled") || "Agrafé"}</option>
+            <option value="rigide">Couverture rigide</option>
+            <option value="coucu">Dos Caré Coucu</option>
           </select>
 
           <select value={coverPaper} onChange={(e) => setCoverPaper(e.target.value)} className="select select-bordered w-full">
             <option value="">{t("printingOrder.cover.none") || "Pas de couverture spéciale"}</option>
             <option value="simple">{t("printingOrder.cover.simple") || "Papier simple"}</option>
             <option value="photo">{t("printingOrder.cover.photo") || "Papier photo"}</option>
+            <option value="mat">Papier couché Mat</option>
+            <option value="brillant">Papier couché Brillant</option>
+            <option value="texture">Papier Création Texturé</option>
           </select>
 
           {formatError && <p className="text-red-500">{formatError}</p>}
@@ -447,7 +679,12 @@ export default function PrintingOrderForm() {
       {/* Étape 3 */}
       {step === 3 && (
         <div className="space-y-4">
-          <input type="tel" placeholder={t("printingOrder.placeholders.phone")} value={phone} onChange={(e) => setPhone(e.target.value)} className="input input-bordered w-full" />
+          <input type="tel" placeholder={t("printingOrder.placeholders.phone")} value={phone} onChange={handlePhoneChange} className={`input input-bordered w-full ${phoneError ? 'input-error' : ''}`} maxLength={10} />
+          {phoneError && (
+            <label className="label">
+              <span className="label-text-alt text-error">{phoneError}</span>
+            </label>
+          )}
           <input type="number" placeholder={t("printingOrder.placeholders.amount")} value={amount} readOnly className="input input-bordered w-full" />
           <textarea placeholder={t("printingOrder.placeholders.options")} value={options} onChange={(e) => setOptions(e.target.value)} className="textarea textarea-bordered w-full" />
           {step3Error && <p className="text-red-500">{step3Error}</p>}

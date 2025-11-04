@@ -25,7 +25,13 @@
       "trash": "Trash"
     },
     "header": {
-      "calendar": "Calendar"
+      "calendar": "Calendar",
+      "statut": "Order Status",
+      "commande": "Today's Orders",
+      "total": "Total Orders",
+      "traiter": "Orders to Process",
+      "format": "Popular Formats",
+      "aucun": "No pending orders"
     },
     "quickLinks": {
       "title": "Quick link 😉"
@@ -183,7 +189,8 @@
     "trash": "Trash",
     "stats": "Statistics",
     "settings": "Settings",
-    "search": "Search for an order......"
+    "search": "Search for an order......",
+    "about": "About"
   },
   "TableauUser": {
     "title": "Hello",
@@ -606,7 +613,7 @@
     "pays": "Country",
     "paysPlaceholder": "Your country",
     "photo": "Profile photo",
-    "change": "Change",
+    "change": "Change image",
     "no": "None",
     "edit": "Edit your information",
     "name": "Name",
@@ -625,5 +632,59 @@
     "errorPassword": "The password does not match",
     "succesPassword": "Password success change !",
     "nosuccessPassword": "Error while changing the password !"
+  },
+  "about": {
+    "logoAlt": "Print.mg Logo",
+    "title": "Print.mg",
+    "subtitle": "Your online printing platform in Madagascar 🇲🇬",
+    "header": "About Print.mg 🖨️",
+    "description1": "Print.mg is your online printing platform in Madagascar, created to simplify your orders and deliver your projects quickly and safely.",
+    "description2": "Our goal is to provide a professional and accessible service for everyone, guiding you from file upload to delivery.",
+    "description3": "With our platform, you can track your orders in real time and get personalized advice for all your printing projects."
+  },
+  "order": {
+    "header": "How to place an order 🖨️",
+    "step1": {
+      "title": "Login",
+      "desc": "Access your client area"
+    },
+    "step2": {
+      "title": "Upload",
+      "desc": "Upload your files to print"
+    },
+    "step3": {
+      "title": "Customization",
+      "desc": "Choose format, finish, quantity"
+    },
+    "step4": {
+      "title": "Quotation",
+      "desc": "View price instantly"
+    },
+    "step5": {
+      "title": "Delivery",
+      "desc": "Select your delivery method"
+    },
+    "step6": {
+      "title": "Payment",
+      "desc": "Finalize via Mvola or on delivery"
+    },
+    "cta": "Ready to bring your project to life? ✨"
+  },
+  "delivery": {
+    "header": "Delivery 🚚",
+    "zone": "Antananarivo area",
+    "price": "5,000 Ar",
+    "free": "Free from 200,000 Ar",
+    "track": "Order tracking",
+    "assist": "Assistance with your order",
+    "pro": "Professional",
+    "secure": "Secure and careful delivery"
+  },
+  "contact": {
+    "header": "Contact us 📞",
+    "whatsappLink": "https://wa.me/261336691909?text=Hello%20Print.mg%20!%20I%20would%20like%20information%20about%20your%20services."
+  },
+  "foter": {
+    "rights": "All rights reserved"
   }
 }

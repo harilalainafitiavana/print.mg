@@ -12,6 +12,8 @@ interface Product {
     prix: string;
     image: string;
     featured: boolean;
+    format_defaut: "A3" | "A4" | "A5" | "A6" | ""; // ⭐ AJOUTEZ "" ICI
+    is_grand_format: boolean;
     searchQuery?: string;
 }
 
@@ -80,6 +82,9 @@ export default function ProductList() {
 
         const formData = new FormData();
         formData.append("name", newProduct.name);
+        formData.append("format_defaut", newProduct.format_defaut || "A4");
+        formData.append("is_grand_format", newProduct.is_grand_format ? "true" : "false");
+
         formData.append("description", newProduct.description || "");
         formData.append("categorie", newProduct.categorie || "");
         formData.append("prix", newProduct.prix);
@@ -110,13 +115,14 @@ export default function ProductList() {
     };
 
 
-
     // Modifier un produit
     const handleUpdate = async () => {
         if (!selectedProduct) return;
 
         const formData = new FormData();
         formData.append("name", selectedProduct.name);
+        formData.append("format_defaut", selectedProduct.format_defaut || "A4");
+        formData.append("is_grand_format", selectedProduct.is_grand_format ? "true" : "false");
         formData.append("description", selectedProduct.description || "");
         formData.append("categorie", selectedProduct.categorie || "");
         formData.append("prix", selectedProduct.prix);
@@ -200,10 +206,19 @@ export default function ProductList() {
                             src={product.image}
                             alt={product.name}
                             className="w-full h-40 object-cover rounded-lg mb-4"
-                            onError={(e) => (e.currentTarget.src = "/placeholder.png")} // Affiche une image par défaut en cas d'erreur
+                            onError={(e) => (e.currentTarget.src = "/placeholder.png")}
                         />
 
                         <h2 className="text-lg font-bold text-blue-500">{product.name}</h2>
+
+                        {/* ⭐ CORRECTION : AFFICHAGE CONDITIONNEL DU FORMAT */}
+                        {product.is_grand_format ? (
+                            <p><strong>Format : </strong>Grand format</p>
+                        ) : (
+                            <p><strong>Format : </strong>{product.format_defaut}</p>
+                        )}
+
+                        <p><strong>Grand format : </strong>{product.is_grand_format ? "✅" : "❌"}</p>
                         <p className="text-sm text-base-content">{product.description}</p>
                         <p className="text-sm text-base-content"><strong>{t("products.modal.category")} : </strong>{product.categorie}</p>
                         <p className="text-sm font-medium"><strong>{t("products.modal.price")} : </strong>{product.prix} Ariary</p>
@@ -212,7 +227,6 @@ export default function ProductList() {
                         </p>
 
                         <div className="flex gap-2 mt-3">
-                            {/* Modifier (optionnel) */}
                             <button className="flex-1 flex items-center justify-center gap-2 px-3 py-1 rounded-lg bg-indigo-500 text-white hover:bg-indigo-600"
                                 onClick={() => {
                                     setSelectedProduct(product);
@@ -221,7 +235,6 @@ export default function ProductList() {
                             >
                                 <Edit size={16} /> {t("products.edit")}
                             </button>
-                            {/* Supprimer */}
                             <button
                                 onClick={() => handleDeleteClick(product)}
                                 className="flex-1 flex items-center justify-center gap-2 px-3 py-1 rounded-lg bg-red-500 text-white hover:bg-red-600"
@@ -231,7 +244,6 @@ export default function ProductList() {
                         </div>
                     </div>
                 ))}
-
             </div>
 
             {/* Pagination Controls */}
@@ -256,14 +268,69 @@ export default function ProductList() {
                     <div className="bg-base-100 p-6 rounded-xl max-w-lg w-full">
                         <h3 className="text-xl font-bold mb-4">➕ {t("products.modal.title")}</h3>
                         <form onSubmit={handleSubmit} className="space-y-3">
-                            <input
-                                type="text"
-                                name="name"
-                                placeholder="Nom du produit"
-                                value={newProduct.name || ""}
-                                onChange={handleInputChange}
-                                className="input input-bordered w-full"
-                            />
+                            <div className="flex flex-col md:flex-row gap-2">
+                                <input
+                                    type="text"
+                                    name="name"
+                                    placeholder="Nom du produit"
+                                    value={newProduct.name || ""}
+                                    onChange={handleInputChange}
+                                    className="input input-bordered w-full"
+                                />
+
+                                {/* Choix du format - CONDITIONNEL */}
+                                {!newProduct.is_grand_format ? (
+                                    <select
+                                        value={newProduct.format_defaut || ""}
+                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                                            setNewProduct(prev => ({
+                                                ...prev,
+                                                format_defaut: e.target.value as "A3" | "A4" | "A5" | "A6"
+                                            }))
+                                        }
+                                        className="select select-bordered w-full"
+                                    >
+                                        <option value="">-- Choisir le format --</option>
+                                        <option value="A3">A3</option>
+                                        <option value="A4">A4</option>
+                                        <option value="A5">A5</option>
+                                        <option value="A6">A6</option>
+                                    </select>
+                                ) : (
+                                    <div className="w-full p-3 bg-gray-100 rounded border text-center">
+                                        <span className="text-gray-600">Format : Grand format</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Checkbox grand format */}
+                            <label className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    checked={newProduct.is_grand_format || false}
+                                    onChange={(e) => {
+                                        const isGrandFormat = e.target.checked;
+                                        setNewProduct(prev => {
+                                            const updated = { ...prev, is_grand_format: isGrandFormat };
+                                            if (isGrandFormat) {
+                                                updated.format_defaut = "" as any; // Force le type
+                                            }
+                                            return updated;
+                                        })
+                                    }}
+                                />
+                                Grand format
+                            </label>
+
+                            {/* Message informatif */}
+                            {newProduct.is_grand_format && (
+                                <div className="bg-blue-50 p-3 rounded border border-blue-200">
+                                    <p className="text-sm text-blue-800">
+                                        ⓘ Pour les grands formats, les dimensions sont personnalisées par le client
+                                    </p>
+                                </div>
+                            )}
+
                             <textarea
                                 name="description"
                                 placeholder="Description"
@@ -299,7 +366,6 @@ export default function ProductList() {
                                     checked={newProduct.featured || false}
                                     onChange={(e) => setNewProduct((prev) => ({ ...prev, featured: e.target.checked }))}
                                 />
-
                                 {t("products.modal.product")}
                             </label>
 
@@ -355,15 +421,48 @@ export default function ProductList() {
                     <div className="bg-base-100 p-6 rounded-xl max-w-lg w-full">
                         <h3 className="text-xl font-bold mb-4">✏️ {t("products.modal.editproduct")}</h3>
                         <div className="space-y-3">
-                            <input
-                                type="text"
-                                placeholder="Nom du produit"
-                                value={selectedProduct.name}
-                                onChange={(e) =>
-                                    setSelectedProduct({ ...selectedProduct, name: e.target.value })
-                                }
-                                className="input input-bordered w-full"
-                            />
+                            <div className="flex flex-col md:flex-row gap-2">
+                                <input
+                                    type="text"
+                                    placeholder="Nom du produit"
+                                    value={selectedProduct.name}
+                                    onChange={(e) =>
+                                        setSelectedProduct({ ...selectedProduct, name: e.target.value })
+                                    }
+                                    className="input input-bordered w-full"
+                                />
+                                {/* Choix du format */}
+                                <select
+                                    value={selectedProduct.format_defaut || "A4"}
+                                    onChange={(e) =>
+                                        setSelectedProduct({
+                                            ...selectedProduct,
+                                            format_defaut: e.target.value as "A3" | "A4" | "A5" | "A6"
+                                        })
+                                    }
+                                    className="select select-bordered w-full"
+                                >
+                                    <option value="A3">A3</option>
+                                    <option value="A4">A4</option>
+                                    <option value="A5">A5</option>
+                                    <option value="A6">A6</option>
+                                </select>
+                            </div>
+                            {/* Checkbox Grand Format */}
+                            <label className="flex items-center gap-2 mt-2">
+                                <input
+                                    type="checkbox"
+                                    checked={selectedProduct.is_grand_format || false}
+                                    onChange={(e) =>
+                                        setSelectedProduct({
+                                            ...selectedProduct,
+                                            is_grand_format: e.target.checked
+                                        })
+                                    }
+                                />
+                                {t("products.modal.grandformat")} {/* tu peux ajouter la traduction correspondante */}
+                            </label>
+
                             <textarea
                                 placeholder="Description"
                                 value={selectedProduct.description}

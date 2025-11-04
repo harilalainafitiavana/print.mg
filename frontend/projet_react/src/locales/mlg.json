@@ -25,7 +25,13 @@
       "trash": "Fako"
     },
     "header": {
-      "calendar": "Kalandrie"
+      "calendar": "Kalandrie",
+      "statut": "Toetran'ny baiko",
+      "commande": "Baiko androany",
+      "total": "Totalin'ny baiko",
+      "traiter": "Baiko tokony handrasana",
+      "format": "Endrika Malaza",
+      "aucun": "Tsy misy baiko miandry"
     },
     "quickLinks": {
       "title": "Rohy haingana 😉"
@@ -183,7 +189,8 @@
     "trash": "Fako",
     "stats": "Antontan'isa",
     "settings": "Toe-javatra",
-    "search": "Mitadiava baiko......"
+    "search": "Mitadiava baiko......",
+    "about": "Momba anay"
   },
   "TableauUser": {
     "title": "Manao ahoana",
@@ -606,7 +613,7 @@
     "pays": "Firenena",
     "paysPlaceholder": "Ny firenenao",
     "photo": "Sary mombamomba",
-    "change": "Hanova",
+    "change": "Hovaina ny sary",
     "no": "Tsy misy",
     "edit": "Hanova ny mombamomba anao",
     "name": "Anarana",
@@ -625,5 +632,60 @@
     "errorPassword": "Tsy mifanaraka ny teny miafinao",
     "succesPassword": "Voahova ny teny miafina !",
     "nosuccessPassword": "Misy tsy fihetezana ny fanovana teny miafina"
+  },
+  
+  "about": {
+    "logoAlt": "Sary famantarana Print.mg",
+    "title": "Print.mg",
+    "subtitle": "Ny sehatra fanontam-pirinty an-tserasera eto Madagasikara 🇲🇬",
+    "header": "Momba ny Print.mg 🖨️",
+    "description1": "Print.mg dia ny sehatra fanontam-pirinty an-tserasera eto Madagasikara, noforonina hanamora ny baiko sy hanaterana ny tetikasanao haingana sy azo antoka.",
+    "description2": "Ny tanjonay dia ny hanome tolotra matihanina sy azo idirana ho an'ny rehetra, miaraka amin'ny fanampiana anao hatrany amin'ny fandefasana ny rakitrao ka hatramin'ny fanaterana.",
+    "description3": "Miaraka amin'ny sehatra anay, afaka manara-maso ny baiko amin'ny fotoana tena izy ianao ary mahazo torohevitra manokana ho an'ny tetikasa fanontam-pirinty rehetra."
+  },
+  "order": {
+    "header": "Ahoana ny fomba hanaovana baiko 🖨️",
+    "step1": {
+      "title": "Fidirana",
+      "desc": "Midira amin'ny kaontinao"
+    },
+    "step2": {
+      "title": "Fandefasana rakitra",
+      "desc": "Ampidiro ny rakitrao ho pirinty"
+    },
+    "step3": {
+      "title": "Fanamboarana",
+      "desc": "Safidio ny format, finition, sy ny habetsahana"
+    },
+    "step4": {
+      "title": "Vidiny",
+      "desc": "Jereo avy hatrany ny vidiny"
+    },
+    "step5": {
+      "title": "Fanaterana",
+      "desc": "Safidio ny fomba handefasana"
+    },
+    "step6": {
+      "title": "Fandoavana",
+      "desc": "Ataovy amin'ny Mvola na amin'ny fanaterana"
+    },
+    "cta": "Vonona hanome aina ny tetikasanao? ✨"
+  },
+  "delivery": {
+    "header": "Fanaterana 🚚",
+    "zone": "Faritra Antananarivo",
+    "price": "5 000 Ar",
+    "free": "Maimaim-poana manomboka amin'ny 200 000 Ar",
+    "track": "Fanaraha-maso",
+    "assist": "Fanampiana amin'ny baiko",
+    "pro": "Matihanina",
+    "secure": "Fanaterana azo antoka sy voakarakara"
+  },
+  "contact": {
+    "header": "Mifandraisa aminay 📞",
+    "whatsappLink": "https://wa.me/261336691909?text=Manao%20ahoana%20Print.mg%20!%20Te-hahazo%20fampahalalana%20mikasa%20ny%20tolotrao."
+  },
+  "foter": {
+    "rights": "Zo rehetra voatokana"
   }
 }

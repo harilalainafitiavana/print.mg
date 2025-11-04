@@ -228,10 +228,13 @@ export default function DashboardLayout({
                             <div className="flex items-center space-x-3">
                                 <img
                                     src={userPhoto}
-                                    alt="Profile"
+                                    alt="Profil"
                                     className="w-10 h-10 rounded-full object-cover border-2 border-white"
+                                    // onError={(e) => {
+                                    //     e.currentTarget.src = user;
+                                    // }}
                                     onError={(e) => {
-                                        e.currentTarget.src = user;
+                                        e.currentTarget.src = '../../assets/logo.png';
                                     }}
                                 />
                                 <div className="flex-1 min-w-0">
@@ -358,7 +361,6 @@ export default function DashboardLayout({
                 </header>
 
                 {/* Zone de contenu */}
-                {/* Zone de contenu */}
                 <div className="flex flex-1 overflow-hidden"> {/* Changé de overflow-y-auto à overflow-hidden */}
                     {/* Contenu dynamique - Scrollable */}
                     <div className={`flex-1 p-4 md:p-6 bg-base-200 min-w-0 transition-all duration-300 ${isRightSidebarVisible && windowWidth >= 1024 ? 'lg:mr-0' : 'mr-0'} overflow-y-auto`}> {/* Ajout de overflow-y-auto */}
@@ -379,7 +381,7 @@ export default function DashboardLayout({
                             <div className="flex-1 overflow-y-auto p-4">
                                 {/* Graphique des commandes par statut */}
                                 <div className="mb-6">
-                                    <h4 className="font-semibold text-sm mb-3 text-base-content">Statuts des Commandes</h4>
+                                    <h4 className="font-semibold text-sm mb-3 text-base-content">{t("dashboard.header.statut")}</h4>
                                     <div className="bg-base-200 p-4 rounded-lg border">
                                         {loadingSidebar ? (
                                             <div className="flex justify-center items-center h-20">
@@ -417,13 +419,13 @@ export default function DashboardLayout({
                                                 {/* Résumé du jour */}
                                                 <div className="mt-4 pt-3 border-t border-gray-200 space-y-2">
                                                     <div className="flex justify-between items-center text-sm">
-                                                        <span className="text-base-content">Commandes aujourd'hui:</span>
+                                                        <span className="text-base-content">{t("dashboard.header.commande")}:</span>
                                                         <span className="font-semibold text-blue-600">
                                                             {sidebarStats.commandesAujourdhui}
                                                         </span>
                                                     </div>
                                                     <div className="flex justify-between items-center text-sm">
-                                                        <span className="text-base-content">Total commandes:</span>
+                                                        <span className="text-base-content">{t("dashboard.header.total")}:</span>
                                                         <span className="font-semibold text-green-600">
                                                             {sidebarStats.totalCommandes}
                                                         </span>
@@ -436,7 +438,7 @@ export default function DashboardLayout({
 
                                 {/* Calendrier */}
                                 <div className="mb-6">
-                                    <h4 className="font-semibold text-sm mb-3 text-base-content">Calendrier</h4>
+                                    <h4 className="font-semibold text-sm mb-3 text-base-content">{t("dashboard.header.calendar")}</h4>
                                     <div className="border rounded-lg p-2 bg-base-200">
                                         <Calendar
                                             value={new Date()}
@@ -456,28 +458,10 @@ export default function DashboardLayout({
                                     </div>
                                 </div>
 
-                                {/* Alertes commandes urgentes */}
-                                <div className="mb-6">
-                                    <h4 className="font-semibold text-sm mb-3 text-base-content">Commandes à Traiter</h4>
-                                    <div className="space-y-2">
-                                        {sidebarStats.commandesEnAttente > 0 ? (
-                                            <div className="text-center p-3 bg-red-50 border border-red-200 rounded-lg">
-                                                <p className="text-sm font-semibold text-red-700">
-                                                    {sidebarStats.commandesEnAttente} commande(s) en attente
-                                                </p>
-                                                <p className="text-xs text-red-600 mt-1">À traiter rapidement</p>
-                                            </div>
-                                        ) : (
-                                            <div className="text-center p-3 bg-green-50 border border-green-200 rounded-lg">
-                                                <p className="text-sm text-green-700">Aucune commande en attente 🎉</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
 
                                 {/* Formats populaires */}
                                 <div className="mb-6">
-                                    <h4 className="font-semibold text-sm mb-3 text-base-content">Formats Populaires</h4>
+                                    <h4 className="font-semibold text-sm mb-3 text-base-content">{t("dashboard.header.format")}</h4>
                                     <div className="space-y-2">
                                         {[
                                             { format: 'A4', count: 45, color: 'bg-blue-500' },

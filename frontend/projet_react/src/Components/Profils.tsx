@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { authFetch } from "./Utils"; // 👈 adapte le chemin
 import { Eye, EyeOff } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { getAvatarUrl } from './avatarUtils';
 
 export default function Profils() {
     const { t } = useTranslation();
@@ -16,6 +17,7 @@ export default function Profils() {
         photo: null as File | null,
     });
     const [userProfilUrl, setUserProfilUrl] = useState<string | null>(null);
+    const [userData, setUserData] = useState<any>(null);
 
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -36,6 +38,8 @@ export default function Profils() {
 
                 if (res.ok) {
                     const data = await res.json();
+                    setUserData(data); // ⭐ SAUVEGARDER LES DONNÉES COMPLÈTES
+
                     setFormData({
                         nom: data.nom || "",
                         prenom: data.prenom || "",
@@ -47,8 +51,10 @@ export default function Profils() {
                         photo: null,
                     });
 
-                    if (data.profils) {// ton backend
-                        setUserProfilUrl(data.profils);
+                    // ⭐⭐ CORRECTION : Utiliser getAvatarUrl pour traiter les URLs Google
+                    const avatarUrl = getAvatarUrl(data);
+                    if (avatarUrl) {
+                        setUserProfilUrl(avatarUrl);
                     } else {
                         setUserProfilUrl(null);
                     }
@@ -63,8 +69,61 @@ export default function Profils() {
         fetchProfil();
     }, []);
 
-    // 🔹 Mise à jour du profil
-    const handleSubmit = async (e: React.FormEvent) => {
+
+    // 🔹 Mise à jour de la PHOTO SEULEMENT
+    const handlePhotoSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        console.log("🔄 Début handlePhotoSubmit");
+        console.log("📸 Photo sélectionnée:", formData.photo?.name);
+
+        if (!formData.photo) {
+            alert("Veuillez sélectionner une photo");
+            return;
+        }
+
+        // ⭐ UTILISER LE NOUVEL ENDPOINT
+        const data = new FormData();
+        data.append("profils", formData.photo);  // ⭐ Nom important : "profils"
+
+        console.log("📦 FormData envoyé:");
+        for (let [key, value] of data.entries()) {
+            console.log(`  ${key}:`, value instanceof File ? `File(${value.name})` : value);
+        }
+
+        try {
+            const res = await authFetch("http://localhost:8000/api/profil/photo/", {  // ⭐ NOUVEL URL
+                method: "PUT",
+                body: data,
+            });
+
+            console.log("📨 Réponse reçue, statut:", res.status);
+
+            // Dans handlePhotoSubmit - MODIFIEZ cette partie :
+            if (res.ok) {
+                const responseData = await res.json();
+                console.log("✅ SUCCÈS:", responseData);
+                alert("Photo modifiée avec succès!");
+                
+                // ⭐ Utiliser l'URL complète SANS timestamp
+                const fullUrl = `http://localhost:8000${responseData.profils}`;
+                console.log("🔄 Nouvelle URL complète:", fullUrl);
+                setUserProfilUrl(fullUrl);
+                
+                setFormData({ ...formData, photo: null });
+            }else {
+                const errorText = await res.text();
+                console.error("❌ ERREUR:", errorText);
+                alert("Erreur: " + errorText);
+            }
+        } catch (error) {
+            console.error("❌ Erreur:", error);
+            alert(error);
+        }
+    };
+
+    // 🔹 Mise à jour des INFOS SEULEMENT (sans photo)
+    const handleInfoSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         const data = new FormData();
@@ -75,7 +134,6 @@ export default function Profils() {
         data.append("code_postal", formData.code_postal);
         data.append("ville", formData.ville);
         data.append("pays", formData.pays);
-        if (formData.photo) data.append("profils", formData.photo);
 
         try {
             const res = await authFetch("http://localhost:8000/api/profil/", {
@@ -84,15 +142,9 @@ export default function Profils() {
             });
 
             if (res.ok) {
-                alert(t("profil.profilAlert"));
-                // Mettre à jour l'aperçu si l'image a changé
-                if (formData.photo) {
-                    setUserProfilUrl(URL.createObjectURL(formData.photo));
-                    setFormData({ ...formData, photo: null });
-                }
+                alert("Profil modifié avec succès!");
             } else {
-                alert(t("profil.errorAlert"));
-                console.error(await res.text());
+                alert("Erreur lors de la modification");
             }
         } catch (error) {
             alert(error);
@@ -137,7 +189,7 @@ export default function Profils() {
             {/* Photo de profil */}
             <div className="border p-6 rounded-xl shadow-sm bg-base-100">
                 <h3 className="text-2xl font-semibold">{t("profil.title")} <span className="text-blue-500">{formData.prenom} {formData.nom} 😀😊</span></h3>
-                <form className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6" onSubmit={handleSubmit}>
+                <form className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6" onSubmit={handlePhotoSubmit}>
                     {/* Partie gauche : inputs et bouton */}
                     <div className="flex-1 space-y-4">
                         <div className="flex justify-between gap-4">
@@ -158,7 +210,8 @@ export default function Profils() {
                                     value={formData.ville}
                                     onChange={(e) => setFormData({ ...formData, ville: e.target.value })}
                                     placeholder={t("profil.villePlaceholder")}
-                                    className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    readOnly
+                                    className="block bg-gray-200 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 cursor-not-allowed"
                                 />
                             </div>
                         </div>
@@ -168,8 +221,9 @@ export default function Profils() {
                                 type="text"
                                 value={formData.pays}
                                 onChange={(e) => setFormData({ ...formData, pays: e.target.value })}
+                                readOnly
                                 placeholder={t("profil.paysPlaceholder")}
-                                className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                className="block bg-gray-200 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 cursor-not-allowed"
                             />
                         </div>
                         <div>
@@ -202,9 +256,13 @@ export default function Profils() {
                             />
                         ) : userProfilUrl ? (
                             <img
-                                src={userProfilUrl}
+                                src={userProfilUrl}  // ⭐ Déjà l'URL correcte grâce au serializer
                                 alt="Photo profil"
                                 className="w-60 h-60 object-cover rounded-full border border-gray-300"
+                                onError={(e) => {
+                                    console.error("Erreur chargement image profil:", userProfilUrl);
+                                    e.currentTarget.style.display = 'none';
+                                }}
                             />
                         ) : (
                             <div className="w-60 h-60 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
@@ -212,13 +270,14 @@ export default function Profils() {
                             </div>
                         )}
                     </div>
+
                 </form>
             </div>
             <div className="grid gap-6 lg:grid-cols-2">
                 {/* Profil utilisateur */}
                 <div className="border p-6 rounded-xl shadow-sm bg-base-100">
                     <h3 className="text-lg font-semibold mb-4">{t("profil.edit")}!!</h3>
-                    <form className="space-y-4" onSubmit={handleSubmit}>
+                    <form className="space-y-4" onSubmit={handleInfoSubmit}>
                         {/* Nom */}
                         <div>
                             <label className="block text-sm font-medium text-base-content mb-1">{t("profil.name")}</label>
