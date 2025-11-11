@@ -163,7 +163,9 @@
       "change": "Ovao ny sary",
       "deleteConfirm": "Te-hamafa tanteraka ny vokatra ve ianao",
       "category": "Sokajy",
-      "price": "Vidiny"
+      "price": "Vidiny",
+      "grandformat": "Haben'ny Endrika",
+      "format": "Endrika"
     }
   },
   "usersadmin": {
@@ -394,19 +396,19 @@
     "papier": {
       "grand": {
         "titre": "Sary lehibe",
-        "prix": "1 350 Ar / pirinty",
+        "prix": "5 000 Ar / pirinty",
         "min": "Farafahakeliny: 4 pirinty",
         "description": "Endrika lehibe, mety amin’ny afisy sy doka."
       },
       "petit": {
         "titre": "Sary kely",
-        "prix": "600 Ar / pirinty",
+        "prix": "500 Ar / pirinty",
         "min": "Farafahakeliny: 30 pirinty",
         "description": "Tena mety amin’ny antontan-taratasy andavanandro."
       },
       "perso": {
         "titre": "Sary manokana",
-        "prix": "450 Ar / pirinty",
+        "prix": "200 Ar / pirinty",
         "min": "Farafahakeliny: 50 pirinty",
         "description": "Mety amin’ny fanontana manokana na araka ny fangatahanao."
       }

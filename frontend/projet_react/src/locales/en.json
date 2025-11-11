@@ -163,7 +163,9 @@
       "change": "Change image",
       "deleteConfirm": "Do you want to permanently delete the product",
       "category": "Catégory",
-      "price": "Price"
+      "price": "Price",
+      "grandformat": "Large Format",
+      "format": "Format"
     }
   },
   "usersadmin": {
@@ -394,19 +396,19 @@
     "papier": {
       "grand": {
         "titre": "Large format",
-        "prix": "1,350 Ar / print",
+        "prix": "5 000 Ar / print",
         "min": "Minimum: 4 prints",
         "description": "Large size, perfect for posters and banners."
       },
       "petit": {
         "titre": "Small format",
-        "prix": "600 Ar / print",
+        "prix": "500 Ar / print",
         "min": "Minimum: 30 prints",
         "description": "Perfect for standard documents and flyers."
       },
       "perso": {
         "titre": "Custom format",
-        "prix": "450 Ar / print",
+        "prix": "200 Ar / print",
         "min": "Minimum: 50 prints",
         "description": "Ideal for personalized or unique print jobs."
       }

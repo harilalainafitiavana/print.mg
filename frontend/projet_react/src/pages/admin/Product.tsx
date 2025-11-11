@@ -213,12 +213,12 @@ export default function ProductList() {
 
                         {/* ⭐ CORRECTION : AFFICHAGE CONDITIONNEL DU FORMAT */}
                         {product.is_grand_format ? (
-                            <p><strong>Format : </strong>Grand format</p>
+                            <p><strong>{t("products.modal.format")} : </strong>Grand format</p>
                         ) : (
-                            <p><strong>Format : </strong>{product.format_defaut}</p>
+                            <p><strong>{t("products.modal.format")} : </strong>{product.format_defaut}</p>
                         )}
 
-                        <p><strong>Grand format : </strong>{product.is_grand_format ? "✅" : "❌"}</p>
+                        <p><strong>{t("products.modal.grandformat")}: </strong>{product.is_grand_format ? "✅" : "❌"}</p>
                         <p className="text-sm text-base-content">{product.description}</p>
                         <p className="text-sm text-base-content"><strong>{t("products.modal.category")} : </strong>{product.categorie}</p>
                         <p className="text-sm font-medium"><strong>{t("products.modal.price")} : </strong>{product.prix} Ariary</p>
@@ -319,7 +319,7 @@ export default function ProductList() {
                                         })
                                     }}
                                 />
-                                Grand format
+                                {t("products.modal.grandformat")}
                             </label>
 
                             {/* Message informatif */}

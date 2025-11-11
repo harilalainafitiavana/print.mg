@@ -163,7 +163,9 @@
       "change": "Changer l'image",
       "deleteConfirm": "Voulez vous supprimer définitivement le produit",
       "category": "Catégorie",
-      "price": "Prix"
+      "price": "Prix",
+      "grandformat": "Grand format",
+      "format": "Format"
     }
   },
   "usersadmin": {
@@ -394,19 +396,19 @@
     "papier": {
       "grand": {
         "titre": "Grand format",
-        "prix": "1 350 Ar / impression",
+        "prix": "5 000 Ar / impression",
         "min": "Minimum : 4 impressions",
         "description": "Format large, idéal pour les affiches et posters."
       },
       "petit": {
         "titre": "Petit format",
-        "prix": "600 Ar / impression",
+        "prix": "500 Ar / impression",
         "min": "Minimum : 30 impressions",
         "description": "Format pratique pour les documents standards."
       },
       "perso": {
         "titre": "Personnalisé",
-        "prix": "450 Ar / impression",
+        "prix": "200 Ar / impression",
         "min": "Minimum : 50 impressions",
         "description": "Format adapté aux impressions sur mesure."
       }

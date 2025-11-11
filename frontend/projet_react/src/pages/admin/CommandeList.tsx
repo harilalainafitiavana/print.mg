@@ -428,7 +428,7 @@ export default function AdminCommande() {
             <p>{t("orders.modal.order_will_be_moved", { user: selectedOrder.user_name })}</p>
             <div className="flex justify-end gap-4 mt-4">
               <button onClick={() => setShowDeleteModal(false)} className="btn btn-outline flex items-center gap-2"><X size={16} /> {t("orders.modal.cancel")}</button>
-              <button onClick={confirmDelete} className="btn btn-primary flex items-center gap-2"><Check size={16} /> {t("orders.modal.confirm")}</button>
+              <button onClick={confirmDelete} className="btn btn-primary flex items-center gap-2"><Check size={16} /> {t("orders.actions.delete")}</button>
             </div>
           </div>
         </div>
