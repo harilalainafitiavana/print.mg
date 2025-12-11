@@ -88,6 +88,7 @@ export default function AdminDashboard() {
     return (
         <DashboardLayout
             userName="Administrateur"
+            userEmail={user?.email || "admin@example.com"}
             userPhoto={AdminProfil}
             menus={menus}
             onMenuClick={setActiveMenu}

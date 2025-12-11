@@ -1,4 +1,4 @@
-import { LogOut, Settings, Printer, Menu, X, CalendarIcon } from "lucide-react";
+import { LogOut, Settings, Printer, Menu, X, CalendarIcon, ChevronDown, User } from "lucide-react";
 import type { JSX } from "react";
 import { useState, useEffect, useRef } from "react";
 import Calendar from "react-calendar";
@@ -13,6 +13,7 @@ import axios from "axios";
 interface DashboardLayoutProps {
     children: React.ReactNode;
     userName: string;
+    userEmail?: string;
     userPhoto?: string;
     menus: { label: string; icon: JSX.Element; id: string }[];
     onMenuClick: (id: string) => void;
@@ -31,6 +32,8 @@ interface SidebarStats {
 export default function DashboardLayout({
     children,
     userPhoto,
+    userName,
+    userEmail,
     menus,
     headerContent,
     sidebarHeader,
@@ -316,44 +319,138 @@ export default function DashboardLayout({
                         >
                             <Settings size={22} />
                         </button>
-                        <div ref={dropdownRef} className="relative inline-block text-left">
-                            {/* Avatar bouton */}
+                        <div ref={dropdownRef} className="relative">
+                            {/* Avatar bouton amélioré */}
                             <button
                                 onClick={() => setOpen(!open)}
-                                className="w-11 h-11 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 transition-all"
+                                className="flex items-center gap-3 p-2 rounded-xl hover:bg-base-200 transition-all duration-200 group"
                             >
-                                <img
-                                    src={userPhoto && userPhoto.trim() !== "" ? userPhoto : user}
-                                    onError={(e) => (e.currentTarget.src = user)}
-                                    alt="Profil utilisateur"
-                                    className="w-full h-full object-cover"
+                                <div className="relative">
+                                    <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-md">
+                                        <img
+                                            src={userPhoto && userPhoto.trim() !== "" ? userPhoto : user}
+                                            onError={(e) => (e.currentTarget.src = user)}
+                                            alt="Profil utilisateur"
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                </div>
+
+                                <div className="hidden lg:block text-left">
+                                    <p className="text-sm font-semibold text-base-content">
+                                        {userName || "Utilisateur"}
+                                    </p>
+                                    <p className="text-xs text-gray-500 truncate max-w-[150px]">
+                                        {/* Maintenant userEmail est disponible depuis les props */}
+                                        {userEmail || "utilisateur@email.com"}
+                                    </p>
+                                </div>
+
+                                <ChevronDown
+                                    size={16}
+                                    className={`text-gray-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
                                 />
                             </button>
 
-                            {/* Menu déroulant */}
+                            {/* Menu déroulant amélioré */}
                             {open && (
-                                <div className="absolute right-0 mt-2 w-40 bg-base-200 rounded-xl shadow-lg border z-50">
-                                    <ul className="py-1 text-base-content">
-                                        <li>
-                                            <button
-                                                onClick={() => {
-                                                    onMenuClick("profil");
-                                                    setOpen(false);
-                                                }}
-                                                className="block w-full text-left px-4 py-2 hover:bg-blue-300 rounded-lg"
-                                            >
-                                                {t("dashboard.menus.profil")}
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button
-                                                onClick={handleLogout}
-                                                className="block w-full text-left px-4 py-2 hover:bg-blue-300 rounded-lg"
-                                            >
-                                                {t("dashboard.sidebar.logout")}
-                                            </button>
-                                        </li>
-                                    </ul>
+                                <div className="absolute right-0 mt-2 w-64 bg-base-100 rounded-xl shadow-xl border border-base-300 z-50 overflow-hidden">
+                                    {/* En-tête du menu avec infos utilisateur */}
+                                    <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-base-300">
+                                        <div className="flex items-center gap-3">
+                                            <div className="relative">
+                                                <div className="w-12 h-12 rounded-full overflow-hidden border-3 border-white shadow">
+                                                    <img
+                                                        src={userPhoto && userPhoto.trim() !== "" ? userPhoto : user}
+                                                        alt="Profil"
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                </div>
+                                                <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <h3 className="font-semibold text-gray-900 truncate">
+                                                    {userName || "Utilisateur"}
+                                                </h3>
+                                                <p className="text-sm text-gray-600 truncate">
+                                                    {userEmail || "utilisateur@email.com"}
+                                                </p>
+                                                <div className="flex items-center gap-1 mt-1">
+                                                    <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
+                                                        {userRole === 'USER' ? 'Utilisateur' : 'Administrateur'}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Options du menu */}
+                                    <div className="py-2">
+                                        <ul className="text-base-content">
+                                            <li>
+                                                <button
+                                                    onClick={() => {
+                                                        onMenuClick("profil");
+                                                        setOpen(false);
+                                                    }}
+                                                    className="flex items-center w-full px-4 py-3 text-left hover:bg-base-100 transition-colors duration-150 group"
+                                                >
+                                                    <div className="mr-3 p-2 rounded-lg bg-blue-50 group-hover:bg-blue-100 transition-colors">
+                                                        <User size={18} className="text-blue-600" />
+                                                    </div>
+                                                    <div>
+                                                        <span className="font-medium">{t("dashboard.menus.profil")}</span>
+                                                        <p className="text-xs text-gray-500 mt-0.5">{t("dashboard.menus.gerer")}</p>
+                                                    </div>
+                                                </button>
+                                            </li>
+
+                                            <li>
+                                                <button
+                                                    onClick={() => {
+                                                        onMenuClick("settings");
+                                                        setOpen(false);
+                                                    }}
+                                                    className="flex items-center w-full px-4 py-3 text-left hover:bg-base-100 transition-colors duration-150 group"
+                                                >
+                                                    <div className="mr-3 p-2 rounded-lg bg-gray-50 group-hover:bg-gray-100 transition-colors">
+                                                        <Settings size={18} className="text-gray-600" />
+                                                    </div>
+                                                    <div>
+                                                        <span className="font-medium">{t("dashboard.menus.settings")}</span>
+                                                        <p className="text-xs text-gray-500 mt-0.5">{t("dashboard.menus.preferred")}</p>
+                                                    </div>
+                                                </button>
+                                            </li>
+
+                                            <div className="my-2 border-t border-base-300"></div>
+
+                                            <li>
+                                                <button
+                                                    onClick={handleLogout}
+                                                    className="flex items-center w-full px-4 py-3 text-left hover:bg-red-50 text-red-600 transition-colors duration-150 group"
+                                                >
+                                                    <div className="mr-3 p-2 rounded-lg bg-red-50 group-hover:bg-red-100 transition-colors">
+                                                        <LogOut size={18} className="text-red-600" />
+                                                    </div>
+                                                    <div>
+                                                        <span className="font-medium">{t("dashboard.sidebar.logout")}</span>
+                                                        <p className="text-xs text-red-500 mt-0.5">{t("dashboard.sidebar.logout")}</p>
+                                                    </div>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div className="px-4 py-3 bg-base-100 border-t border-base-300">
+                                        <div className="flex items-center justify-between text-xs text-gray-500">
+                                            <span>{t("dashboard.sidebar.dernière")}</span>
+                                            <span className="font-medium">
+                                                {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             )}
                         </div>
@@ -386,7 +483,7 @@ export default function DashboardLayout({
                                         {loadingSidebar ? (
                                             <div className="flex justify-center items-center h-20">
                                                 <div className="loading loading-spinner loading-md text-blue-500"></div>
-                                                <span className="ml-2 text-sm text-gray-600">Chargement...</span>
+                                                <span className="ml-2 text-sm text-gray-600">{t("dashboard.sidebar.loading")}</span>
                                             </div>
                                         ) : (
                                             <>

@@ -12,10 +12,16 @@
     "sidebar": {
       "title": "Print.mg",
       "logout": "Logout",
-      "confirmLogout": "Do you really want to log out?"
+      "confirmLogout": "Do you really want to log out?",
+      "dernière": "Last login"
     },
     "menus": {
       "profil": "Profile",
+      "gerer": "Manage your profile",
+      "settings": "Settings",
+      "preferred": "Account preferreds",
+      "logout": "Logout from system",
+      "loading": "Loading....",
       "parametres": "Settings",
       "notification": "Notifications",
       "home": "Dashboard",
@@ -609,6 +615,16 @@
   "profil": {
     "title": "Hello",
     "code": "Postal code",
+    "localization": "localization",
+    "contact": "Edit your details and contact information",
+    "security": "Security",
+    "protege": "Change your password to protect your account",
+    "force": "Password strength",
+    "error": "Passwords do not match",
+    "complète": "Completness of your profile",
+    "information": "Basic information",
+    "add": "add your photo and complete your contact details for a 100% complete profile",
+    "gerer": "Manage your personal information and security settings",
     "codePlaceholder": "Your postal code",
     "Ville": "City",
     "villePlaceholder": "Your city",

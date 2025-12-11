@@ -12,10 +12,16 @@
     "sidebar": {
       "title": "Print.mg",
       "logout": "Déconnexion",
-      "confirmLogout": "Voulez-vous vraiment vous déconnecter ?"
+      "confirmLogout": "Voulez-vous vraiment vous déconnecter ?",
+      "dernière": "Dernière connexion"
     },
     "menus": {
       "profil": "Profil",
+      "gerer": "Gérer votre profil",
+      "settings": "Paramètre",
+      "preferred": "Préférences du compte",
+      "logout": "Se déconnecter du système",
+      "loading": "Chargement....",
       "parametres": "Paramètres",
       "notification": "Notifications",
       "home": "Tableau de bord",
@@ -609,6 +615,16 @@
   "profil": {
     "title": "Bonjour",
     "code": "Code postal",
+    "localization": "Localisation",
+    "contact": "Modifiez vos coordonnées et informations de contact",
+    "security": "Sécurité",
+    "protege": "Changez votre mot de passe pour protéger votre compte",
+    "force": "Force du mot de passe",
+    "error": "Les mots de passe ne correspondent pas",
+    "complète": "Complétude de votre profil",
+    "information": "Informations de base",
+    "add": "Ajoutez votre photo et complétez vos coordonnées pour un profil 100% complet",
+    "gerer": "Gérez vos informations personnelles et vos paramètres de sécurité",
     "codePlaceholder": "Votre code postal",
     "Ville": "Ville",
     "villePlaceholder": "Votre ville",

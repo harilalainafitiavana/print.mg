@@ -12,10 +12,16 @@
     "sidebar": {
       "title": "Print.mg",
       "logout": "Hivoaka",
+      "dernière": "Fidirana farany",
       "confirmLogout": "Tianao ve ny hivoaka amin'ny kaontinao ?"
     },
     "menus": {
       "profil": "Mombamomba",
+      "gerer": "Fitantanana ny mombamomba anao",
+      "settings": "Toe-javatra",
+      "preferred": "Fikirana ny kaonty",
+      "logout": "Hivoaka amin'ny rafitra",
+      "loading": "Eo am-pamenoana......",
       "parametres": "Fikirana",
       "notification": "Fampandrenesana",
       "home": "Tabilao lehibe",
@@ -609,6 +615,16 @@
   "profil": {
     "title": "Salama",
     "code": "Kaody paositra",
+    "localization": "Toerana",
+    "contact": "Hanova ny mombamomba sy ny fifandraisana",
+    "security": "Fiarovana",
+    "protege": "Arovy ny kaontinao amin'ny fanovana ny teny miafina",
+    "force": "Hery ny teny miafinao",
+    "information": "Fampahalalana",
+    "add": "Ampidiro ny sarinao de fenoy daholo ny mombamomba rehetra mba ho feno 100%",
+    "gerer": "Fitantanana ny mombamomba anao",
+    "complète": "Fahefenoin'ny mombamomba anao",
+    "error": "Tsy ampy ny herin'ny teny miafinao",
     "codePlaceholder": "Ny kaody paositra",
     "Ville": "Tanàna",
     "villePlaceholder": "Ny tanànanao",

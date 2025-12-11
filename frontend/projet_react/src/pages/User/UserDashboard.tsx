@@ -66,7 +66,10 @@ export default function UserDashboard() {
                             src={getAvatarUrl(user)!}
                             alt="Profile de l'utilisateur"
                             className="w-28 h-28 rounded-full object-cover border-2 border-white shadow-sm"
+                            crossOrigin="anonymous"
+                            referrerPolicy="no-referrer"
                         />
+
                     ) : (
                         // Si l'utilisateur n'a pas de photo
                         <div className="w-28 h-28 rounded-full bg-blue-100 flex items-center justify-center border-2 border-white shadow-sm">
@@ -116,6 +119,7 @@ export default function UserDashboard() {
     return (
         <DashboardLayout
             userName={user ? `${user.nom} ${user.prenom}` : "Utilisateur"}
+            userEmail={user?.email || "utilisateur@example.com"}
             userPhoto={Logo}
             menus={menus}
             onMenuClick={setActiveMenu}

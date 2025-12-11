@@ -95,7 +95,7 @@ const LoginPage = () => {
         // Stockage token et rôle USER
         localStorage.setItem('token', data.access);
         localStorage.setItem('role', 'USER');
-        localStorage.setItem('user_profils', data.user.profils || '');        
+        localStorage.setItem('user_profils', data.user.profils || '');
 
         // ⚡ Redirection directe
         window.location.href = '/dashboard-user';
