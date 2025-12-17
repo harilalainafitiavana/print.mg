@@ -178,6 +178,7 @@
     "title": "Liste des Utilisateurs",
     "name": "Nom",
     "firstname": "Prénom",
+    "view": "Détails",
     "email": "E-mail",
     "action": "Actions",
     "previous": "Précédent",

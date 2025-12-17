@@ -180,6 +180,7 @@
     "firstname": "Firstname",
     "email": "E-mail",
     "action": "Action",
+    "view": "detail",
     "previous": "Previous",
     "next": "Next",
     "userdetails": "Details user",
