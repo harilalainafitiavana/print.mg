@@ -568,7 +568,8 @@
       "title": "Nos Services d'Impression",
       "description": "Découvrez notre gamme complète de produits d'impression de haute qualité. Des cartes de visite aux affiches grand format, nous avons tout pour répondre à vos besoins.",
       "button": "Commander maintenant",
-      "link": "Retour vers l'accueil"
+      "link": "Retour vers l'accueil",
+      "subtitle": "Impression professionnelle"
     },
     "feature": [
       {
@@ -707,3 +708,4 @@
     "rights": "Tous droits réservés"
   }
 }
+

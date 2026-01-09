@@ -75,7 +75,7 @@ const ImageSlider = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
-      <h2 className="text-3xl font-bold text-center text-blue-800 mb-8">
+      <h2 className="text-3xl font-bold text-center text-violet-800 mb-8">
         {t("sliders.title")}
       </h2>
 
@@ -125,7 +125,7 @@ const ImageSlider = () => {
             onClick={nextSlide}
             className="absolute right-2 top-1/2 -translate-y-1/2 z-10 p-3 bg-white/90 rounded-full shadow-md hover:bg-white transition-all"
           >
-            <ChevronRight size={28} className="text-blue-800" />
+            <ChevronRight size={28} className="text-violet-800" />
           </button>
         )}
 
@@ -135,7 +135,7 @@ const ImageSlider = () => {
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`mx-1.5 h-3 w-3 rounded-full transition-all ${index === currentIndex ? 'bg-blue-800' : 'bg-gray-300'
+              className={`mx-1.5 h-3 w-3 rounded-full transition-all ${index === currentIndex ? 'bg-violet-800' : 'bg-gray-300'
                 }`}
             />
           ))}

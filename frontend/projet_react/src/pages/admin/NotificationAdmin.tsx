@@ -327,7 +327,7 @@ export default function AdminUserNotifications() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                     <div>
                         <h1 className="text-3xl font-bold text-base-content mb-2 flex items-center gap-3">
-                            <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl shadow-lg">
+                            <div className="p-3 bg-gradient-to-r from-violet-500 to-indigo-600 rounded-2xl shadow-lg">
                                 <Bell size={28} className="text-white" />
                             </div>
                             <span>Notifications Administrateur</span>
@@ -461,7 +461,7 @@ export default function AdminUserNotifications() {
             {/* Liste des notifications */}
             {isLoading ? (
                 <div className="text-center py-12">
-                    <div className="loading loading-spinner loading-lg text-blue-500"></div>
+                    <div className="loading loading-spinner loading-lg text-violet-500"></div>
                     <p className="mt-4 text-base-content/70">Chargement des notifications...</p>
                 </div>
             ) : paginatedNotifications.length === 0 ? (
@@ -482,7 +482,7 @@ export default function AdminUserNotifications() {
                     {searchTerm && (
                         <button
                             onClick={() => setSearchTerm("")}
-                            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200"
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200"
                         >
                             Réinitialiser la recherche
                         </button>
@@ -494,7 +494,7 @@ export default function AdminUserNotifications() {
                         {paginatedNotifications.map((n) => (
                             <div
                                 key={n.id}
-                                className={`group bg-base-100 rounded-2xl border ${n.is_read ? 'border-base-300' : 'border-blue-300 border-l-4 border-l-blue-500'} 
+                                className={`group bg-base-100 rounded-2xl border ${n.is_read ? 'border-base-300' : 'border-violet-300 border-l-4 border-l-violet-500'} 
                   shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden animate-fadeIn`}
                             >
                                 <div className="p-5">
@@ -503,8 +503,8 @@ export default function AdminUserNotifications() {
                                             {/* Informations expéditeur */}
                                             <div className="flex items-center gap-3 mb-4">
                                                 <div className="relative">
-                                                    <div className="p-2 bg-blue-100 rounded-lg">
-                                                        <User size={18} className="text-blue-600" />
+                                                    <div className="p-2 bg-violet-100 rounded-lg">
+                                                        <User size={18} className="text-violet-600" />
                                                     </div>
                                                     {!n.is_read && (
                                                         <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
@@ -849,7 +849,7 @@ export default function AdminUserNotifications() {
                                 <button
                                     onClick={sendNotification}
                                     disabled={!notifyMessage.trim() || isLoading}
-                                    className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 font-medium shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="flex-1 px-6 py-3 bg-gradient-to-r from-violet-500 to-indigo-600 text-white rounded-xl hover:from-violet-600 hover:to-indigo-700 transition-all duration-200 font-medium shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     <div className="flex items-center justify-center gap-2">
                                         {isLoading ? (

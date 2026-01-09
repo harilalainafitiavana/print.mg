@@ -130,7 +130,7 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
         <div className="flex gap-2 w-full sm:w-auto">
 
           <button
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 text-white shadow hover:bg-blue-600"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 text-white shadow hover:bg-violet-800"
             onClick={() => onMenuClick("order")}
           >
             <PlusCircle size={18} />
@@ -173,7 +173,7 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
                   <button
                     title={t("mesCommandes.view")}
                     onClick={() => handleViewDetail(order)}
-                    className="p-2 rounded-lg border border-gray-100 hover:bg-blue-300"
+                    className="p-2 rounded-lg border border-gray-100 hover:bg-violet-300"
                   >
                     <Eye size={18} />
                   </button>
@@ -181,7 +181,7 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
                   <button
                     title={t("mesCommandes.delete")}
                     onClick={() => handleDeleteClick(order)}
-                    className="p-2 rounded-lg border border-gray-100 hover:bg-blue-300 text-red-600"
+                    className="p-2 rounded-lg border border-gray-100 hover:bg-violet-300 text-red-600"
                   >
                     <Trash2 size={18} />
                   </button>

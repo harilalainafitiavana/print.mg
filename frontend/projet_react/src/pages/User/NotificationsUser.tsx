@@ -247,7 +247,7 @@ export default function UserNotifications() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
             <h1 className="text-3xl font-bold text-base-content mb-2 flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl shadow-lg">
+              <div className="p-3 bg-gradient-to-r from-violet-500 to-indigo-600 rounded-2xl shadow-lg">
                 <Bell size={28} className="text-white" />
               </div>
               <span>Centre de notifications</span>
@@ -267,7 +267,7 @@ export default function UserNotifications() {
 
             <button
               onClick={() => setShowModal(true)}
-              className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-200"
+              className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-violet-500 to-indigo-600 text-white rounded-xl hover:from-violet-600 hover:to-violet-700 shadow-lg hover:shadow-xl transition-all duration-200"
             >
               <Reply size={20} />
               <span className="font-semibold">Nouveau message</span>
@@ -352,7 +352,7 @@ export default function UserNotifications() {
                   setCurrentPage(1);
                 }}
                 className={`flex-1 px-6 py-4 text-center transition-all duration-200 ${activeTab === "received"
-                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+                  ? "bg-gradient-to-r from-violet-500 to-indigo-600 text-white"
                   : "text-base-content hover:bg-base-200"
                 }`}
               >
@@ -360,7 +360,7 @@ export default function UserNotifications() {
                   <Inbox size={20} />
                   <span className="font-semibold">Messages reçus</span>
                   {unreadCount > 0 && (
-                    <span className="bg-white text-blue-600 text-xs font-bold px-2 py-1 rounded-full">
+                    <span className="bg-white text-violet-600 text-xs font-bold px-2 py-1 rounded-full">
                       {unreadCount}
                     </span>
                   )}
@@ -400,7 +400,7 @@ export default function UserNotifications() {
                     <button
                       onClick={() => setFilter("all")}
                       className={`px-4 py-2 rounded-xl transition-all duration-200 ${filter === "all"
-                        ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+                        ? "bg-gradient-to-r from-violet-500 to-indigo-600 text-white"
                         : "bg-base-200 text-base-content hover:bg-base-300"
                       }`}
                     >
@@ -445,7 +445,7 @@ export default function UserNotifications() {
       {/* Contenu des onglets */}
       {isLoading ? (
         <div className="text-center py-12">
-          <div className="loading loading-spinner loading-lg text-blue-500"></div>
+          <div className="loading loading-spinner loading-lg text-violet-500"></div>
           <p className="mt-4 text-base-content/70">Chargement des messages...</p>
         </div>
       ) : paginatedNotifications.length === 0 ? (
@@ -476,7 +476,7 @@ export default function UserNotifications() {
           {activeTab === "sent" && (
             <button
               onClick={() => setShowModal(true)}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-500 to-indigo-600 text-white rounded-xl hover:from-violet-600 hover:to-indigo-700 transition-all duration-200"
             >
               <Reply size={20} />
               Envoyer votre premier message
@@ -494,7 +494,7 @@ export default function UserNotifications() {
                   ${activeTab === "received" 
                     ? n.is_read 
                       ? 'border-base-300' 
-                      : 'border-blue-300 border-l-4 border-l-blue-500'
+                      : 'border-violet-300 border-l-4 border-l-violet-500'
                     : 'border-green-300 border-l-4 border-l-green-500'
                   }`}
               >
@@ -503,11 +503,11 @@ export default function UserNotifications() {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-3">
                         <div className={`p-2 rounded-lg ${activeTab === "received"
-                            ? n.is_read ? 'bg-base-200' : 'bg-blue-100'
+                            ? n.is_read ? 'bg-base-200' : 'bg-violet-200'
                             : 'bg-green-100'
                           }`}>
                           {activeTab === "received" ? (
-                            <Bell size={18} className={n.is_read ? 'text-base-content/70' : 'text-blue-600'} />
+                            <Bell size={18} className={n.is_read ? 'text-base-content/70' : 'text-violet-600'} />
                           ) : (
                             <Send size={18} className="text-green-600" />
                           )}
@@ -519,7 +519,7 @@ export default function UserNotifications() {
                               {activeTab === "sent" && "À l'admin : "}{n.message}
                             </p>
                             {activeTab === "received" && isNotificationNew(n) && (
-                              <span className="px-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full animate-pulse">
+                              <span className="px-2 py-1 bg-violet-500 text-white text-xs font-semibold rounded-full animate-pulse">
                                 Nouveau
                               </span>
                             )}
@@ -540,7 +540,7 @@ export default function UserNotifications() {
                             <span className="font-medium">{n.sender_info.prenom} {n.sender_info.nom}</span>
                             <span className="mx-1">•</span>
                             <Mail size={14} />
-                            <span className="text-blue-600">{n.sender_info.email}</span>
+                            <span className="text-violet-900">{n.sender_info.email}</span>
                           </div>
                         )}
                         
@@ -567,7 +567,7 @@ export default function UserNotifications() {
                           onClick={() => toggleReadStatus(n)}
                           className={`p-2 rounded-lg transition-colors ${n.is_read 
                             ? 'bg-base-200 text-base-content/70 hover:bg-base-300 hover:text-blue-600' 
-                            : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
+                            : 'bg-blue-100 text-violet-600 hover:bg-violet-200'
                           }`}
                           title={n.is_read ? "Marquer comme non lue" : "Marquer comme lue"}
                         >
@@ -695,12 +695,12 @@ export default function UserNotifications() {
             </div>
 
             <div className="p-6 space-y-6">
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4">
+              <div className="bg-gradient-to-r from-violet-50 to-indigo-50 border border-blue-200 rounded-xl p-4">
                 <div className="flex items-start gap-3">
-                  <AlertCircle size={20} className="text-blue-600 flex-shrink-0 mt-0.5" />
+                  <AlertCircle size={20} className="text-violet-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-medium text-blue-800">Comment ça fonctionne ?</p>
-                    <p className="text-blue-700 text-sm mt-1">
+                    <p className="font-medium text-violet-900">Comment ça fonctionne ?</p>
+                    <p className="text-indigo-700 text-sm mt-1">
                       Votre message sera envoyé directement à l'administrateur du système. 
                       Vous recevrez une réponse dans cette section des notifications.
                     </p>
@@ -713,7 +713,7 @@ export default function UserNotifications() {
                   Votre message *
                 </label>
                 <textarea
-                  className="w-full px-4 py-3 bg-base-200 border border-base-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base-content resize-none"
+                  className="w-full px-4 py-3 bg-base-200 border border-base-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-base-content resize-none"
                   rows={5}
                   placeholder="Décrivez votre problème, suggestion ou demande..."
                   value={newMessage}
@@ -741,7 +741,7 @@ export default function UserNotifications() {
                 <button
                   onClick={sendNotificationToAdmin}
                   disabled={!newMessage.trim() || isLoading}
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 font-medium shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-violet-500 to-indigo-600 text-white rounded-xl hover:from-indigo-600 hover:to-indigo-700 transition-all duration-200 font-medium shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="flex items-center justify-center gap-2">
                     {isLoading ? (

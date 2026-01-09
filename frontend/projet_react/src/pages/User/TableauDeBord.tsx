@@ -39,7 +39,7 @@ const TableauDeBord = () => {
       {/* Header */}
       <div className="text-center">
         <h2 className="text-3xl font-bold text-base-content">
-          {t("TableauUser.title")} <span className="text-blue-600">{stats.user_email}</span> 👋
+          {t("TableauUser.title")} <span className="text-violet-600">{stats.user_email}</span> 👋
         </h2>
         <p className="text-gray-500 mt-2">
           {t("TableauUser.secondtitle")}<span className="font-semibold">Print.mg</span>

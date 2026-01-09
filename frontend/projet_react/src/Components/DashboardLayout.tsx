@@ -210,7 +210,7 @@ export default function DashboardLayout({
             {/* Sidebar gauche */}
             <aside className={`fixed md:relative z-30 w-64 bg-base-100 text-base-content flex flex-col transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:flex h-full`}>
                 <div className="p-4 font-bold text-2xl flex items-center justify-between">
-                    <div className="flex text-blue-600 items-center gap-2">
+                    <div className="flex text-violet-600 items-center gap-2">
                         <Printer size={20} />
                         {t("dashboard.sidebar.title")}
                     </div>
@@ -227,7 +227,7 @@ export default function DashboardLayout({
                         </div>
                     ) : (
                         // Version par défaut pour USER si sidebarHeader n'est pas fourni
-                        <div className="p-4 border-b border-base-300 bg-gradient-to-r from-blue-50 to-indigo-50">
+                        <div className="p-4 border-b border-base-300 bg-gradient-to-r from-violet-50 to-indigo-50">
                             <div className="flex items-center space-x-3">
                                 <img
                                     src={userPhoto}
@@ -259,15 +259,15 @@ export default function DashboardLayout({
                                 onMenuClick(menu.id);
                                 if (windowWidth < 768) setIsSidebarOpen(false);
                             }}
-                            className="flex items-center text-base-content hover:text-white space-x-3 w-full px-3 py-4 rounded-lg hover:bg-blue-400 hover:font-bold"
+                            className="flex items-center text-base-content hover:text-white space-x-3 w-full px-3 py-4 rounded-lg hover:bg-violet-400 hover:font-bold"
                         >
-                            <span className="text-red-500 font-bold">{menu.icon}</span>
+                            <span className="text-violet-800 font-bold">{menu.icon}</span>
                             <span>{t(menu.label)}</span>
                         </button>
                     ))}
                 </nav>
                 <button
-                    className="flex items-center text-base-content space-x-3 px-3 py-2 hover:bg-blue-400 hover:text-white hover:font-bold mb-4"
+                    className="flex items-center text-base-content space-x-3 px-3 py-2 hover:bg-violet-500 hover:text-white hover:font-bold mb-4"
                     onClick={handleLogout}
                 >
                     <LogOut size={20} /> <span>{t("dashboard.sidebar.logout")}</span>
@@ -301,7 +301,7 @@ export default function DashboardLayout({
                                     relative flex items-center justify-center 
                                     w-10 h-10 rounded-full 
                                     transition-all duration-300 
-                                    ${isRightSidebarVisible ? 'bg-base-200 text-base-content shadow-lg' : 'bg-base-200 text-base-content hover:bg-blue-400 hover:text-white'}
+                                    ${isRightSidebarVisible ? 'bg-base-200 text-base-content shadow-lg' : 'bg-base-200 text-base-content hover:bg-violet-400 hover:text-white'}
                                 `}
                             >
                                 <CalendarIcon size={20} />
@@ -314,7 +314,7 @@ export default function DashboardLayout({
 
                         <NotificationButton onClick={() => onMenuClick("notification")} />
                         <button
-                            className="text-base-content hover:text-white hover:bg-blue-400 p-2 rounded-full"
+                            className="text-base-content hover:text-white hover:bg-violet-400 p-2 rounded-full"
                             onClick={() => onMenuClick("settings")}
                         >
                             <Settings size={22} />
@@ -396,8 +396,8 @@ export default function DashboardLayout({
                                                     }}
                                                     className="flex items-center w-full px-4 py-3 text-left hover:bg-base-100 transition-colors duration-150 group"
                                                 >
-                                                    <div className="mr-3 p-2 rounded-lg bg-blue-50 group-hover:bg-blue-100 transition-colors">
-                                                        <User size={18} className="text-blue-600" />
+                                                    <div className="mr-3 p-2 rounded-lg bg-violet-50 group-hover:bg-violet-100 transition-colors">
+                                                        <User size={18} className="text-violet-600" />
                                                     </div>
                                                     <div>
                                                         <span className="font-medium">{t("dashboard.menus.profil")}</span>

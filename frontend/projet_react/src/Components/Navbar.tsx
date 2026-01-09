@@ -1,7 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 import { ShoppingCart, Menu, Globe, UserPlus, UserCheck, ShoppingBasket, Search, Printer, Grid } from "lucide-react";
-import Image from "../assets/album photo.jpg"
-import Photo from "../assets/album photo.jpg"
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
@@ -85,7 +83,7 @@ export default function Navbar() {
             .then(data => setCartCount(data.count))
             .catch(err => console.error(err));
     }, []);
-    
+
     const { t, i18n } = useTranslation();
     const [language, setLanguage] = useState(i18n.language);
 
@@ -114,11 +112,10 @@ export default function Navbar() {
         {
             name: t("navbar.tousProduits"),
             images: [
-                "https://img.freepik.com/photos-gratuite/belle-femme-souriante-s-appuyant-tableau-blanc-vide_329181-3924.jpg",
-                "https://www.printoclock.com/media/image/e8/57/fd2d1edaf5cab744059dc3117f9d.jpeg",
+                "https://www.billposters.fr/wp-content/uploads/2020/08/presentation-affiches-accueil-1.jpg",
+                "https://images.ctfassets.net/btbidkudc1so/2fumZH0dYhveH08ft4qoFi/8321b971584d08b9f7e7facb1c10a4d2/flyer-A5-135g-couche-brillant.jpg",
                 "https://facimprimeur.fr/wp-content/uploads/2023/12/impression-A5-300x300.jpg",
-                Image,
-                Photo
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxi_viaqLyeZQU2wwVxMKkyULAr2A41vTiZw&s"
             ]
         },
         {
@@ -149,30 +146,30 @@ export default function Navbar() {
             ]
         },
         {
-            name: "Signalétique",
+            name: "Posters",
             images: [
-                "https://example.com/signaletique1.jpg",
-                "https://example.com/signaletique2.jpg",
-                "https://example.com/signaletique3.jpg",
-                "https://example.com/signaletique4.jpg"
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRILK7nj8YMmwDpFchSOAzaWYPO3FUdMYZ6EA&s",
+                "https://koawoodranch.com/cdn/shop/articles/Travel_Posters.jpg?v=1598575310",
+                "https://img.elegantflyer.com/templates/preview/back-to-school-poster-170858.jpg",
+                "https://www.planprinting24.co.uk/hs-fs/hubfs/Screenshot%202023-02-21%20at%2012.17.55.png?length=720&name=Screenshot%202023-02-21%20at%2012.17.55.png"
             ]
         },
         {
-            name: "Sticker",
+            name: "Stickers",
             images: [
-                "https://example.com/sticker1.jpg",
-                "https://example.com/sticker2.jpg",
-                "https://example.com/sticker3.jpg",
-                "https://example.com/sticker4.jpg"
+                "https://d3ccuprjuqkp1j.cloudfront.net/ProductLandingPages/FeaturedImages/Sticker-Pages-03_720.jpg",
+                "https://www.happydownloads.net/wp-content/uploads/2024/06/Cozy-cafe-main-768x614.png",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiv81GSuLj5Yvf6iXATSEF9NFxE7OKCFtVnQ&s",
+                "https://web2printdata.blob.core.windows.net/w2p-cms-17/25-12-12-DCL-Laptop-Stickers-Mockup-3.png"
             ]
         },
         {
             name: "Kakémono",
             images: [
-                "https://example.com/kakemono1.jpg",
-                "https://example.com/kakemono2.jpg",
-                "https://example.com/kakemono3.jpg",
-                "https://example.com/kakemono4.jpg"
+                "https://img.freepik.com/vecteurs-libre/presentoir-affaires-enroulable-fins-presentation_1017-31432.jpg?semt=ais_hybrid&w=740&q=80",
+                "https://destcom.fr/wp-content/uploads/2020/11/Support-kakemono-roll-up.jpg",
+                "https://shop.latelierduprint.fr/63-home_default/roll-up-kakemonos.jpg",
+                "https://www.realisaprint.com/blog/wp-content/uploads/2018/02/impression-kakemono.jpg"
             ]
         }
     ];
@@ -242,7 +239,7 @@ export default function Navbar() {
             {/* Conteneur fixe pour le premier navbar */}
             <div className="fixed top-0 left-0 w-full z-50">
                 {/* Bandeau publicitaire */}
-                <div className="bg-blue-500 text-white text-center py-1 animate-pulse text-sm md:text-base">
+                <div className="bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white text-center py-1 animate-pulse text-sm md:text-base">
                     {t("navbar.slogan")}
                 </div>
 
@@ -251,8 +248,8 @@ export default function Navbar() {
                     {/* Logo */}
                     <div className="flex items-center">
                         <nav className="flex items-center space-x-2">
-                            <Printer size={28} className="text-blue-500" />
-                            <span className="text-xl font-bold text-blue-600">Print.mg</span>
+                            <Printer size={28} className="text-violet-500" />
+                            <span className="text-xl font-bold text-violet-600">Print.mg</span>
                         </nav>
                     </div>
 
@@ -265,7 +262,7 @@ export default function Navbar() {
                                 onMouseEnter={() => setHovered(papier.key)}
                                 onMouseLeave={() => setHovered(null)}
                             >
-                                <span className="text-gray-700 font-semibold cursor-pointer hover:text-blue-500 text-lg">
+                                <span className="text-gray-700 font-semibold cursor-pointer hover:text-violet-500 text-lg">
                                     {t(`navbar.papier.${papier.key}.titre`)}
                                 </span>
 
@@ -305,7 +302,7 @@ export default function Navbar() {
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 z-10" size={20} />
                                 <input
                                     type="text"
-                                    placeholder="Rechercher un produit..."
+                                    placeholder={t(`navbar.searchPlaceholder`)}
                                     className="input input-bordered w-full bg-white text-black pl-10"
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
@@ -378,7 +375,7 @@ export default function Navbar() {
                                         whileHover={{ rotate: 360 }}
                                         transition={{ duration: 1, ease: "easeInOut" }}
                                     >
-                                        <Globe size={16} className="text-blue-500" />
+                                        <Globe size={16} className="text-violet-500" />
                                     </motion.div>
                                 </div>
                             </label>
@@ -418,7 +415,7 @@ export default function Navbar() {
                         <div className="dropdown dropdown-end hidden md:block">
                             <button
                                 tabIndex={0}
-                                className="btn bg-blue-500 text-white py-3 px-6 text-sm rounded-lg hover:bg-blue-600 transition-colors duration-200"
+                                className="btn bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white py-3 px-6 text-sm rounded-lg shadow-lg shadow-violet-500/50 hover:shadow-xl hover:shadow-violet-500/70 transition-all duration-200 hover:scale-105"
                             >
                                 {t("navbar.connexion")}
                             </button>
@@ -449,8 +446,8 @@ export default function Navbar() {
 
                         {/* Icône panier */}
                         <div className="flex items-center gap-1">
-                            <ShoppingCart size={30} className="text-blue-500" />
-                            <span className="font-bold border-2 bg-blue-200 text-lg border-blue-500 px-2 py-0 rounded-full">{cartCount}</span>
+                            <ShoppingCart size={30} className="text-violet-500" />
+                            <span className="font-bold border-2 bg-violet-200 text-lg border-violet-500 px-2 py-0 rounded-full">{cartCount}</span>
                         </div>
 
                         {/* Menu mobile */}
@@ -502,7 +499,7 @@ export default function Navbar() {
             <div className="h-24"></div>
 
             {/* Deuxième navbar - Sous-menu horizontal (NON FIXE) */}
-            <div className="bg-blue-50 border-t mt-0/5 p-1 border-b border-blue-200 shadow-sm hidden lg:block">
+            <div className="bg-violet-50 border-t mt-0/5 p-1 border-b border-violet-200 shadow-sm hidden lg:block">
                 <div className="container mx-auto px-4 py-2">
                     <div className="flex items-center justify-center">
                         <div className="flex flex-wrap gap-1 justify-center">
@@ -513,7 +510,7 @@ export default function Navbar() {
                                     onMouseEnter={() => handleProductHover(item.name)}
                                     onMouseLeave={handleProductLeave}
                                 >
-                                    <div className="px-3 py-1 text-sm bg-white rounded-full border border-blue-200 shadow-sm cursor-pointer transition-all duration-200 hover:bg-blue-500 hover:text-white">
+                                    <div className="px-3 py-1 text-sm bg-white rounded-full border border-violet-200 shadow-sm cursor-pointer transition-all duration-200 hover:bg-violet-500 hover:text-white hover:shadow-md hover:shadow-violet-300">
                                         {item.name}
                                     </div>
                                 </div>
@@ -532,7 +529,7 @@ export default function Navbar() {
                 >
                     <div className="flex justify-between items-center mb-3">
                         <h3 className="text-lg font-bold text-gray-800">
-                            {t("navbar.produits")} : <span className="text-blue-500">{hoveredProduct}</span>
+                            {t("navbar.produits")} : <span className="text-violet-500">{hoveredProduct}</span>
                         </h3>
                         <button
                             className="text-gray-400 hover:text-gray-600"

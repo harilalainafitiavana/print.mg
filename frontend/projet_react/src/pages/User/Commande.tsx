@@ -195,23 +195,27 @@ export default function PrintingOrderForm() {
 
   // Erreurs et validations du numéro téléphone sur le payement
   const validatePhone = (number: string): string => {
-    // Supprimer tous les caractères non numériques
-    const cleanNumber = number.replace(/\D/g, '');
+    let cleanNumber = number.replace(/\D/g, '');
 
-    // Vérifier la longueur
-    if (cleanNumber.length > 10) {
-      return "Le numéro ne doit pas dépasser 10 chiffres";
+    // Conversion format international
+    if (cleanNumber.startsWith('261') && cleanNumber.length === 12) {
+      cleanNumber = '0' + cleanNumber.substring(3);
     }
 
-    // Vérifier le format Telma (034 ou 038)
-    if (cleanNumber.length >= 3) {
-      const prefix = cleanNumber.substring(0, 3);
-      if (prefix !== "034" && prefix !== "038") {
-        return "Le numéro doit commencer par 034 ou 038 (Telma Madagascar) pour le payement MVola";
-      }
+    // Longueur exacte
+    if (cleanNumber.length !== 10) {
+      return "Le numéro doit avoir exactement 10 chiffres";
     }
 
-    return ""; // Pas d'erreur
+    // Opérateurs Mobile Money
+    const validPrefixes = ["034", "038", "032", "037", "033"];
+    const prefix = cleanNumber.substring(0, 3);
+
+    if (!validPrefixes.includes(prefix)) {
+      return "Numéro invalide pour Mobile Money. Utilisez Telma (034/038), Orange (032/037) ou Airtel Money (033)";
+    }
+
+    return ""; // Valide
   };
 
   // Le numéro doit contenir 10 chiffres, commencer par 034 ou 038
@@ -679,6 +683,13 @@ export default function PrintingOrderForm() {
       {/* Étape 3 */}
       {step === 3 && (
         <div className="space-y-4">
+          {/* Ajoute juste cette ligne d'avertissement */}
+          <div className="alert alert-warning">
+            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.998-.833-2.732 0L4.34 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+            <span>Mode développement : le paiement est simulé (Sandbox)</span>
+          </div>
           <input type="tel" placeholder={t("printingOrder.placeholders.phone")} value={phone} onChange={handlePhoneChange} className={`input input-bordered w-full ${phoneError ? 'input-error' : ''}`} maxLength={10} />
           {phoneError && (
             <label className="label">

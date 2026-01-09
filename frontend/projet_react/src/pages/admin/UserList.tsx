@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { Eye, Users, Search, ChevronLeft, ChevronRight, Mail, Phone, MapPin, User, Calendar, Globe, Hash } from "lucide-react";
+import { Eye, Users, Search, ChevronLeft, ChevronRight, Mail, Phone, MapPin, User, Calendar, Globe, Hash, X, Camera } from "lucide-react";
 import { authFetch } from "../../Components/Utils";
 import { useTranslation } from "react-i18next";
-import { getAvatarUrl } from "../../Components/avatarUtils"; // Import de votre utilitaire
+import { getAvatarUrl } from "../../Components/avatarUtils";
 
 interface User {
     id: number;
@@ -14,7 +14,7 @@ interface User {
     ville: string;
     pays: string;
     role?: string;
-    profils?: string | null; // Modifié pour correspondre à votre interface
+    profils?: string | null;
     google_avatar_url?: string;
     date_inscription: string;
 }
@@ -24,6 +24,7 @@ const AdminUsersDashboard = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false); // Nouvel état pour la modal photo
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const usersPerPage = 10;
@@ -56,6 +57,43 @@ const AdminUsersDashboard = () => {
         setSelectedUser(null);
         setIsModalOpen(false);
     };
+
+    // 🔹 Fonctions pour la modal photo
+    const openPhotoModal = (user: User) => {
+        setSelectedUser(user);
+        setIsPhotoModalOpen(true);
+    };
+
+    const closePhotoModal = () => {
+        setIsPhotoModalOpen(false);
+    };
+
+    const handlePhotoModalClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+    };
+
+    // 🔹 Gestion de la touche Escape pour fermer les modals
+    useEffect(() => {
+        const handleEscape = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                if (isPhotoModalOpen) {
+                    closePhotoModal();
+                } else if (isModalOpen) {
+                    closeModal();
+                }
+            }
+        };
+
+        if (isModalOpen || isPhotoModalOpen) {
+            document.addEventListener('keydown', handleEscape);
+            document.body.style.overflow = 'hidden';
+        }
+
+        return () => {
+            document.removeEventListener('keydown', handleEscape);
+            document.body.style.overflow = 'auto';
+        };
+    }, [isModalOpen, isPhotoModalOpen]);
 
     // 🔹 Filtrer selon la recherche
     const filteredUsers = users.filter((user) =>
@@ -171,9 +209,35 @@ const AdminUsersDashboard = () => {
                                 >
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
-                                            {/* Icône au lieu de photo dans la liste */}
-                                            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                                                <User className="w-5 h-5 text-primary" />
+                                            {/* Photo de profil cliquable */}
+                                            <div 
+                                                className="w-10 h-10 rounded-full overflow-hidden bg-primary/10 cursor-pointer hover:shadow-lg transition-shadow duration-200"
+                                                onClick={() => openPhotoModal(user)}
+                                            >
+                                                {(() => {
+                                                    const avatarUrl = getAvatarUrl(user);
+                                                    if (avatarUrl) {
+                                                        return (
+                                                            <img
+                                                                src={avatarUrl.replace(/s\d+-c$/, 's100-c')}
+                                                                alt={`${user.prenom} ${user.nom}`}
+                                                                className="w-full h-full object-cover"
+                                                                crossOrigin="anonymous"
+                                                                referrerPolicy="no-referrer"
+                                                                onError={(e) => {
+                                                                    const parent = e.currentTarget.parentNode as HTMLElement;
+                                                                    parent.className = 'w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center';
+                                                                    e.currentTarget.style.display = 'none';
+                                                                }}
+                                                            />
+                                                        );
+                                                    }
+                                                    return (
+                                                        <div className="w-full h-full flex items-center justify-center">
+                                                            <User className="w-5 h-5 text-primary" />
+                                                        </div>
+                                                    );
+                                                })()}
                                             </div>
                                             <div>
                                                 <p className="font-medium text-base-content">{user.nom}</p>
@@ -289,7 +353,7 @@ const AdminUsersDashboard = () => {
                 </div>
             )}
 
-            {/* Modal de détails */}
+            {/* Modal de détails utilisateur */}
             {isModalOpen && selectedUser && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
                     <div className="bg-base-100 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-modal-in">
@@ -297,28 +361,26 @@ const AdminUsersDashboard = () => {
                             {/* En-tête du modal */}
                             <div className="flex justify-between items-start mb-6">
                                 <div className="flex items-center gap-3">
-                                    {/* Affichage de la photo de profil avec votre utilitaire getAvatarUrl */}
-                                    <div className="relative group w-20 h-20 rounded-full overflow-hidden border-4 border-primary/20">
+                                    {/* Photo de profil cliquable */}
+                                    <div 
+                                        className="relative group w-20 h-20 rounded-full overflow-hidden border-4 border-primary/20 cursor-pointer hover:border-primary/40 transition-all duration-300"
+                                        onClick={() => {
+                                            closeModal();
+                                            openPhotoModal(selectedUser);
+                                        }}
+                                    >
                                         {(() => {
                                             const avatarUrl = getAvatarUrl(selectedUser);
                                             if (avatarUrl) {
                                                 return (
                                                     <img
-                                                        src={avatarUrl}
+                                                        src={avatarUrl.replace(/s\d+-c$/, 's200-c')}
                                                         alt={`${selectedUser.prenom} ${selectedUser.nom}`}
                                                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                                                         crossOrigin="anonymous"
                                                         referrerPolicy="no-referrer"
                                                         onError={(e) => {
-                                                            console.error("Erreur chargement image profil:", avatarUrl);
                                                             e.currentTarget.style.display = 'none';
-                                                            // Afficher l'icône par défaut si l'image échoue
-                                                            const fallbackDiv = document.createElement('div');
-                                                            fallbackDiv.className = 'w-full h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-gray-400';
-                                                            const icon = document.createElement('div');
-                                                            icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
-                                                            fallbackDiv.appendChild(icon);
-                                                            e.currentTarget.parentNode?.appendChild(fallbackDiv);
                                                         }}
                                                     />
                                                 );
@@ -329,6 +391,9 @@ const AdminUsersDashboard = () => {
                                                 </div>
                                             );
                                         })()}
+                                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+                                            <Camera size={24} className="text-white opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                                        </div>
                                     </div>
                                     <div>
                                         <h2 className="text-2xl font-bold text-base-content">
@@ -352,7 +417,7 @@ const AdminUsersDashboard = () => {
                                     onClick={closeModal}
                                     className="btn btn-ghost btn-sm btn-circle hover:bg-base-300"
                                 >
-                                    ✕
+                                    <X size={20} />
                                 </button>
                             </div>
 
@@ -444,17 +509,6 @@ const AdminUsersDashboard = () => {
                                 </div>
                             </div>
 
-                            {/* Source de la photo (si disponible) */}
-                            {selectedUser.profils && (
-                                <div className="mt-4 pt-4 border-t border-base-300">
-                                    <p className="text-sm text-base-content/60 text-center">
-                                        {selectedUser.profils.includes('https%3A') || selectedUser.profils.startsWith('http')
-                                            ? "Photo de profil Google"
-                                            : "Photo de profil locale"}
-                                    </p>
-                                </div>
-                            )}
-
                             {/* Boutons d'action */}
                             <div className="flex gap-3 mt-8 pt-6 border-t border-base-300">
                                 <button
@@ -470,6 +524,113 @@ const AdminUsersDashboard = () => {
                                     <Mail size={16} />
                                     Envoyer un email
                                 </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal pour afficher la photo en grand */}
+            {isPhotoModalOpen && selectedUser && (
+                <div 
+                    className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4"
+                    onClick={closePhotoModal}
+                >
+                    <div 
+                        className="relative bg-base-100 rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden shadow-2xl"
+                        onClick={handlePhotoModalClick}
+                    >
+                        <button
+                            onClick={closePhotoModal}
+                            className="absolute top-4 right-4 z-50 bg-base-100 hover:bg-base-200 rounded-full p-2 transition-colors shadow-lg"
+                            aria-label="Fermer"
+                        >
+                            <X size={28} />
+                        </button>
+                        
+                        <div className="p-6 md:p-8 flex flex-col items-center">
+                            {/* Image en grand */}
+                            <div className="w-full max-w-2xl">
+                                {(() => {
+                                    const avatarUrl = getAvatarUrl(selectedUser);
+                                    if (avatarUrl) {
+                                        return (
+                                            <img
+                                                src={avatarUrl.replace(/s\d+-c$/, 's800-c')}
+                                                alt={`Photo de ${selectedUser.prenom} ${selectedUser.nom}`}
+                                                className="w-full h-auto max-h-[70vh] object-contain rounded-lg shadow-xl"
+                                                crossOrigin="anonymous"
+                                                referrerPolicy="no-referrer"
+                                                onError={(e) => {
+                                                    console.error("Erreur chargement image en modal:", avatarUrl);
+                                                    e.currentTarget.style.display = 'none';
+                                                }}
+                                            />
+                                        );
+                                    }
+                                    return (
+                                        <div className="w-full h-96 bg-gradient-to-br from-blue-100 to-indigo-100 flex flex-col items-center justify-center text-gray-400 rounded-lg">
+                                            <User size={120} />
+                                            <p className="mt-4 text-lg">Aucune photo de profil</p>
+                                        </div>
+                                    );
+                                })()}
+                            </div>
+                            
+                            {/* Informations utilisateur */}
+                            <div className="mt-8 text-center">
+                                <h3 className="text-2xl font-bold text-base-content">
+                                    {selectedUser.prenom} {selectedUser.nom}
+                                </h3>
+                                <div className="flex flex-wrap gap-2 justify-center mt-2">
+                                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                        selectedUser.role === 'ADMIN' 
+                                            ? 'bg-primary/20 text-primary' 
+                                            : 'bg-base-300 text-base-content/70'
+                                    }`}>
+                                        {selectedUser.role || 'UTILISATEUR'}
+                                    </span>
+                                    <span className="px-3 py-1 rounded-full text-sm font-medium bg-base-300 text-base-content/70">
+                                        ID: {selectedUser.id}
+                                    </span>
+                                </div>
+                                <p className="text-base-content/70 mt-4">{selectedUser.email}</p>
+                                
+                                {/* Boutons d'action */}
+                                <div className="mt-8 flex flex-wrap gap-4 justify-center">
+                                    <a
+                                        href={`mailto:${selectedUser.email}`}
+                                        className="btn btn-primary gap-2"
+                                    >
+                                        <Mail size={18} />
+                                        Envoyer un email
+                                    </a>
+                                    
+                                    {(() => {
+                                        const avatarUrl = getAvatarUrl(selectedUser);
+                                        if (avatarUrl) {
+                                            return (
+                                                <button
+                                                    onClick={() => {
+                                                        const link = document.createElement('a');
+                                                        link.href = avatarUrl.replace(/s\d+-c$/, 's800-c');
+                                                        link.download = `photo-${selectedUser.prenom}-${selectedUser.nom}.jpg`;
+                                                        document.body.appendChild(link);
+                                                        link.click();
+                                                        document.body.removeChild(link);
+                                                    }}
+                                                    className="btn btn-outline gap-2"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                                                    </svg>
+                                                    Télécharger
+                                                </button>
+                                            );
+                                        }
+                                        return null;
+                                    })()}
+                                </div>
                             </div>
                         </div>
                     </div>

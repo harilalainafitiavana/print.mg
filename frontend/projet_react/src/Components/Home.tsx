@@ -61,9 +61,9 @@ export default function HomePage() {
   // Background image
   const [currentIndex, setCurrentIndex] = useState(0);
   const imagess = [
-    "https://contentful.helloprint.com/wm1n7oady8a5/6GF6VHqwxjUdUhEbYdahs8/5ae7618505438c941a540eb637d3a274/Corporate_Information_and_Marketing.png?q=75&h=600&w=600&fm=avif&fit=pad",
-    "https://contentful.helloprint.com/wm1n7oady8a5/6WJ6WGava4AB3XdKctQg4w/4656354bd4f938b514212ee14a5f8489/Educational_Manuals_and_Employee_Handbook.png?q=75&h=600&w=600&fm=avif&fit=pad",
-    "https://contentful.helloprint.com/wm1n7oady8a5/2R3oOrcpI9OGWTb0EOGtfH/6928e67a0db245d6e7acae7646462d4d/Branding_and_Portfolio_Showcases.png?q=75&h=600&w=600&fm=avif&fit=pad"
+    "https://aac.com.au/wp-content/uploads/2024/10/custom-flyers-blog.webp",
+    "https://www.ooprint.fr/media/wysiwyg/wysiwyg/Flyers/flyers3.jpg",
+    "https://graphics.tradeprintinguk.com/Blogs/Flyers/Blog-Flyers-Full-Width-1.webp"
   ];
 
   // Changement automatique toutes les 5 secondes
@@ -142,10 +142,20 @@ export default function HomePage() {
               {t("slider.description")}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/login" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full transition-all duration-300 hover:scale-105">
-                {t("slider.commander")}
+              {/* BOUTON COMMANDER - Version ultra-violet avec effet lumineux */}
+              <Link
+                to="/login"
+                className="relative bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-bold py-4 px-6 rounded-full shadow-lg shadow-violet-500/40 hover:shadow-violet-500/60 transition-all duration-300 hover:scale-105 overflow-hidden group"
+              >
+                <span className="relative z-10">{t("slider.commander")}</span>
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
               </Link>
-              <Link to='/detaille' className="bg-transparent border-2 border-white hover:bg-white hover:text-black text-white font-bold py-4 px-6 rounded-full transition-all duration-300 hover:scale-105">
+
+              {/* BOUTON TOUS LES PRODUITS - Garde le style original */}
+              <Link
+                to='/detaille'
+                className="bg-transparent border-2 border-white hover:bg-white hover:text-black text-white font-bold py-4 px-6 rounded-full transition-all duration-300 hover:scale-105"
+              >
                 {t("slider.tousProduits")}
               </Link>
             </div>
@@ -230,16 +240,29 @@ export default function HomePage() {
 
 
       {/* Call to Action */}
-      <section className="py-16 bg-blue-500 text-white text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          {t("sectionCallToAction.titre")}
-        </h2>
-        <p className="text-sm md:text-lg mb-6">
-          {t("sectionCallToAction.texte")}
-        </p>
-        <Link to="/login" className="btn btn-lg btn-white text-blue-500 font-bold">
-          {t("sectionCallToAction.bouton")}
-        </Link>
+      <section className="py-16 bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 text-white text-center relative overflow-hidden">
+
+        {/* Effet de particules ou d'éclats lumineux (optionnel) */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-10 w-4 h-4 bg-white rounded-full animate-pulse"></div>
+          <div className="absolute top-1/4 right-20 w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+          <div className="absolute bottom-20 left-1/3 w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+        </div>
+
+        <div className="relative z-10">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            {t("sectionCallToAction.titre")}
+          </h2>
+          <p className="text-sm md:text-lg mb-6 max-w-2xl mx-auto">
+            {t("sectionCallToAction.texte")}
+          </p>
+          <Link
+            to="/login"
+            className="btn btn-lg bg-white py-2 text-violet-600 font-bold shadow-lg hover:shadow-2xl hover:shadow-violet-500/30 hover:scale-105 transition-all duration-300 transform hover:-translate-y-1 inline-block"
+          >
+            {t("sectionCallToAction.bouton")}
+          </Link>
+        </div>
       </section>
       {/* Call to Action */}
 
@@ -249,7 +272,7 @@ export default function HomePage() {
         <div className="flex flex-col lg:flex-row items-center justify-center gap-8 md:px-8 mx-6">
           {/* Texte */}
           <div className="text-center md:text-left max-w-xl">
-            <h1 className="text-blue-500 text-3xl md:text-3xl font-bold mb-4">
+            <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-fuchsia-600 text-3xl md:text-3xl font-bold mb-4">
               {t("sectionMarquepages.titre")}
             </h1>
             <p className="text-base leading-relaxed mb-4">
@@ -291,15 +314,25 @@ export default function HomePage() {
 
             {/* Publication */}
             <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
-              <Camera className="w-12 h-12 text-blue-500 mb-4" />
+              <Camera className="w-12 h-12 text-violet-400 mb-4" />
               <h1 className="text-3xl md:text-5xl font-bold text-white drop-shadow-lg">
                 {t("sectionCreativite.titre")}
               </h1>
               <p className="mt-4 text-lg text-gray-200 max-w-2xl">
                 {t("sectionCreativite.texte")}
               </p>
-              <Link to="/login" className="btn bg-blue-500 text-white mt-6 px-6 py-3 rounded-xl shadow-lg hover:scale-105 transition">
-                {t("sectionCreativite.bouton")}
+              <Link
+                to="/login"
+                className="relative bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 text-white mt-6 px-8 py-4 rounded-xl font-bold shadow-xl shadow-violet-500/40 hover:shadow-2xl hover:shadow-violet-500/60 transition-all duration-300 hover:scale-105 group overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  {/* Optionnel: ajouter une icône */}
+                  <Sparkles className="w-5 h-5" />
+                  {t("sectionCreativite.bouton")}
+                </span>
+
+                {/* Effet de brillance qui traverse le bouton */}
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
               </Link>
             </div>
           </div>
@@ -329,7 +362,7 @@ export default function HomePage() {
 
                 {/* Texte */}
                 <div className="w-full md:w-1/2 text-center md:text-left">
-                  <item.icon className="w-10 h-10 text-blue-500 mb-3 mx-auto md:mx-0" />
+                  <item.icon className="w-10 h-10 text-violet-500 mb-3 mx-auto md:mx-0" />
                   <h3 className="text-2xl font-semibold mb-3">
                     {t(`sectionServices.items.${index}.title`)}
                   </h3>
@@ -358,7 +391,7 @@ export default function HomePage() {
           {/* Rapidité */}
           <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col items-center hover:shadow-lg transition">
             <Rocket className="text-blue-600 mb-4" size={40} />
-            <h3 className="text-lg font-semibold text-blue-900 mb-2">
+            <h3 className="text-lg font-semibold text-violet-900 mb-2">
               {t("sectionImpression.cards.0.title")}
             </h3>
             <p className="text-gray-600 text-sm">
@@ -369,7 +402,7 @@ export default function HomePage() {
           {/* Qualité */}
           <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col items-center hover:shadow-lg transition">
             <Printer className="text-green-600 mb-4" size={40} />
-            <h3 className="text-lg font-semibold text-blue-900 mb-2">
+            <h3 className="text-lg font-semibold text-violet-900 mb-2">
               {t("sectionImpression.cards.1.title")}
             </h3>
             <p className="text-gray-600 text-sm">
@@ -380,7 +413,7 @@ export default function HomePage() {
           {/* Simplicité */}
           <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col items-center hover:shadow-lg transition">
             <Smile className="text-yellow-500 mb-4" size={40} />
-            <h3 className="text-lg font-semibold text-blue-900 mb-2">
+            <h3 className="text-lg font-semibold text-violet-900 mb-2">
               {t("sectionImpression.cards.2.title")}
             </h3>
             <p className="text-gray-600 text-sm">
@@ -414,7 +447,7 @@ export default function HomePage() {
           {/* Texte marketing */}
           <div className="flex flex-col md:w-1/2 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start mb-4">
-              <Sparkles className="w-8 h-8 text-blue-500 mr-2" />
+              <Sparkles className="w-8 h-8 text-violet-500 mr-2" />
               <h2 className="text-2xl font-bold text-gray-800">
                 {t("sectionPrêt.subtitle")}
               </h2>
@@ -422,7 +455,10 @@ export default function HomePage() {
             <p className="text-gray-600 mb-6">
               {t("sectionPrêt.description")}
             </p>
-            <Link to="/login" className="btn bg-blue-500 text-white px-6 py-3 rounded-xl shadow-md hover:scale-105 transition">
+            <Link
+              to="/login"
+              className="btn bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white px-6 py-3 rounded-xl shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 hover:scale-105 transition-all duration-300"
+            >
               {t("sectionPrêt.btn")}
             </Link>
           </div>

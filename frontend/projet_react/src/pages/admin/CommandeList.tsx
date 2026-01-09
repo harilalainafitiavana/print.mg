@@ -196,7 +196,7 @@ export default function AdminCommande() {
       <h1 className="text-2xl font-bold mb-4">📋 {t("orders.title")}</h1>
 
       <table className="w-full text-left border-collapse">
-        <thead className="bg-blue-500 text-white">
+        <thead className="bg-indigo-500 text-white">
           <tr>
             <th className="px-4 py-2">{t("orders.table.id")}</th>
             <th className="px-4 py-2">{t("orders.table.name")}</th>
@@ -245,15 +245,15 @@ export default function AdminCommande() {
                     setShowActionModal(true);
                   }}
 
-                  className="bg-blue-500 text-white ml-4 px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center gap-2"
+                  className="bg-indigo-500 text-white ml-4 px-4 py-2 rounded-lg hover:bg-indigo-600 flex items-center gap-2"
                 >
                   {t("orders.table.actions")} <Wrench size={16} />
                 </button>
 
                 {/* Modal des actions */}
                 {showActionModal && selectedOrder && (
-                  <div className="fixed inset-0 bg-transparent flex justify-center items-center z-50 transition-all duration-300">
-                    <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
+                  <div className="fixed inset-0 backdrop-blur-sm bg-black/10 flex justify-center items-center z-50 transition-all duration-300">
+                    <div className="bg-base-100 p-6 rounded-xl max-w-md w-full shadow-2xl">
                       <h2 className="text-xl font-bold mb-4">⚡ {t("orders.modal.actions_for_order", { id: selectedOrder.id })}</h2>
 
                       <div className="grid grid-cols-2 gap-4">

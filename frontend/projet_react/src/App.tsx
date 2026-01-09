@@ -10,6 +10,7 @@ import DashboardAdmin from "./pages/admin/AdminDashboard";
 import DashboardUser from "./pages/User/UserDashboard"
 import ForgotPassword from "./Components/ForgotPassword";
 import ResetPassword from "./Components/ResetPassword";
+import FeaturesDetailPage from "./Components/FeaturesDetailPage";
 
 export default function App() {
   // Récupère le Client ID depuis .env
@@ -21,6 +22,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/detaille" element={<Detaille />} />
+          <Route path="/features" element={<FeaturesDetailPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />

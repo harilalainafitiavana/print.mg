@@ -183,7 +183,7 @@ const AdminDashboard = () => {
                     <ul className="space-y-3">
                         {utilisateursRecents.map(user => (
                             <li key={user.email} className="flex items-center p-3 border rounded-lg hover:bg-blue-50 transition">
-                                <User size={24} className="text-blue-500 mr-2" />
+                                <User size={24} className="text-indigo-500 mr-2" />
                                 <div>
                                     <p className="text-base-content">{user.nom} {user.prenom}</p>
                                     <span className="text-sm text-gray-400">{user.email} | {new Date(user.date_inscription).toLocaleDateString()}</span>

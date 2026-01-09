@@ -120,7 +120,7 @@ const LoginPage = () => {
       <div className="w-full md:w-1/2 bg-base-200 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
           <div className="text-center mb-10">
-            <h1 className="text-3xl font-bold text-blue-500 mb-2">Print.mg</h1>
+            <h1 className="text-3xl font-bold text-violet-500 mb-2">Print.mg</h1>
             <p className="text-base-content">Connectez-vous à votre compte</p>
           </div>
 
@@ -147,7 +147,7 @@ const LoginPage = () => {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   required
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition"
+                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition"
                   placeholder="votre@email.com"
                 />
               </div>
@@ -169,7 +169,7 @@ const LoginPage = () => {
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   required
-                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition"
+                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition"
                   placeholder="Votre mot de passe"
                 />
                 <button
@@ -192,7 +192,7 @@ const LoginPage = () => {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-indigo-500 focus:ring-indigo-500 border-gray-300 rounded"
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-base-content">
                   Se souvenir de moi
@@ -200,7 +200,7 @@ const LoginPage = () => {
               </div>
 
               <div className="text-sm">
-                <Link to="/forgot-password" className="font-medium text-blue-500 hover:text-blue-600 transition">
+                <Link to="/forgot-password" className="font-medium text-violet-900 font-bold hover:text-violet-900 transition">
                   Mot de passe oublié?
                 </Link>
               </div>
@@ -210,9 +210,24 @@ const LoginPage = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 px-4 rounded-2xl shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-300"
+                className={`relative w-full flex items-center justify-center gap-3 bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 text-white py-3 px-4 rounded-2xl shadow-lg transition-all duration-300 overflow-hidden group ${loading ? 'animate-pulse' : 'shadow-violet-500/40 hover:shadow-violet-500/60 hover:scale-[1.02]'}`}
               >
-                <span className="font-semibold">{loading ? "Connexion..." : "Se connecter"}</span>
+                {/* Effet de brillance (seulement quand pas en chargement) */}
+                {!loading && (
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
+                )}
+
+                {/* Texte du bouton avec animation pendant le chargement */}
+                <span className="relative z-10 font-semibold flex items-center gap-2">
+                  {loading ? (
+                    <>
+                      <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+                      Connexion...
+                    </>
+                  ) : (
+                    "Se connecter"
+                  )}
+                </span>
               </button>
             </div>
           </form>
@@ -224,7 +239,7 @@ const LoginPage = () => {
               onClick={() => googleLogin()} // appel direct pour éviter popup bloqué
               className="w-full flex items-center justify-center gap-3 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 px-4 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300"
             >
-              <Globe className="w-5 h-5 text-blue-500" />
+              <Globe className="w-5 h-5 text-violet-500" />
               <span className="font-semibold">Se connecter avec Google</span>
             </button>
           </div>
@@ -233,7 +248,7 @@ const LoginPage = () => {
           <div className="mt-8 text-center">
             <p className="text-sm text-base-content">
               Vous n'avez pas de compte?{' '}
-              <Link to="/register" className="font-medium text-blue-500 hover:text-blue-600 transition">
+              <Link to="/register" className="font-medium text-violet-900 font-bold hover:text-violet-600 transition">
                 Créer un compte
               </Link>
             </p>
@@ -242,15 +257,15 @@ const LoginPage = () => {
           <div className="mt-10 border-t border-gray-200 pt-6">
             <div className="grid grid-cols-3 gap-4">
               <div className="text-center">
-                <Printer className="h-6 w-6 text-blue-500 mx-auto mb-2" />
+                <Printer className="h-6 w-6 text-violet-500 mx-auto mb-2" />
                 <p className="text-xs text-gray-500">Impression haute qualité</p>
               </div>
               <div className="text-center">
-                <Truck className="h-6 w-6 text-blue-500 mx-auto mb-2" />
+                <Truck className="h-6 w-6 text-violet-500 mx-auto mb-2" />
                 <p className="text-xs text-gray-500">Livraison rapide</p>
               </div>
               <div className="text-center">
-                <Shield className="h-6 w-6 text-blue-500 mx-auto mb-2" />
+                <Shield className="h-6 w-6 text-violet-500 mx-auto mb-2" />
                 <p className="text-xs text-gray-500">Paiement sécurisé</p>
               </div>
             </div>

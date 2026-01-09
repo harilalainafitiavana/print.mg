@@ -72,8 +72,8 @@ export default function UserDashboard() {
 
                     ) : (
                         // Si l'utilisateur n'a pas de photo
-                        <div className="w-28 h-28 rounded-full bg-blue-100 flex items-center justify-center border-2 border-white shadow-sm">
-                            <User size={48} className="text-blue-600" />
+                        <div className="w-28 h-28 rounded-full bg-violet-100 flex items-center justify-center border-2 border-white shadow-sm">
+                            <User size={48} className="text-violet-600" />
                         </div>
                     )}
                 </div>

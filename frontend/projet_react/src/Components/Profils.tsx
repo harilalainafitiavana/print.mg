@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { authFetch } from "./Utils";
-import { Eye, EyeOff, Camera, Lock, User, MapPin, Phone, Mail, Save, Key } from "lucide-react";
+import { Eye, EyeOff, Camera, Lock, User, MapPin, Phone, Mail, Save, Key, X } from "lucide-react"; // Ajout de X
 import { useTranslation } from "react-i18next";
 import { getAvatarUrl } from './avatarUtils';
 
@@ -18,6 +18,7 @@ export default function Profils() {
     });
     const [userProfilUrl, setUserProfilUrl] = useState<string | null>(null);
     const [userData, setUserData] = useState<any>(null);
+    const [showPhotoModal, setShowPhotoModal] = useState(false); // Nouvel état pour la modal
 
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -66,6 +67,23 @@ export default function Profils() {
 
         fetchProfil();
     }, []);
+
+    // Fonction pour ouvrir la modal
+    const openPhotoModal = () => {
+        if (formData.photo || userProfilUrl) {
+            setShowPhotoModal(true);
+        }
+    };
+
+    // Fonction pour fermer la modal
+    const closePhotoModal = () => {
+        setShowPhotoModal(false);
+    };
+
+    // Empêcher la propagation du clic dans la modal
+    const handleModalClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+    };
 
     const handlePhotoSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -160,6 +178,25 @@ export default function Profils() {
         }
     };
 
+    // Gestion de la touche Escape pour fermer la modal
+    useEffect(() => {
+        const handleEscape = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && showPhotoModal) {
+                closePhotoModal();
+            }
+        };
+
+        if (showPhotoModal) {
+            document.addEventListener('keydown', handleEscape);
+            document.body.style.overflow = 'hidden'; // Empêcher le scroll du body
+        }
+
+        return () => {
+            document.removeEventListener('keydown', handleEscape);
+            document.body.style.overflow = 'auto'; // Rétablir le scroll
+        };
+    }, [showPhotoModal]);
+
     return (
         <div className="min-h-screen bg-base-200 from-gray-50 to-blue-50 p-4 md:p-6">
             {/* En-tête avec titre principal */}
@@ -181,7 +218,10 @@ export default function Profils() {
                             <div className="flex flex-col items-center text-center mb-6">
                                 {/* Avatar avec effet hover et badge de modification */}
                                 <div className="relative mb-4 group">
-                                    <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                                    <div 
+                                        className="w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300"
+                                        onClick={openPhotoModal}
+                                    >
                                         {formData.photo ? (
                                             <img
                                                 src={URL.createObjectURL(formData.photo)}
@@ -201,12 +241,15 @@ export default function Profils() {
                                                 }}
                                             />
                                         ) : (
-                                            <div className="w-full h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-gray-400">
+                                            <div 
+                                                className="w-full h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-gray-400 cursor-pointer"
+                                                onClick={openPhotoModal}
+                                            >
                                                 <User size={60} />
                                             </div>
                                         )}
                                     </div>
-                                    <label className="absolute bottom-2 right-2 bg-blue-500 text-white p-2 rounded-full cursor-pointer hover:bg-blue-600 transition-all shadow-lg">
+                                    <label className="absolute bottom-2 right-2 bg-blue-500 text-white p-2 rounded-full cursor-pointer hover:bg-blue-600 transition-all shadow-lg z-10">
                                         <Camera size={20} />
                                         <input
                                             type="file"
@@ -607,6 +650,100 @@ export default function Profils() {
                     </p>
                 </div>
             </div>
+
+            {/* Modal pour afficher la photo en grand */}
+            {showPhotoModal && (
+                <div 
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4"
+                    onClick={closePhotoModal}
+                >
+                    <div 
+                        className="relative bg-base-100 rounded-2xl max-w-4xl max-h-[90vh] overflow-hidden"
+                        onClick={handleModalClick}
+                    >
+                        <button
+                            onClick={closePhotoModal}
+                            className="absolute top-4 right-4 z-50 bg-base-100 rounded-full p-2 hover:bg-base-200 transition-colors shadow-lg"
+                            aria-label="Fermer"
+                        >
+                            <X size={24} />
+                        </button>
+                        
+                        <div className="p-8 flex flex-col items-center">
+                            <div className="w-full max-w-lg">
+                                {formData.photo ? (
+                                    <img
+                                        src={URL.createObjectURL(formData.photo)}
+                                        alt="Aperçu profil"
+                                        className="w-full h-auto max-h-[70vh] object-contain rounded-lg shadow-xl"
+                                    />
+                                ) : userProfilUrl ? (
+                                    <img
+                                        src={userProfilUrl.replace(/s\d+-c$/, 's800-c')}
+                                        alt="Photo profil"
+                                        className="w-full h-auto max-h-[70vh] object-contain rounded-lg shadow-xl"
+                                        crossOrigin="anonymous"
+                                        referrerPolicy="no-referrer"
+                                        onError={(e) => {
+                                            console.error("Erreur chargement image en modal:", userProfilUrl);
+                                            e.currentTarget.style.display = 'none';
+                                        }}
+                                    />
+                                ) : (
+                                    <div className="w-full h-96 bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-gray-400 rounded-lg">
+                                        <User size={120} />
+                                    </div>
+                                )}
+                            </div>
+                            
+                            <div className="mt-6 text-center">
+                                <h3 className="text-xl font-bold text-base-content">
+                                    {formData.prenom} {formData.nom}
+                                </h3>
+                                <p className="text-base-content mt-2">{formData.email}</p>
+                                
+                                <div className="mt-6 flex gap-4">
+                                    <button
+                                        onClick={() => {
+                                            if (userProfilUrl) {
+                                                // Créer un lien temporaire pour télécharger l'image
+                                                const link = document.createElement('a');
+                                                link.href = userProfilUrl.replace(/s\d+-c$/, 's800-c');
+                                                link.download = `photo-profil-${formData.prenom}-${formData.nom}.jpg`;
+                                                document.body.appendChild(link);
+                                                link.click();
+                                                document.body.removeChild(link);
+                                            }
+                                        }}
+                                        className="btn btn-outline gap-2"
+                                        disabled={!userProfilUrl}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                                        </svg>
+                                        Télécharger
+                                    </button>
+                                    
+                                    <label className="btn btn-primary gap-2 cursor-pointer">
+                                        <Camera size={18} />
+                                        Changer la photo
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => {
+                                                if (e.target.files && e.target.files[0]) {
+                                                    setFormData({ ...formData, photo: e.target.files[0] });
+                                                }
+                                            }}
+                                            className="hidden"
+                                        />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

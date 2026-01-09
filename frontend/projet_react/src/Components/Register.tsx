@@ -143,7 +143,7 @@ const RegisterPage = () => {
             <div className="w-full md:w-1/2 bg-base-200 flex items-center justify-center px-6 py-12">
                 <div className="w-full max-w-md">
                     <div className="text-center mb-10">
-                        <h1 className="text-3xl font-bold text-blue-500 mb-2">Print.mg</h1>
+                        <h1 className="text-3xl font-bold text-violet-600 mb-2">Print.mg</h1>
                         <p className="text-base-content">Inscrivez-vous pour continuer</p>
                         {/* 🔥 Notification stylée */}
                         {notification && (
@@ -167,7 +167,7 @@ const RegisterPage = () => {
                                             onChange={handleChange}
                                             placeholder="Votre nom"
                                             required
-                                            className="block w-full pl-10 pr-3 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            className="block w-full pl-10 pr-3 py-3 border border-violet-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                                         />
                                     </div>
                                 </div>
@@ -183,7 +183,7 @@ const RegisterPage = () => {
                                             onChange={handleChange}
                                             placeholder="Votre prénom"
                                             required
-                                            className="block w-full pl-10 pr-3 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            className="block w-full pl-10 pr-3 py-3 border border-violet-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                                         />
                                     </div>
                                 </div>
@@ -201,7 +201,7 @@ const RegisterPage = () => {
                                                     setFormData((prev) => ({ ...prev, photo: URL.createObjectURL(file), photoFile: file }));
                                                 }
                                             }}
-                                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-blue-500 file:text-white hover:file:bg-blue-600 cursor-pointer"
+                                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-violet-500 file:text-white hover:file:bg-violet-600 cursor-pointer"
                                         />
                                         {formData.photo && (
                                             <img
@@ -216,7 +216,7 @@ const RegisterPage = () => {
                                 <button
                                     type="button"
                                     onClick={nextStep}
-                                    className="w-full py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                                    className="w-full py-3 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-lg shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 transition-all duration-300"
                                 >
                                     Suivant
                                 </button>
@@ -236,7 +236,7 @@ const RegisterPage = () => {
                                             onChange={handleChange}
                                             placeholder="votre@email.com"
                                             required
-                                            className="block w-full pl-10 pr-3 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            className="block w-full pl-10 pr-3 py-3 border border-violet-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                                         />
                                     </div>
                                 </div>
@@ -255,7 +255,7 @@ const RegisterPage = () => {
                                             maxLength={10}
                                             pattern="\d{10}"
                                             inputMode="numeric"
-                                            className="block w-full pl-10 pr-3 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            className="block w-full pl-10 pr-3 py-3 border border-violet-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                                         />
 
                                     </div>
@@ -265,14 +265,14 @@ const RegisterPage = () => {
                                     <button
                                         type="button"
                                         onClick={prevStep}
-                                        className="px-4 py-2 rounded-lg border text-base-content hover:text-black hover:bg-blue-100"
+                                        className="px-4 py-2 rounded-lg border border-violet-200 text-base-content hover:text-black hover:bg-violet-50"
                                     >
                                         Précédent
                                     </button>
                                     <button
                                         type="button"
                                         onClick={nextStep}
-                                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                                        className="px-4 py-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-lg shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 transition-all duration-300"
                                     >
                                         Suivant
                                     </button>
@@ -292,7 +292,7 @@ const RegisterPage = () => {
                                             onChange={handleChange}
                                             placeholder="Ex: 101"
                                             required
-                                            className="block w-full px-3 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            className="block w-full px-3 py-3 border border-violet-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                                         />
                                     </div>
 
@@ -324,14 +324,14 @@ const RegisterPage = () => {
                                     <button
                                         type="button"
                                         onClick={prevStep}
-                                        className="px-4 py-2 rounded-lg border text-base-content hover:text-black hover:bg-blue-100"
+                                        className="px-4 py-2 rounded-lg border text-base-content hover:text-black hover:bg-violet-100"
                                     >
                                         Précédent
                                     </button>
                                     <button
                                         type="button"
                                         onClick={nextStep}
-                                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                                        className="px-4 py-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-lg shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 transition-all duration-300"
                                     >
                                         Suivant
                                     </button>
@@ -352,7 +352,7 @@ const RegisterPage = () => {
                                             onChange={handleChange}
                                             placeholder="Mot de passe"
                                             required
-                                            className="block w-full pl-10 pr-12 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            className="block w-full pl-10 pr-12 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                                         />
                                         <button
                                             type="button"
@@ -379,7 +379,7 @@ const RegisterPage = () => {
                                             onChange={handleChange}
                                             placeholder="Confirmez"
                                             required
-                                            className="block w-full pl-10 pr-12 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            className="block w-full pl-10 pr-12 py-3 border border-violet-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                                         />
                                         <button
                                             type="button"
@@ -399,13 +399,13 @@ const RegisterPage = () => {
                                     <button
                                         type="button"
                                         onClick={prevStep}
-                                        className="px-4 py-2 rounded-lg border text-base-content hover:text-black hover:bg-blue-100"
+                                        className="px-4 py-2 rounded-lg border text-base-content hover:text-black hover:bg-violet-100"
                                     >
                                         Précédent
                                     </button>
                                     <button
                                         type="submit"
-                                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                                        className="px-4 py-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-lg shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 transition-all duration-300"
                                     >
                                         S'inscrire
                                     </button>
@@ -418,7 +418,7 @@ const RegisterPage = () => {
                     <div className="mt-6 text-center">
                         <p className="text-sm text-base-content">
                             Vous avez déjà un compte ?{" "}
-                            <Link to="/login" className="font-medium text-blue-500 hover:text-blue-600 transition">
+                            <Link to="/login" className="font-medium text-violet-900 hover:text-violet-600 transition">
                                 Se connecter
                             </Link>
                         </p>
@@ -427,15 +427,15 @@ const RegisterPage = () => {
                     <div className="mt-10 border-t border-gray-200 pt-6">
                         <div className="grid grid-cols-3 gap-4">
                             <div className="text-center">
-                                <Printer className="h-6 w-6 text-blue-500 mx-auto mb-2" />
+                                <Printer className="h-6 w-6 text-violet-500 mx-auto mb-2" />
                                 <p className="text-xs text-gray-500">Impression haute qualité</p>
                             </div>
                             <div className="text-center">
-                                <Truck className="h-6 w-6 text-blue-500 mx-auto mb-2" />
+                                <Truck className="h-6 w-6 text-violet-500 mx-auto mb-2" />
                                 <p className="text-xs text-gray-500">Livraison rapide</p>
                             </div>
                             <div className="text-center">
-                                <Shield className="h-6 w-6 text-blue-500 mx-auto mb-2" />
+                                <Shield className="h-6 w-6 text-violet-500 mx-auto mb-2" />
                                 <p className="text-xs text-gray-500">Paiement sécurisé</p>
                             </div>
                         </div>
