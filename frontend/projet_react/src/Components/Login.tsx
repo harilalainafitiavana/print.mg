@@ -210,7 +210,7 @@ const LoginPage = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className={`relative w-full flex items-center justify-center gap-3 bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 text-white py-3 px-4 rounded-2xl shadow-lg transition-all duration-300 overflow-hidden group ${loading ? 'animate-pulse' : 'shadow-violet-500/40 hover:shadow-violet-500/60 hover:scale-[1.02]'}`}
+                className={`relative w-full flex items-center justify-center gap-3 bg-gradient-to-r from-violet-500 to-pink-600 text-white py-3 px-4 rounded-2xl shadow-lg transition-all duration-300 overflow-hidden group ${loading ? 'animate-pulse' : 'shadow-violet-500/40 hover:shadow-violet-500/60 hover:scale-[1.02]'}`}
               >
                 {/* Effet de brillance (seulement quand pas en chargement) */}
                 {!loading && (

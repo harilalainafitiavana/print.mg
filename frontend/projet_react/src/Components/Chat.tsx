@@ -56,7 +56,7 @@ export default function Chat() {
 
       {/* Bouton Chat flottant */}
       <button
-        className="fixed bottom-6 right-6 bg-gradient-to-r from-red-500 to-blue-500 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform z-50"
+        className="fixed bottom-6 right-6 bg-gradient-to-r from-violet-500 to-pink-600 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform z-50"
         onClick={() => setIsOpen(!isOpen)}
       >
         <MessageCircle className="w-7 h-7" />
@@ -66,7 +66,7 @@ export default function Chat() {
       {isOpen && (
         <div className="fixed bottom-20 right-6 w-96 h-[480px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 transform transition-all duration-300">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-500 to-red-500 text-white px-5 py-3 flex justify-between items-center rounded-t-2xl">
+          <div className="bg-gradient-to-r from-violet-500 to-pink-600 text-white px-5 py-3 flex justify-between items-center rounded-t-2xl">
             <span className="font-bold text-lg">PrintMG Assistant</span>
             <button onClick={() => setIsOpen(false)}>
               <X className="w-5 h-5" />

@@ -130,7 +130,7 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
         <div className="flex gap-2 w-full sm:w-auto">
 
           <button
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 text-white shadow hover:bg-violet-800"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-violet-600 to-pink-500 text-white shadow hover:bg-violet-800"
             onClick={() => onMenuClick("order")}
           >
             <PlusCircle size={18} />
@@ -193,37 +193,163 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
       )}
 
       {/* Modal détail complet */}
+      {/* Modal élégant et compact - Version optimisée */}
       {showDetailModal && selectedOrder && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-base-100 p-6 rounded-xl max-w-md w-full">
-            <h3 className="text-xl font-bold mb-4">{t("mesCommandes.orderSummary")}</h3>
-            <div className="space-y-2 text-sm">
-              {selectedOrder.fichiers.map((f, idx) => (
-                <div key={idx} className="border-b border-gray-200 pb-2 mb-2">
-                  <p><strong>{t("mesCommandes.modal.file")}:</strong> {f.nom_fichier}</p>
-                  <p><strong>{t("mesCommandes.modal.dpi")}:</strong> {f.resolution_dpi}</p>
-                  <p><strong>{t("mesCommandes.modal.colorProfile")}:</strong> {f.profil_couleur}</p>
-                  <p><strong>{t("mesCommandes.modal.format")}:</strong> {f.format} {selectedOrder.configuration.format_type === "petit"
-                    ? `- ${selectedOrder.configuration.small_format}`
-                    : `- ${selectedOrder.configuration.largeur}x${selectedOrder.configuration.hauteur} cm`
-                  }</p>
-                  <p><strong>{t("mesCommandes.modal.formatType")}:</strong> {selectedOrder.configuration.format_type}</p>
-                  <p><strong>{t("mesCommandes.modal.paper")}:</strong> {selectedOrder.configuration.paper_type}</p>
-                  <p><strong>{t("mesCommandes.modal.finish")}:</strong> {selectedOrder.configuration.finish}</p>
-                  <p><strong>{t("mesCommandes.modal.quantity")}:</strong> {selectedOrder.configuration.quantity}</p>
-                  <p><strong>{t("mesCommandes.modal.bookPages")}:</strong> {selectedOrder.configuration.book_pages || "-"}</p>
-                  {selectedOrder.configuration.duplex && <p><strong>{t("mesCommandes.modal.duplex")}:</strong> {selectedOrder.configuration.duplex}</p>}
-                  {selectedOrder.configuration.binding && <p><strong>{t("mesCommandes.modal.binding")}:</strong> {selectedOrder.configuration.binding}</p>}
-                  {selectedOrder.configuration.cover_paper && <p><strong>{t("mesCommandes.modal.coverPaper")}:</strong> {selectedOrder.configuration.cover_paper}</p>}
-                  <p><strong>{t("mesCommandes.modal.phone")}:</strong> {selectedOrder.phone}</p>
-                  <p><strong>{t("mesCommandes.modal.amount")}:</strong> {selectedOrder.montant_total} Ariary</p>
-                  <p><strong>{t("mesCommandes.modal.options")}:</strong> {selectedOrder.configuration.options || "-"}</p>
+        <div className="fixed inset-0 bg-black/70 flex justify-center items-center z-50 backdrop-blur-sm p-4">
+          <div className="bg-base-100 rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden border border-base-300">
+            {/* En-tête compact */}
+            <div className="p-4 border-b border-base-300 bg-gradient-to-r from-violet-50 to-pink-50">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-base-100 rounded-lg shadow-sm">
+                    <svg className="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-indigo-600">Commande #{typeof selectedOrder.id === 'string' ? selectedOrder.id.slice(0, 6) : selectedOrder.id}</h2>
+                    <p className="text-xs text-pink-600">
+                      {new Date(selectedOrder.date_commande).toLocaleDateString('fr-FR')}
+                    </p>
+                  </div>
                 </div>
-              ))}
+                <button
+                  onClick={handleCancel}
+                  className="p-2 hover:bg-white/50 rounded-full transition-colors"
+                  aria-label="Fermer"
+                >
+                  <X size={18} className="text-base-content/70" />
+                </button>
+              </div>
             </div>
-            <div className="flex justify-end gap-4 mt-4">
-              <button onClick={handleCancel} className="px-4 py-2 rounded-lg border flex items-center gap-2 hover:bg-red-600 hover:text-white">
-                <X size={16} /> {t("mesCommandes.cancel")}
+
+            {/* Contenu principal - Layout horizontal */}
+            <div className="p-4">
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                {/* Statut */}
+                <div className="bg-base-200 rounded-lg p-3">
+                  <p className="text-xs text-base-content/60 mb-1">Statut</p>
+                  <span className={`inline-block px-2 py-1 rounded text-xs font-semibold ${selectedOrder.statut === 'TERMINE' ? 'bg-green-100 text-green-800' :
+                      selectedOrder.statut === 'EN_ATTENTE' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-violet-100 text-violet-800'
+                    }`}>
+                    {selectedOrder.statut}
+                  </span>
+                </div>
+
+                {/* Montant */}
+                <div className="bg-gradient-to-br from-violet-50 to-pink-50 rounded-lg p-3 border border-violet-100">
+                  <p className="text-sm text-violet-500 mb-1">Total</p>
+                  <p className="font-bold text-pink-600 text-lg">{selectedOrder.montant_total?.toLocaleString()} Ar</p>
+                </div>
+
+                {/* Contact */}
+                <div className="bg-base-200 rounded-lg p-3">
+                  <p className="text-xs text-base-content/60 mb-1">Contact</p>
+                  <p className="font-medium text-sm">{selectedOrder.phone || "-"}</p>
+                </div>
+              </div>
+
+              {/* Fichier principal - Design horizontal */}
+              <div className="mb-4">
+                <h3 className="text-sm font-semibold text-base-content/60 mb-2">FICHIER</h3>
+
+                {selectedOrder.fichiers?.slice(0, 1).map((f, idx) => (
+                  <div key={idx} className="bg-base-200 rounded-xl p-3">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="min-w-0 flex-1">
+                        <p className="font-semibold text-base-content truncate text-sm">{f.nom_fichier}</p>
+                        <div className="flex items-center gap-2 mt-1 text-xs text-base-content/60">
+                          <span>DPI: {f.resolution_dpi}</span>
+                          <span>•</span>
+                          <span>{f.profil_couleur}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Infos techniques en grille */}
+                    <div className="grid grid-cols-4 gap-2">
+                      <div className="bg-base-100 p-2 rounded">
+                        <p className="text-xs text-base-content/60 mb-1">Format</p>
+                        <p className="font-medium text-xs">
+                          {selectedOrder.configuration?.format_type === "petit"
+                            ? selectedOrder.configuration?.small_format?.slice(0, 8) || "-"
+                            : `${selectedOrder.configuration?.largeur || ''}x${selectedOrder.configuration?.hauteur || ''}`
+                          }
+                        </p>
+                      </div>
+
+                      <div className="bg-base-100 p-2 rounded">
+                        <p className="text-xs text-base-content/60 mb-1">Papier</p>
+                        <p className="font-medium text-xs truncate">{selectedOrder.configuration?.paper_type || "-"}</p>
+                      </div>
+
+                      <div className="bg-base-100 p-2 rounded">
+                        <p className="text-xs text-base-content/60 mb-1">Finition</p>
+                        <p className="font-medium text-xs truncate">{selectedOrder.configuration?.finish || "-"}</p>
+                      </div>
+
+                      <div className="bg-violet-50 p-2 rounded border border-violet-100">
+                        <p className="text-xs text-violet-600 mb-1">Qté</p>
+                        <p className="font-bold text-violet-600 text-sm">{selectedOrder.configuration?.quantity || "0"}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Options en badges horizontaux */}
+              <div className="mb-4">
+                <h3 className="text-sm font-semibold text-base-content/60 mb-2">OPTIONS</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selectedOrder.configuration?.book_pages && (
+                    <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs">
+                      <span className="text-xs">📖</span> {selectedOrder.configuration.book_pages}p
+                    </span>
+                  )}
+                  {selectedOrder.configuration?.duplex && (
+                    <span className="inline-flex items-center gap-1 bg-green-50 text-green-700 px-2 py-1 rounded text-xs">
+                      <span className="text-xs">🔄</span> {selectedOrder.configuration.duplex}
+                    </span>
+                  )}
+                  {selectedOrder.configuration?.binding && (
+                    <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-700 px-2 py-1 rounded text-xs">
+                      <span className="text-xs">📎</span> {selectedOrder.configuration.binding}
+                    </span>
+                  )}
+                  {selectedOrder.configuration?.cover_paper && (
+                    <span className="inline-flex items-center gap-1 bg-purple-50 text-purple-700 px-2 py-1 rounded text-xs">
+                      <span className="text-xs">🛡️</span> {selectedOrder.configuration.cover_paper}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Info fichiers multiples - Barre horizontale */}
+              {selectedOrder.fichiers && selectedOrder.fichiers.length > 1 && (
+                <div className="bg-violet-50 border border-violet-100 rounded-lg p-3 mb-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <svg className="w-4 h-4 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                      </svg>
+                      <span className="text-sm font-medium text-violet-700">
+                        + {selectedOrder.fichiers.length - 1} autre(s) fichier(s)
+                      </span>
+                    </div>
+                    <span className="text-xs text-violet-600">Voir tout</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Bouton fermer - Compact */}
+            <div className="p-4 border-t border-base-300">
+              <button
+                onClick={handleCancel}
+                className="w-full py-2.5 px-4 rounded-lg bg-gradient-to-r from-violet-500 to-pink-500 text-white font-semibold hover:opacity-90 transition-opacity text-sm"
+              >
+                Fermer le détail
               </button>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { authFetch } from "./Utils";
-import { Eye, EyeOff, Camera, Lock, User, MapPin, Phone, Mail, Save, Key, X } from "lucide-react"; // Ajout de X
+import { Eye, EyeOff, Camera, Lock, User, MapPin, Phone, Mail, Save, Key, X, Check, AlertCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { getAvatarUrl } from './avatarUtils';
 
@@ -18,7 +18,7 @@ export default function Profils() {
     });
     const [userProfilUrl, setUserProfilUrl] = useState<string | null>(null);
     const [userData, setUserData] = useState<any>(null);
-    const [showPhotoModal, setShowPhotoModal] = useState(false); // Nouvel état pour la modal
+    const [showPhotoModal, setShowPhotoModal] = useState(false);
 
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -27,6 +27,19 @@ export default function Profils() {
     const [showOld, setShowOld] = useState(false);
     const [showNew, setShowNew] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
+
+    // Nouveaux états pour la validation du mot de passe
+    const [passwordError, setPasswordError] = useState<string | null>(null);
+    const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
+    const [passwordValidation, setPasswordValidation] = useState({
+        length: false,
+        uppercase: false,
+        lowercase: false,
+        number: false,
+        special: false,
+        score: 0
+    });
+    const [isPasswordValid, setIsPasswordValid] = useState(false);
 
     useEffect(() => {
         const fetchProfil = async () => {
@@ -146,11 +159,52 @@ export default function Profils() {
         }
     };
 
+    // Fonction de validation du mot de passe
+    const validatePassword = (password: string) => {
+        const validations = {
+            length: password.length >= 8,
+            uppercase: /[A-Z]/.test(password),
+            lowercase: /[a-z]/.test(password),
+            number: /\d/.test(password),
+            special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+        };
+        
+        const score = Object.values(validations).filter(Boolean).length;
+        
+        setPasswordValidation({
+            ...validations,
+            score: score
+        });
+        
+        const isValid = Object.values(validations).every(Boolean);
+        setIsPasswordValid(isValid);
+        return isValid;
+    };
+
+    // Gestion du changement du nouveau mot de passe
+    const handleNewPasswordChange = (value: string) => {
+        setNewPassword(value);
+        validatePassword(value);
+    };
+
     const handlePasswordChange = async (e: React.FormEvent) => {
         e.preventDefault();
+        setPasswordError(null);
+        setPasswordSuccess(null);
+
+        // Validation côté client améliorée
+        if (!oldPassword) {
+            setPasswordError("L'ancien mot de passe est requis");
+            return;
+        }
 
         if (newPassword !== confirmPassword) {
-            alert(t("profil.errorPassword"));
+            setPasswordError(t("profil.errorPassword") || "Les mots de passe ne correspondent pas");
+            return;
+        }
+
+        if (!isPasswordValid) {
+            setPasswordError("Le mot de passe ne respecte pas tous les critères de sécurité");
             return;
         }
 
@@ -165,16 +219,36 @@ export default function Profils() {
             });
 
             if (res.ok) {
-                alert(t("profil.succesPassword"));
+                setPasswordSuccess(t("profil.succesPassword") || "Mot de passe changé avec succès");
                 setOldPassword("");
                 setNewPassword("");
                 setConfirmPassword("");
+                setPasswordValidation({
+                    length: false,
+                    uppercase: false,
+                    lowercase: false,
+                    number: false,
+                    special: false,
+                    score: 0
+                });
+                setIsPasswordValid(false);
+                
+                // Auto-clear le message de succès après 5 secondes
+                setTimeout(() => setPasswordSuccess(null), 5000);
             } else {
-                alert(t("profil.nosuccessPassword"));
-                console.error(await res.text());
+                const errorText = await res.text();
+                console.error(errorText);
+                
+                // Gestion des erreurs spécifiques
+                if (errorText.includes("ancien mot de passe") || errorText.includes("Ancien mot de passe")) {
+                    setPasswordError("L'ancien mot de passe est incorrect");
+                } else {
+                    setPasswordError(t("profil.nosuccessPassword") || "Échec du changement de mot de passe");
+                }
             }
         } catch (error) {
-            alert(error);
+            console.error("Erreur réseau:", error);
+            setPasswordError("Erreur réseau. Veuillez réessayer.");
         }
     };
 
@@ -188,12 +262,12 @@ export default function Profils() {
 
         if (showPhotoModal) {
             document.addEventListener('keydown', handleEscape);
-            document.body.style.overflow = 'hidden'; // Empêcher le scroll du body
+            document.body.style.overflow = 'hidden';
         }
 
         return () => {
             document.removeEventListener('keydown', handleEscape);
-            document.body.style.overflow = 'auto'; // Rétablir le scroll
+            document.body.style.overflow = 'auto';
         };
     }, [showPhotoModal]);
 
@@ -263,7 +337,7 @@ export default function Profils() {
                                 </div>
 
                                 <h2 className="text-2xl font-bold text-base-content">
-                                    {formData.prenom} <span className="text-blue-500">{formData.nom}</span>
+                                    {formData.prenom} <span className="text-indigo-600">{formData.nom}</span>
                                 </h2>
                                 <p className="text-base-content flex items-center gap-1 mt-1">
                                     <Mail size={16} />
@@ -462,6 +536,37 @@ export default function Profils() {
                                 </div>
                             </div>
 
+                            {/* Messages d'erreur/succès pour le mot de passe */}
+                            {passwordError && (
+                                <div className="alert alert-error bg-red-50 border-red-200 text-red-700 py-3 px-4 rounded-lg mb-4">
+                                    <div className="flex items-center gap-2">
+                                        <AlertCircle size={20} className="flex-shrink-0" />
+                                        <span className="text-sm font-medium">{passwordError}</span>
+                                    </div>
+                                    <button 
+                                        onClick={() => setPasswordError(null)} 
+                                        className="text-red-600 hover:text-red-800 ml-auto"
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
+                            )}
+
+                            {passwordSuccess && (
+                                <div className="alert alert-success bg-green-50 border-green-200 text-green-700 py-3 px-4 rounded-lg mb-4">
+                                    <div className="flex items-center gap-2">
+                                        <Check size={20} className="flex-shrink-0" />
+                                        <span className="text-sm font-medium">{passwordSuccess}</span>
+                                    </div>
+                                    <button 
+                                        onClick={() => setPasswordSuccess(null)} 
+                                        className="text-green-600 hover:text-green-800 ml-auto"
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
+                            )}
+
                             <form className="space-y-6" onSubmit={handlePasswordChange}>
                                 <div className="space-y-6">
                                     {/* Ancien mot de passe */}
@@ -480,18 +585,18 @@ export default function Profils() {
                                                 value={oldPassword}
                                                 onChange={(e) => setOldPassword(e.target.value)}
                                                 className="input input-bordered w-full pl-10 pr-12 
-                                     bg-base-50 focus:bg-base-100 
-                                     border-gray-300 focus:border-blue-500 
-                                     focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50
-                                     transition-all duration-200 relative z-0"
+                                                    bg-base-50 focus:bg-base-100 
+                                                    border-gray-300 focus:border-blue-500 
+                                                    focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50
+                                                    transition-all duration-200 relative z-0"
                                                 placeholder="••••••••"
                                             />
                                             <button
                                                 type="button"
                                                 onClick={() => setShowOld(!showOld)}
                                                 className="absolute inset-y-0 right-0 pr-3 flex items-center z-20
-                                     text-gray-500 hover:text-blue-600 transition-colors duration-200
-                                     bg-transparent"
+                                                    text-gray-500 hover:text-blue-600 transition-colors duration-200
+                                                    bg-transparent"
                                                 aria-label={showOld ? "Cacher le mot de passe" : "Afficher le mot de passe"}
                                             >
                                                 {showOld ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -513,25 +618,77 @@ export default function Profils() {
                                             <input
                                                 type={showNew ? "text" : "password"}
                                                 value={newPassword}
-                                                onChange={(e) => setNewPassword(e.target.value)}
-                                                className="input input-bordered w-full pl-10 pr-12 
-                                     bg-base-100 focus:bg-base-100 
-                                     border-gray-300 focus:border-blue-500 
-                                     focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50
-                                     transition-all duration-200 relative z-0"
+                                                onChange={(e) => handleNewPasswordChange(e.target.value)}
+                                                className={`input input-bordered w-full pl-10 pr-12 
+                                                    bg-base-100 focus:bg-base-100 
+                                                    ${newPassword && !isPasswordValid ? 'border-red-300' : 'border-gray-300'}
+                                                    ${newPassword && isPasswordValid ? 'border-green-300' : ''}
+                                                    focus:border-blue-500 
+                                                    focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50
+                                                    transition-all duration-200 relative z-0`}
                                                 placeholder="••••••••"
                                             />
                                             <button
                                                 type="button"
                                                 onClick={() => setShowNew(!showNew)}
                                                 className="absolute inset-y-0 right-0 pr-3 flex items-center z-20
-                                     text-gray-500 hover:text-blue-600 transition-colors duration-200
-                                     bg-transparent"
+                                                    text-gray-500 hover:text-blue-600 transition-colors duration-200
+                                                    bg-transparent"
                                                 aria-label={showNew ? "Cacher le mot de passe" : "Afficher le mot de passe"}
                                             >
                                                 {showNew ? <EyeOff size={20} /> : <Eye size={20} />}
                                             </button>
                                         </div>
+
+                                        {/* Indicateur de force du mot de passe amélioré */}
+                                        {newPassword && (
+                                            <div className="mt-3 space-y-2">
+                                                <div className="flex items-center justify-between mb-1">
+                                                    <span className="text-xs text-gray-600">{t("profil.force")}</span>
+                                                    <span className={`text-xs font-medium ${
+                                                        passwordValidation.score <= 2 ? "text-red-600" :
+                                                        passwordValidation.score <= 4 ? "text-yellow-600" :
+                                                        "text-green-600"
+                                                    }`}>
+                                                        {passwordValidation.score <= 2 ? "Faible" :
+                                                         passwordValidation.score <= 4 ? "Moyen" : "Fort"}
+                                                    </span>
+                                                </div>
+                                                <div className="w-full bg-gray-200 rounded-full h-2">
+                                                    <div
+                                                        className={`h-2 rounded-full transition-all duration-300 ${
+                                                            passwordValidation.score <= 2 ? "bg-red-500" :
+                                                            passwordValidation.score <= 4 ? "bg-yellow-500" : "bg-green-500"
+                                                        }`}
+                                                        style={{ width: `${(passwordValidation.score / 5) * 100}%` }}
+                                                    ></div>
+                                                </div>
+                                                
+                                                {/* Liste des critères */}
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 mt-2">
+                                                    <div className={`flex items-center gap-1 ${passwordValidation.length ? 'text-green-600' : 'text-gray-500'}`}>
+                                                        <span className="text-xs">{passwordValidation.length ? '✓' : '○'}</span>
+                                                        <span className="text-xs">{t("profil.passwordCriteria.min8chars")}</span>
+                                                    </div>
+                                                    <div className={`flex items-center gap-1 ${passwordValidation.uppercase ? 'text-green-600' : 'text-gray-500'}`}>
+                                                        <span className="text-xs">{passwordValidation.uppercase ? '✓' : '○'}</span>
+                                                        <span className="text-xs">{t("profil.passwordCriteria.minUppercase")}</span>
+                                                    </div>
+                                                    <div className={`flex items-center gap-1 ${passwordValidation.lowercase ? 'text-green-600' : 'text-gray-500'}`}>
+                                                        <span className="text-xs">{passwordValidation.lowercase ? '✓' : '○'}</span>
+                                                        <span className="text-xs">{t("profil.passwordCriteria.minLowercase")}</span>
+                                                    </div>
+                                                    <div className={`flex items-center gap-1 ${passwordValidation.number ? 'text-green-600' : 'text-gray-500'}`}>
+                                                        <span className="text-xs">{passwordValidation.number ? '✓' : '○'}</span>
+                                                        <span className="text-xs">{t("profil.passwordCriteria.minNumber")}</span>
+                                                    </div>
+                                                    <div className={`flex items-center gap-1 ${passwordValidation.special ? 'text-green-600' : 'text-gray-500'}`}>
+                                                        <span className="text-xs">{passwordValidation.special ? '✓' : '○'}</span>
+                                                        <span className="text-xs">{t("profil.passwordCriteria.minSpecial")}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
 
                                     {/* Confirmation */}
@@ -549,19 +706,21 @@ export default function Profils() {
                                                 type={showConfirm ? "text" : "password"}
                                                 value={confirmPassword}
                                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                                className="input input-bordered w-full pl-10 pr-12 
-                                     bg-base-50 focus:bg-base-100 
-                                     border-gray-300 focus:border-blue-500 
-                                     focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50
-                                     transition-all duration-200 relative z-0"
+                                                className={`input input-bordered w-full pl-10 pr-12 
+                                                    bg-base-50 focus:bg-base-100 
+                                                    ${confirmPassword && newPassword !== confirmPassword ? 'border-red-300' : 'border-gray-300'}
+                                                    ${confirmPassword && newPassword === confirmPassword ? 'border-green-300' : ''}
+                                                    focus:border-blue-500 
+                                                    focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50
+                                                    transition-all duration-200 relative z-0`}
                                                 placeholder="••••••••"
                                             />
                                             <button
                                                 type="button"
                                                 onClick={() => setShowConfirm(!showConfirm)}
                                                 className="absolute inset-y-0 right-0 pr-3 flex items-center z-20
-                                     text-gray-500 hover:text-blue-600 transition-colors duration-200
-                                     bg-transparent"
+                                                    text-gray-500 hover:text-blue-600 transition-colors duration-200
+                                                    bg-transparent"
                                                 aria-label={showConfirm ? "Cacher le mot de passe" : "Afficher le mot de passe"}
                                             >
                                                 {showConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -570,43 +729,18 @@ export default function Profils() {
                                     </div>
                                 </div>
 
-                                {/* Indicateur de force du mot de passe */}
-                                {newPassword && (
-                                    <div className="mt-2">
-                                        <div className="flex items-center justify-between mb-1">
-                                            <span className="text-xs text-gray-600">{t("profil.force")}</span>
-                                            <span className="text-xs font-medium">
-                                                {newPassword.length < 6 ? "Faible" :
-                                                    newPassword.length < 10 ? "Moyen" : "Fort"}
-                                            </span>
-                                        </div>
-                                        <div className="w-full bg-gray-200 rounded-full h-2">
-                                            <div
-                                                className={`h-2 rounded-full transition-all duration-300 ${newPassword.length < 6 ? "bg-red-500 w-1/3" :
-                                                    newPassword.length < 10 ? "bg-yellow-500 w-2/3" :
-                                                        "bg-green-500 w-full"
-                                                    }`}
-                                            ></div>
-                                        </div>
-                                        <p className="text-xs text-gray-500 mt-1">
-                                            {newPassword.length < 6 ? "Utilisez au moins 6 caractères" :
-                                                newPassword.length < 10 ? "Ajoutez des majuscules et chiffres" :
-                                                    "Mot de passe sécurisé"}
-                                        </p>
-                                    </div>
-                                )}
-
                                 <div className="flex justify-end pt-6 border-t border-gray-100">
                                     <button
                                         type="submit"
                                         className="btn btn-primary gap-2 px-8 min-h-12
-                             bg-gradient-to-r from-blue-600 to-blue-700 border-0 
-                             hover:from-blue-700 hover:to-blue-800 
-                             text-white font-medium shadow-md hover:shadow-lg
-                             transition-all duration-200
-                             disabled:opacity-50 disabled:cursor-not-allowed
-                             disabled:from-gray-400 disabled:to-gray-500 cursor-pointer"
-                                        disabled={!oldPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword}
+                                            bg-gradient-to-r from-violet-500 to-pink-600 border-0 
+                                            hover:from-violet-700 hover:to-pink-800 
+                                            text-white font-medium shadow-md hover:shadow-lg
+                                            transition-all duration-200
+                                            disabled:opacity-50 disabled:cursor-not-allowed
+                                            disabled:from-gray-400 disabled:to-gray-500 cursor-pointer"
+                                        disabled={!oldPassword || !newPassword || !confirmPassword || 
+                                                 newPassword !== confirmPassword || !isPasswordValid}
                                     >
                                         <Lock size={18} />
                                         <span>
@@ -614,18 +748,6 @@ export default function Profils() {
                                         </span>
                                     </button>
                                 </div>
-
-                                {/* Message d'erreur si les mots de passe ne correspondent pas */}
-                                {newPassword && confirmPassword && newPassword !== confirmPassword && (
-                                    <div className="alert alert-error bg-red-50 border-red-200 text-red-700 py-3 px-4 rounded-lg">
-                                        <div className="flex items-center gap-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                            <span className="text-sm">{t("profil.error")}</span>
-                                        </div>
-                                    </div>
-                                )}
                             </form>
                         </div>
                     </div>

@@ -216,7 +216,7 @@ const RegisterPage = () => {
                                 <button
                                     type="button"
                                     onClick={nextStep}
-                                    className="w-full py-3 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-lg shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 transition-all duration-300"
+                                    className="w-full py-3 bg-gradient-to-r from-violet-500 to-pink-600 text-white rounded-lg shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 transition-all duration-300"
                                 >
                                     Suivant
                                 </button>
@@ -272,7 +272,7 @@ const RegisterPage = () => {
                                     <button
                                         type="button"
                                         onClick={nextStep}
-                                        className="px-4 py-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-lg shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 transition-all duration-300"
+                                        className="px-4 py-2 bg-gradient-to-r from-violet-500 to-pink-600 text-white rounded-lg shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 transition-all duration-300"
                                     >
                                         Suivant
                                     </button>
@@ -331,7 +331,7 @@ const RegisterPage = () => {
                                     <button
                                         type="button"
                                         onClick={nextStep}
-                                        className="px-4 py-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-lg shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 transition-all duration-300"
+                                        className="px-4 py-2 bg-gradient-to-r from-violet-500 to-pink-600 text-white rounded-lg shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 transition-all duration-300"
                                     >
                                         Suivant
                                     </button>
@@ -405,7 +405,7 @@ const RegisterPage = () => {
                                     </button>
                                     <button
                                         type="submit"
-                                        className="px-4 py-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-lg shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 transition-all duration-300"
+                                        className="px-4 py-2 bg-gradient-to-r from-violet-500 to-pink-600 text-white rounded-lg shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 transition-all duration-300"
                                     >
                                         S'inscrire
                                     </button>

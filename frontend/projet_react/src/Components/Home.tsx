@@ -145,7 +145,7 @@ export default function HomePage() {
               {/* BOUTON COMMANDER - Version ultra-violet avec effet lumineux */}
               <Link
                 to="/login"
-                className="relative bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-bold py-4 px-6 rounded-full shadow-lg shadow-violet-500/40 hover:shadow-violet-500/60 transition-all duration-300 hover:scale-105 overflow-hidden group"
+                className="relative bg-gradient-to-r from-violet-500 to-pink-600 text-white font-bold py-4 px-6 rounded-full shadow-lg shadow-violet-500/40 hover:shadow-violet-500/60 transition-all duration-300 hover:scale-105 overflow-hidden group"
               >
                 <span className="relative z-10">{t("slider.commander")}</span>
                 <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
@@ -240,7 +240,7 @@ export default function HomePage() {
 
 
       {/* Call to Action */}
-      <section className="py-16 bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 text-white text-center relative overflow-hidden">
+      <section className="py-16 bg-gradient-to-r from-violet-500 to-pink-600 text-white text-center relative overflow-hidden">
 
         {/* Effet de particules ou d'éclats lumineux (optionnel) */}
         <div className="absolute inset-0 opacity-10">
@@ -323,7 +323,7 @@ export default function HomePage() {
               </p>
               <Link
                 to="/login"
-                className="relative bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 text-white mt-6 px-8 py-4 rounded-xl font-bold shadow-xl shadow-violet-500/40 hover:shadow-2xl hover:shadow-violet-500/60 transition-all duration-300 hover:scale-105 group overflow-hidden"
+                className="relative bg-gradient-to-r from-violet-500 via-purple-500 to-pink-600 text-white mt-6 px-8 py-4 rounded-xl font-bold shadow-xl shadow-violet-500/40 hover:shadow-2xl hover:shadow-violet-500/60 transition-all duration-300 hover:scale-105 group overflow-hidden"
               >
                 <span className="relative z-10 flex items-center gap-2">
                   {/* Optionnel: ajouter une icône */}
@@ -457,7 +457,7 @@ export default function HomePage() {
             </p>
             <Link
               to="/login"
-              className="btn bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white px-6 py-3 rounded-xl shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 hover:scale-105 transition-all duration-300"
+              className="btn bg-gradient-to-r from-violet-500 to-pink-600 text-white px-6 py-3 rounded-xl shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 hover:scale-105 transition-all duration-300"
             >
               {t("sectionPrêt.btn")}
             </Link>

@@ -34,7 +34,7 @@ export default function PublicationPopup() {
                         </button>
 
                         {/* Titre */}
-                        <h2 className="text-2xl font-bold text-center text-blue-600 mb-4">
+                        <h2 className="text-2xl font-bold text-center text-violet-500 mb-4">
                             Bienvenue sur Print.mg 🎉
                         </h2>
 
@@ -47,7 +47,7 @@ export default function PublicationPopup() {
                         <div className="flex justify-center">
                             <Link
                                 to="/login"
-                                className="px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+                                className="px-6 py-3 bg-gradient-to-r from-violet-500 to-pink-600 text-white rounded-full hover:bg-blue-700 transition"
                             >
                                 Commander maintenant
                             </Link>

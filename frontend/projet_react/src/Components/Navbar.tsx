@@ -239,7 +239,7 @@ export default function Navbar() {
             {/* Conteneur fixe pour le premier navbar */}
             <div className="fixed top-0 left-0 w-full z-50">
                 {/* Bandeau publicitaire */}
-                <div className="bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white text-center py-1 animate-pulse text-sm md:text-base">
+                <div className="bg-gradient-to-r from-violet-500 to-pink-600 text-white text-center py-1 animate-pulse text-sm md:text-base">
                     {t("navbar.slogan")}
                 </div>
 
@@ -415,7 +415,7 @@ export default function Navbar() {
                         <div className="dropdown dropdown-end hidden md:block">
                             <button
                                 tabIndex={0}
-                                className="btn bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white py-3 px-6 text-sm rounded-lg shadow-lg shadow-violet-500/50 hover:shadow-xl hover:shadow-violet-500/70 transition-all duration-200 hover:scale-105"
+                                className="btn bg-gradient-to-r from-violet-500 to-pink-600 text-white py-3 px-6 text-sm rounded-lg shadow-lg shadow-violet-500/50 hover:shadow-xl hover:shadow-violet-500/70 transition-all duration-200 hover:scale-105"
                             >
                                 {t("navbar.connexion")}
                             </button>

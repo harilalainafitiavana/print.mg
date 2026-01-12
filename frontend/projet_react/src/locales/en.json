@@ -45,7 +45,7 @@
   },
   "TableauAdmin": {
     "title": "Dashboard",
-    "weather": "Current Weather",
+    "weather": "Welcome 🙏",
     "users": "Users",
     "orders": "Orders",
     "products": "Products",
@@ -564,6 +564,17 @@
     "copyright": "© {{year}} Print.mg — All rights reserved."
   },
   "detaille": {
+    "whyChooseUs": "Why choose us?",
+    "exceptionalExperience": "An exceptional printing experience for all your needs",
+    "learnMore": "Learn more",
+    "discoverServices": "Discover our complete range of printing services",
+    "filterByCategory": "Filter by category:",
+    "noProductsFound": "No products found",
+    "tryModifyingSearch": "Try modifying your search criteria or explore other categories",
+    "popular": "Popular",
+    "startingFrom": "From",
+    "order": "Order",
+    "readyToStart": "Ready to get started?",
     "sectionHero": {
       "title": "Our printing services",
       "description": "Discover our full range of high-quality printing products. From business cards to large-format posters, we have everything to meet your needs.",
@@ -651,7 +662,18 @@
     "errorAlert": "Update error",
     "errorPassword": "The password does not match",
     "succesPassword": "Password success change !",
-    "nosuccessPassword": "Error while changing the password !"
+    "nosuccessPassword": "Error while changing the password !",
+    "errorOldPassword": "Old password is required",
+    "errorWrongOldPassword": "Old password is incorrect",
+    "errorPasswordRequirements": "Password must contain: at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character",
+    "errorNetwork": "Network error. Please try again.",
+    "passwordCriteria": {
+      "min8chars": "08 characters minimum",
+      "minLowercase": "01 lowercase",
+      "minUppercase": "01 uppercase",
+      "minNumber": "01 number",
+      "minSpecial": "01 special character"
+    }
   },
   "about": {
     "logoAlt": "Print.mg Logo",
@@ -706,5 +728,47 @@
   },
   "foter": {
     "rights": "All rights reserved"
+  },
+  "plusDetaille": {
+    "backToServices": "Back to services",
+    "ourCommitmentToExcellence": "Our Commitment to Excellence",
+    "discoverOurExcellence": "Discover in detail what makes us the ideal partner for all your printing needs",
+    "securityQualityGuarantee": "Security & Quality Guarantee",
+    "securityQualityDescription": "We take pride in guaranteeing the security and exceptional quality of all our printing products.",
+    "qualityControl": "Quality control at every production stage",
+    "ecoInks": "Certified non-toxic ecological inks",
+    "premiumPapers": "Premium quality, long-lasting papers",
+    "absoluteConfidentiality": "Absolute confidentiality of your documents",
+    "isoStandards": "International security standards ISO 9001",
+    "fastReliableDelivery": "Fast & Reliable Delivery",
+    "deliveryDescription": "Our express delivery service guarantees fast and secure receipt of your orders.",
+    "expressDelivery": "24-hour express delivery in Antananarivo",
+    "realTimeTracking": "Real-time tracking of your package",
+    "protectivePackaging": "Premium protective packaging",
+    "islandwideDelivery": "Delivery service across the island",
+    "competitiveFees": "Competitive delivery fees",
+    "advancedPrintingTech": "Advanced Printing Technology",
+    "techDescription": "State-of-the-art equipment for unparalleled professional printing quality.",
+    "hdPrinters": "High-definition 2400 DPI laser printers",
+    "pantoneTech": "Pantone color printing technology",
+    "largeFormat": "Large format machines up to A0",
+    "professionalFinishing": "Professional binding and finishing",
+    "digitalOffsetPrint": "Digital and offset printing",
+    "serviceDetails": "Our service details",
+    "whyChooseThisService": "Why choose this service?",
+    "uniqueApproachDescription": "Our unique approach combines technical expertise and exceptional customer service to offer you a complete experience. We commit to exceeding your expectations at every step of the process.",
+    "available7Days": "Available 7 days a week",
+    "techSupportIncluded": "Technical support included",
+    "satisfactionGuarantee": "Satisfaction or money-back guarantee",
+    "readyToStartProject": "Ready to start your project?",
+    "discoverOurServices": "Discover how our services can transform your ideas into impressive achievements",
+    "orderNow": "Order now",
+    "viewAllServices": "View all services",
+    "Satisfactionclients": "Customer satisfaction",
+    "Documentssécurisés": "Secure documents",
+    "Livraisontemps": "On-time delivery",
+    "Zonesdesservies": "Service areas",
+    "Résolutionmax": "Max resolution",
+    "Supporttechnique": "Technical support"
   }
 }

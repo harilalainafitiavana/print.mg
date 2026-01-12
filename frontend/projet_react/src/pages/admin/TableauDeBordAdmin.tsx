@@ -80,10 +80,10 @@ const AdminDashboard = () => {
             {/* Header */}
             <div className="flex flex-col lg:flex-row lg:justify-between ">
                 {/* Widget météo */}
-                <div className="bg-gradient-to-r from-yellow-400 to-orange-500 p-6 shadow rounded-xl w-64 flex items-center justify-between">
+                <div className="bg-gradient-to-r from-violet-500 to-pink-600 p-6 shadow rounded-xl w-64 flex items-center justify-between">
                     <div>
                         <h3 className="text-lg font-semibold text-white">{t("TableauAdmin.weather")}</h3>
-                        <p className="text-2xl font-bold text-white mt-1">{meteo}°C</p>
+                        <p className="text-2xl font-bold text-white mt-1">😉👏☺️</p>
                     </div>
                     <Sun size={48} className="text-white" />
                 </div>

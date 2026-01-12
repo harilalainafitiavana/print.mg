@@ -196,7 +196,7 @@ export default function AdminCommande() {
       <h1 className="text-2xl font-bold mb-4">📋 {t("orders.title")}</h1>
 
       <table className="w-full text-left border-collapse">
-        <thead className="bg-indigo-500 text-white">
+        <thead className="bg-gradient-to-r from-violet-600 to-pink-500 text-white">
           <tr>
             <th className="px-4 py-2">{t("orders.table.id")}</th>
             <th className="px-4 py-2">{t("orders.table.name")}</th>
@@ -245,7 +245,7 @@ export default function AdminCommande() {
                     setShowActionModal(true);
                   }}
 
-                  className="bg-indigo-500 text-white ml-4 px-4 py-2 rounded-lg hover:bg-indigo-600 flex items-center gap-2"
+                  className="bg-gradient-to-r from-violet-600 to-pink-500 text-white ml-4 px-4 py-2 rounded-lg hover:bg-indigo-600 flex items-center gap-2"
                 >
                   {t("orders.table.actions")} <Wrench size={16} />
                 </button>

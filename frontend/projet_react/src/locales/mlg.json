@@ -45,7 +45,7 @@
   },
   "TableauAdmin": {
     "title": "Tabilao fitantanana",
-    "weather": "Toetrandro amin'izao",
+    "weather": "Tongasoa 🙏",
     "users": "Mpampiasa",
     "orders": "Baiko",
     "products": "Vokatra",
@@ -564,6 +564,17 @@
     "copyright": "© {{year}} Print.mg — Zo rehetra voatokana."
   },
   "detaille": {
+    "whyChooseUs": "Nahoana no hifidiana anay?",
+    "exceptionalExperience": "Traikefa fanontam-pirinty tsara indrindra ho an'ny filanao rehetra",
+    "learnMore": "Hamarino kokoa",
+    "discoverServices": "Hitsidihao ny lisitra feno serivisy fanontam-pirinty ananantsika",
+    "filterByCategory": "Sivana araka ny sokajy:",
+    "noProductsFound": "Tsy misy vokatra hita",
+    "tryModifyingSearch": "Andramo ny hanova ny fikarohanao na hijery sokajy hafa",
+    "popular": "Malaza",
+    "startingFrom": "Manomboka amin'ny",
+    "order": "Baiko",
+    "readyToStart": "Vonona handeha ve ianao?",
     "sectionHero": {
       "title": "Ny tolotra fanontananay",
       "description": "Fantaro ny karazana vokatra fanontana avo lenta ananantsika. Manomboka amin'ny karatra fandraharahana ka hatamin'ny afisy lehibe, manana izay rehetra ilainao izahay",
@@ -651,9 +662,19 @@
     "errorAlert": "Misy tsy fietezana ny fanovana",
     "errorPassword": "Tsy mifanaraka ny teny miafinao",
     "succesPassword": "Voahova ny teny miafina !",
-    "nosuccessPassword": "Misy tsy fihetezana ny fanovana teny miafina"
+    "nosuccessPassword": "Misy tsy fihetezana ny fanovana teny miafina",
+    "errorOldPassword": "Ilaina ny tenimiafina taloha",
+    "errorWrongOldPassword": "Diso ny tenimiafina taloha",
+    "errorPasswordRequirements": "Tokony hanana io ireo teny manaraka ireo ilay tenimiafina : farafahakeliny tarehimarika 8, litera lehibe 1, litera madinika 1, isa 1 ary marika manokana 1",
+    "errorNetwork": "Hadisoana tambajotra. Andramo indray azafady.",
+    "passwordCriteria": {
+      "min8chars": "Farafahakeliny tarehimarika 08",
+      "minLowercase": "Litera madinika 01",
+      "minUppercase": "Litera lehibe 01",
+      "minNumber": "Isa 01",
+      "minSpecial": "Marika manokana 01"
+    }
   },
-  
   "about": {
     "logoAlt": "Sary famantarana Print.mg",
     "title": "Print.mg",
@@ -707,5 +728,47 @@
   },
   "foter": {
     "rights": "Zo rehetra voatokana"
+  },
+  "plusDetaille": {
+    "backToServices": "Miverina amin'ny serivisy",
+    "ourCommitmentToExcellence": "Ny toky ananantsika amin'ny fahamendrehana",
+    "discoverOurExcellence": "Hitsidihao tsara izay manao antsika ho mpiara-miasa mety ho an'ny filanao fanontam-pirinty rehetra",
+    "securityQualityGuarantee": "Fiarovana & Kalita antoka",
+    "securityQualityDescription": "Manantanteraka ny fiarovana sy ny kalita tsara indrindra amin'ny vokatra fanontam-pirinty rehetra izahay.",
+    "qualityControl": "Fikarohana kalita isaky ny dingana fanamboarana",
+    "ecoInks": "Ranomainty tsy manimba tontolo iainana voamarina tsy misy poizina",
+    "premiumPapers": "Taratasy kalita avo lenta maharitra",
+    "absoluteConfidentiality": "Tsiambaratelo tanteraka ny antontan-taratasinao",
+    "isoStandards": "Fenitra iraisam-pirenena momba ny fiarovana ISO 9001",
+    "fastReliableDelivery": "Fandefasana haingana & azo itokisana",
+    "deliveryDescription": "Ny serivisy fandefasana haingana ananantsika dia miantoka ny fahazoana haingana sy azo antoka ny baikonao.",
+    "expressDelivery": "Fandefasana haingana ao an-tanàna andro iray",
+    "realTimeTracking": "Fanarahana ny fonosinao mitranga",
+    "protectivePackaging": "Fonosina fiarovana kalita avo lenta",
+    "islandwideDelivery": "Serivisy fandefasana manerana ny nosy",
+    "competitiveFees": "Saram-pandefasana mifaninana",
+    "advancedPrintingTech": "Teknolojia fanontam-pirinty mandroso",
+    "techDescription": "Fitaovana teknolojia faramparany ho an'ny kalita fanontam-pirinty matihanina tsy manam-paharoa.",
+    "hdPrinters": "Mpanonta laser avo lenta 2400 DPI",
+    "pantoneTech": "Teknolojia fanontam-pirinty loko Pantone",
+    "largeFormat": "Milina fanontana lehibe hatramin'ny A0",
+    "professionalFinishing": "Famatorana sy famaranana matihanina",
+    "digitalOffsetPrint": "Fanontana nomerika sy ofisety",
+    "serviceDetails": "Antsipirihany momba ny serivisintsika",
+    "whyChooseThisService": "Nahoana no hifidiana an'ity serivisy ity?",
+    "uniqueApproachDescription": "Ny fomba fiasa tsy manam-paharoa ananantsika dia mampiaraka ny fahaizana ara-teknika sy serivisy mpanjifa tsara indrindra mba hanolotra anao traikefa feno. Miantoka ny hihoatra ny andrasanao isaky ny dingana izahay.",
+    "available7Days": "Miasa 7 andro isan-kerinandro",
+    "techSupportIncluded": "Fanohanana teknika tafiditra",
+    "satisfactionGuarantee": "Antoka fahafaham-po na famerenam-bola",
+    "readyToStartProject": "Vonona handeha amin'ny projektao ve ianao?",
+    "discoverOurServices": "Hitanio ny fomba ahafahan'ny serivisintsika manova ny hevitrao ho zava-bita mahatalanjona",
+    "orderNow": "Baiko izao",
+    "viewAllServices": "Hijery ny serivisy rehetra",
+    "Satisfactionclients": "Fahafaham-po mpanjifa",
+    "Documentssécurisés": "Antontan-taratamy azo antoka",
+    "Livraisontemps": "Fandefasana ara-potoana",
+    "Zonesdesservies": "Faritra ifandraisana",
+    "Résolutionmax": "Vahaolana farafahakeliny",
+    "Supporttechnique": "Fanohanana ara-teknika"
   }
 }

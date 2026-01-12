@@ -127,9 +127,9 @@ const PublicationsPage: React.FC = () => {
             <section className="py-20 bg-white">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-4">Pourquoi nous choisir ?</h2>
+                        <h2 className="text-3xl font-bold text-gray-900 mb-4">{t("detaille.whyChooseUs")}</h2>
                         <p className="text-gray-600 max-w-2xl mx-auto">
-                            Une expérience d'impression exceptionnelle pour tous vos besoins
+                            {t("detaille.exceptionalExperience")}
                         </p>
                     </div>
 
@@ -174,7 +174,7 @@ const PublicationsPage: React.FC = () => {
                                         className="flex items-center gap-2 text-sm text-gray-600 hover:text-violet-600 transition-colors duration-300 group/btn"
                                     >
                                         <div className="w-2 h-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-full group-hover/btn:scale-125 transition-transform duration-300"></div>
-                                        <span className="font-medium">En savoir plus</span>
+                                        <span className="font-medium">{t("detaille.learnMore")}</span>
                                         <svg
                                             className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform duration-300"
                                             fill="none"
@@ -200,12 +200,12 @@ const PublicationsPage: React.FC = () => {
                             <h2 className="text-4xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
                                 {t("detaille.product.title")}
                             </h2>
-                            <p className="text-gray-600 mt-2">Découvrez notre gamme complète de services d'impression</p>
+                            <p className="text-gray-600 mt-2">{t("detaille.discoverServices")}</p>
                         </div>
 
                         <button
                             onClick={() => setShowPriceModal(true)}
-                            className="group relative overflow-hidden bg-gradient-to-r from-blue-500 via-violet-600 to-fuchsia-700 text-white font-bold px-8 py-4 rounded-full shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-105"
+                            className="group relative overflow-hidden bg-gradient-to-r from-violet-500 via-violet-600 to-pink-600 text-white font-bold px-8 py-4 rounded-full shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-105"
                         >
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                             <div className="flex items-center gap-3 relative">
@@ -222,7 +222,7 @@ const PublicationsPage: React.FC = () => {
                             <div className="p-2 bg-violet-100 rounded-lg">
                                 <Filter className="h-5 w-5 text-violet-600" />
                             </div>
-                            <span className="font-medium text-gray-700">Filtrer par catégorie :</span>
+                            <span className="font-medium text-gray-700">{t("detaille.filterByCategory")}</span>
                         </div>
 
                         <div className="flex flex-wrap gap-2 justify-center">
@@ -246,9 +246,9 @@ const PublicationsPage: React.FC = () => {
                             <div className="inline-block p-6 bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl mb-6">
                                 <Package className="h-16 w-16 text-gray-400 mx-auto" />
                             </div>
-                            <h3 className="text-2xl font-bold text-gray-700 mb-3">Aucun produit trouvé</h3>
+                            <h3 className="text-2xl font-bold text-gray-700 mb-3">{t("detaille.noProductsFound")}</h3>
                             <p className="text-gray-500 max-w-md mx-auto">
-                                Essayez de modifier vos critères de recherche ou explorez d'autres catégories
+                                {t("detaille.tryModifyingSearch")}
                             </p>
                         </div>
                     ) : (
@@ -265,7 +265,7 @@ const PublicationsPage: React.FC = () => {
                                         <div className="absolute top-4 left-4 z-10">
                                             <div className="flex items-center gap-1 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
                                                 <Star className="h-3 w-3" />
-                                                Populaire
+                                                {t("detaille.popular")}
                                             </div>
                                         </div>
                                     )}
@@ -312,13 +312,13 @@ const PublicationsPage: React.FC = () => {
                                         {/* Prix et CTA */}
                                         <div className="flex justify-between items-center pt-4 border-t border-gray-100">
                                             <div>
-                                                <div className="text-sm text-gray-500">À partir de</div>
+                                                <div className="text-sm text-gray-500">{t("detaille.startingFrom")}</div>
                                                 <div className="text-2xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
                                                     {product.prix} Ar
                                                 </div>
                                             </div>
                                             <Link to="/login" className="bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white px-5 py-2.5 rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all duration-300">
-                                                Commander
+                                                {t("detaille.order")}
                                             </Link>
                                         </div>
                                     </div>
@@ -396,7 +396,7 @@ const PublicationsPage: React.FC = () => {
                 <div className="container relative mx-auto px-4 text-center">
                     <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
                         <Zap className="h-4 w-4" />
-                        <span className="text-sm font-medium">Prêt à commencer ?</span>
+                        <span className="text-sm font-medium">{t("detaille.readyToStart")}</span>
                     </div>
 
                     <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -485,6 +485,12 @@ const PublicationsPage: React.FC = () => {
                                     <li>
                                         {t("detaille.product.modal.stapled")} : <span className="font-bold">1000 Ar</span>
                                     </li>
+                                    <li>
+                                        Rigide : <span className='font-bold'>3000</span>
+                                    </li>
+                                    <li>
+                                        Cousu : <span className='font-bold'>2500</span>
+                                    </li>
                                 </ul>
                             </div>
 
@@ -499,6 +505,15 @@ const PublicationsPage: React.FC = () => {
                                     </li>
                                     <li>
                                         {t("detaille.product.modal.simple")} : <span className="font-bold">1000 Ar</span>
+                                    </li>
+                                    <li>
+                                        Mat : <span className='font-bold'>2000</span>
+                                    </li>
+                                    <li>
+                                        Brillant : <span className='font-bold'>2000</span>
+                                    </li>
+                                    <li>
+                                        Texture : <span className='font-bold'>4000</span>
                                     </li>
                                     <li>
                                         {t("detaille.product.modal.doubleSided")} : <span className="italic text-blue-600">{t("detaille.product.modal.validPrice")}</span>

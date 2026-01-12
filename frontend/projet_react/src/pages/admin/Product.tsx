@@ -240,7 +240,7 @@ export default function ProductList() {
                     </div>
                     <button
                         onClick={() => setShowAddModal(true)}
-                        className="flex items-center gap-3 px-6 py-3 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-600 text-white hover:from-violet-600 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-200"
+                        className="flex items-center gap-3 px-6 py-3 rounded-xl bg-gradient-to-r from-violet-400 to-pink-500 text-white hover:from-violet-500 hover:to-pink-600 shadow-lg hover:shadow-xl transition-all duration-200"
                     >
                         <PlusCircle size={20} />
                         <span className="font-semibold">{t("products.add")}</span>
