@@ -3,6 +3,7 @@ import { Eye, EyeOff, Mail, Lock, Printer, Truck, Shield, Globe } from 'lucide-r
 import { Link, useNavigate } from 'react-router-dom';
 import Slide_show from './Slide_show';
 import { useGoogleLogin } from '@react-oauth/google';
+import API_BASE_URL from '../services/api';
 
 
 const LoginPage = () => {
@@ -22,7 +23,7 @@ const LoginPage = () => {
 
     try {
       // 1️⃣ Récupérer le token
-      const res = await fetch('http://localhost:8000/api/token/', {
+      const res = await fetch(`${API_BASE_URL}/api/token/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -39,7 +40,7 @@ const LoginPage = () => {
       }
 
       // 2️⃣ Récupérer les infos utilisateur
-      const userRes = await fetch('http://localhost:8000/api/me/', {
+      const userRes = await fetch(`${API_BASE_URL}/api/me/`, {
         headers: { Authorization: `Bearer ${data.access}` },
       });
       const userData = await userRes.json();
@@ -80,7 +81,7 @@ const LoginPage = () => {
         console.log("Google profile", profile);
 
         // Envoi au backend
-        const backendRes = await fetch('http://localhost:8000/api/google-login/', {
+        const backendRes = await fetch(`${API_BASE_URL}/api/google-login/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

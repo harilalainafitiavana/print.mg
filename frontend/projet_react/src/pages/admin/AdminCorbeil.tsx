@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { RotateCcw, Trash, X, Check, Archive, Package, Bell, User, Mail, Phone, Calendar, FileText, Hash, DollarSign } from "lucide-react";
 import { authFetch } from "../../Components/Utils";
 import { useTranslation } from "react-i18next";
+import API_BASE_URL from "../../services/api";
 
 // ------------------- Types -------------------
 interface Fichier {
@@ -76,7 +77,7 @@ export default function AdminCorbeille() {
         const token = localStorage.getItem("token") || sessionStorage.getItem("token");
         if (!token) return;
 
-        const res = await fetch("http://localhost:8000/api/commandes/deleted/", {
+        const res = await fetch(`${API_BASE_URL}/api/commandes/deleted/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -98,7 +99,7 @@ export default function AdminCorbeille() {
         const token = localStorage.getItem("token") || sessionStorage.getItem("token");
         if (!token) return;
 
-        const res = await fetch("http://localhost:8000/api/notifications/deleted/", {
+        const res = await fetch(`${API_BASE_URL}/api/notifications/deleted/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -117,7 +118,7 @@ export default function AdminCorbeille() {
   const confirmRestore = async () => {
     if (!selectedOrder) return;
     try {
-      const res = await authFetch(`http://localhost:8000/api/commandes/${selectedOrder.id}/restore/`, { method: "POST" });
+      const res = await authFetch(`${API_BASE_URL}/api/commandes/${selectedOrder.id}/restore/`, { method: "POST" });
       if (res.ok) {
         setDeletedOrders(prev => prev.filter(o => o.id !== selectedOrder.id));
       }
@@ -130,7 +131,7 @@ export default function AdminCorbeille() {
   const confirmDeletePermanent = async () => {
     if (!selectedOrder) return;
     try {
-      const res = await authFetch(`http://localhost:8000/api/commandes/${selectedOrder.id}/delete_forever/`, { method: "DELETE" });
+      const res = await authFetch(`${API_BASE_URL}/api/commandes/${selectedOrder.id}/delete_forever/`, { method: "DELETE" });
       if (res.ok) {
         setDeletedOrders(prev => prev.filter(o => o.id !== selectedOrder.id));
       }
@@ -144,7 +145,7 @@ export default function AdminCorbeille() {
   const confirmRestoreNotification = async () => {
     if (!selectedNotif) return;
     try {
-      const res = await authFetch(`http://localhost:8000/api/notifications/restore/${selectedNotif.id}/`, { method: "POST" });
+      const res = await authFetch(`${API_BASE_URL}/api/notifications/restore/${selectedNotif.id}/`, { method: "POST" });
       if (res.ok) {
         setDeletedNotifications(prev => prev.filter(n => n.id !== selectedNotif.id));
       }
@@ -157,7 +158,7 @@ export default function AdminCorbeille() {
   const confirmDeletePermanentNotif = async () => {
     if (!selectedNotif) return;
     try {
-      const res = await authFetch(`http://localhost:8000/api/notifications/delete-forever/${selectedNotif.id}/`, { method: "DELETE" });
+      const res = await authFetch(`${API_BASE_URL}/api/notifications/delete-forever/${selectedNotif.id}/`, { method: "DELETE" });
       if (res.ok) {
         setDeletedNotifications(prev => prev.filter(n => n.id !== selectedNotif.id));
       }

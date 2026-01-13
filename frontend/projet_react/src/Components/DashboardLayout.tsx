@@ -9,6 +9,7 @@ import NotificationButton from "./NotificationButton";
 import '../calendar.css';
 import { useTranslation } from "react-i18next";
 import axios from "axios";
+import API_BASE_URL from "../services/api";
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -105,10 +106,10 @@ export default function DashboardLayout({
             try {
                 setLoadingSidebar(true);
                 const [dashboardResponse, countResponse] = await Promise.all([
-                    axios.get("http://localhost:8000/api/admin/dashboard/", {
+                    axios.get(`${API_BASE_URL}/api/admin/dashboard/`, {
                         headers: { Authorization: `Bearer ${token}` }
                     }),
-                    axios.get("http://localhost:8000/api/admin/commandes/count/")
+                    axios.get(`${API_BASE_URL}/api/admin/commandes/count/`)
                 ]);
 
                 const data = dashboardResponse.data;

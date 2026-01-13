@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { label } from "framer-motion/client";
+import API_BASE_URL from "../services/api";
 
 interface Produit {
     id: number;
@@ -29,7 +31,7 @@ export default function Navbar() {
             if (search.trim().length > 1) {
                 try {
                     const res = await fetch(
-                        `http://localhost:8000/api/search-produits/?search=${encodeURIComponent(search)}`
+                        `${API_BASE_URL}/api/search-produits/?search=${encodeURIComponent(search)}`
                     );
                     const data: Produit[] = await res.json();
                     setSuggestions(data.slice(0, 5)); // max 5 suggestions
@@ -78,7 +80,7 @@ export default function Navbar() {
 
     // Nombre de commande
     useEffect(() => {
-        fetch("http://localhost:8000/api/admin/commandes/count/")
+        fetch(`${API_BASE_URL}/api/admin/commandes/count/`)
             .then(res => res.json())
             .then(data => setCartCount(data.count))
             .catch(err => console.error(err));

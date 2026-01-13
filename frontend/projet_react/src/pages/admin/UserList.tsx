@@ -3,6 +3,7 @@ import { Eye, Users, Search, ChevronLeft, ChevronRight, Mail, Phone, MapPin, Use
 import { authFetch } from "../../Components/Utils";
 import { useTranslation } from "react-i18next";
 import { getAvatarUrl } from "../../Components/avatarUtils";
+import API_BASE_URL from "../../services/api";
 
 interface User {
     id: number;
@@ -33,7 +34,7 @@ const AdminUsersDashboard = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await authFetch("http://127.0.0.1:8000/api/users/");
+                const response = await authFetch(`${API_BASE_URL}/api/users/`);
 
                 if (response.ok) {
                     const data = await response.json();

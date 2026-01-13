@@ -3,10 +3,10 @@ import { authFetch } from "../../Components/Utils";
 import {
     User, Calendar, X, Check, Trash, Eye,
     Bell, Send, Mail, Search, Filter, Clock,
-    MessageSquare, AlertCircle, ChevronDown,
-    ChevronRight, RefreshCw, Users, Inbox
+    MessageSquare, AlertCircle, ChevronDown, RefreshCw, Users, Inbox
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import API_BASE_URL from "../../services/api";
 
 type NotificationType = {
     id: number;
@@ -78,7 +78,7 @@ export default function AdminUserNotifications() {
     const fetchNotifications = async () => {
         setIsLoading(true);
         try {
-            const res = await authFetch("http://localhost:8000/api/notifications-admin/");
+            const res = await authFetch(`${API_BASE_URL}/api/notifications-admin/`);
             const data = await res.json();
 
             // Combiner les données de l'API avec l'état lu depuis localStorage
@@ -239,7 +239,7 @@ export default function AdminUserNotifications() {
         setIsLoading(true);
         try {
             const res = await authFetch(
-                `http://localhost:8000/api/notifications/delete/${selectedNotification.id}/`,
+                `${API_BASE_URL}/api/notifications/delete/${selectedNotification.id}/`,
                 { method: "POST" }
             );
 
@@ -280,7 +280,7 @@ export default function AdminUserNotifications() {
 
         setIsLoading(true);
         try {
-            const res = await authFetch("http://localhost:8000/api/send-notification/", {
+            const res = await authFetch(`${API_BASE_URL}/api/send-notification/`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

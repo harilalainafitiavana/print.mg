@@ -8,6 +8,7 @@ import RetourAcceuil from './RetourAccueil';
 import Popup from './Popup';
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
+import API_BASE_URL from '../services/api';
 
 // Types TypeScript
 interface Product {
@@ -36,7 +37,7 @@ const PublicationsPage: React.FC = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const res = await fetch("http://localhost:8000/api/produits/");
+                const res = await fetch(`${API_BASE_URL}/api/produits/`);
                 const data = await res.json();
                 setProducts(data);
 

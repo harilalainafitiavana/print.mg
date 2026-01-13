@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { RotateCcw, Trash2, X, Check, Archive, Bell, Package, FileText, Phone, DollarSign, Hash, Calendar, User, Mail } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import API_BASE_URL from "../../services/api";
 
 // ================================
 // 🔹 Types
@@ -85,7 +86,7 @@ export default function Trash() {
       const token = localStorage.getItem("token") || sessionStorage.getItem("token");
       if (!token) return;
 
-      const res = await fetch("http://localhost:8000/api/commandes/deleted/", {
+      const res = await fetch(`${API_BASE_URL}/api/commandes/deleted/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -101,7 +102,7 @@ export default function Trash() {
       const token = localStorage.getItem("token") || sessionStorage.getItem("token");
       if (!token) return;
 
-      const res = await fetch("http://localhost:8000/api/notifications/deleted/", {
+      const res = await fetch(`${API_BASE_URL}/api/notifications/deleted/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -135,10 +136,10 @@ export default function Trash() {
       // 🔹 Commande
       if (selectedItem.type === "order") {
         if (showModal === "restore") {
-          await fetch(`http://localhost:8000/api/commandes/${selectedItem.id}/restore/`, { method: "POST", headers: { Authorization: `Bearer ${token}` } });
+          await fetch(`${API_BASE_URL}/api/commandes/${selectedItem.id}/restore/`, { method: "POST", headers: { Authorization: `Bearer ${token}` } });
           setDeletedOrders(prev => prev.filter(o => o.id !== selectedItem.id));
         } else if (showModal === "delete") {
-          await fetch(`http://localhost:8000/api/commandes/${selectedItem.id}/delete_forever/`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+          await fetch(`${API_BASE_URL}/api/commandes/${selectedItem.id}/delete_forever/`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
           setDeletedOrders(prev => prev.filter(o => o.id !== selectedItem.id));
         }
       }
@@ -146,10 +147,10 @@ export default function Trash() {
       // 🔹 Notification
       if (selectedItem.type === "notification") {
         if (showModal === "restore") {
-          await fetch(`http://localhost:8000/api/notifications/restore/${selectedItem.id}/`, { method: "POST", headers: { Authorization: `Bearer ${token}` } });
+          await fetch(`${API_BASE_URL}/api/notifications/restore/${selectedItem.id}/`, { method: "POST", headers: { Authorization: `Bearer ${token}` } });
           setDeletedNotifications(prev => prev.filter(n => n.id !== selectedItem.id));
         } else if (showModal === "delete") {
-          await fetch(`http://localhost:8000/api/notifications/delete-forever/${selectedItem.id}/`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+          await fetch(`${API_BASE_URL}/api/notifications/delete-forever/${selectedItem.id}/`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
           setDeletedNotifications(prev => prev.filter(n => n.id !== selectedItem.id));
         }
       }

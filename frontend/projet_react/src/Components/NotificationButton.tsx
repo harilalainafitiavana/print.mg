@@ -1,6 +1,7 @@
 import { Bell } from "lucide-react";
 import { useEffect, useState } from "react";
 import { authFetch } from "./Utils";
+import API_BASE_URL from "../services/api";
 
 export default function NotificationButton({ onClick }: { onClick: () => void }) {
     const [count, setCount] = useState<number>(0);
@@ -8,7 +9,7 @@ export default function NotificationButton({ onClick }: { onClick: () => void })
     useEffect(() => {
         const fetchCount = async () => {
             try {
-                const res = await authFetch("http://localhost:8000/api/unread-count/");
+                const res = await authFetch(`${API_BASE_URL}/api/unread-count/`);
                 if (res.ok) {
                     const data = await res.json();
                     setCount(data.unread_count);
@@ -29,7 +30,7 @@ export default function NotificationButton({ onClick }: { onClick: () => void })
         onClick();
         try {
             // Marquer comme lu quand on ouvre la page notif
-            await authFetch("http://localhost:8000/api/mark-notifications-read/", {
+            await authFetch(`${API_BASE_URL}/api/mark-notifications-read/`, {
                 method: "POST",
             });
             setCount(0);

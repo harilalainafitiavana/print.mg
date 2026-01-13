@@ -7,6 +7,7 @@ import {
     PieChart, Pie, Cell
 } from "recharts";
 import { User, ShoppingCart, Package, FileText, DollarSign, Sun } from "lucide-react";
+import API_BASE_URL from "../../services/api";
 
 const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6"];
 
@@ -41,14 +42,14 @@ const AdminDashboard = () => {
     const [commandesParStatut, setCommandesParStatut] = useState<any[]>([]);
     const [dernieresCommandes, setDernieresCommandes] = useState<Commande[]>([]);
     const [utilisateursRecents, setUtilisateursRecents] = useState<Utilisateur[]>([]);
-    const [meteo, setMeteo] = useState<number | null>(null);
+    // const [meteo, setMeteo] = useState<number | null>(null);
 
     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
     useEffect(() => {
         if (!token) return;
 
-        axios.get("http://localhost:8000/api/admin/dashboard/", {
+        axios.get(`${API_BASE_URL}/api/admin/dashboard/`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => {
@@ -61,7 +62,7 @@ const AdminDashboard = () => {
             .catch(err => console.error(err));
 
         // Météo temporaire
-        setMeteo(25);
+        // setMeteo(25);
     }, [token]);
 
     if (!totaux) return <p className="text-center mt-10 text-gray-500">Chargement du dashboard...</p>;

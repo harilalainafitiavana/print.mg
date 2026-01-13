@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { authFetch } from "../../Components/Utils";
 import {
-  Bell, Check, Send, Trash, X, MessageSquare,
-  Clock, User, Mail, ChevronRight, AlertCircle,
-  Eye, EyeOff, Filter, Archive, Inbox, RefreshCw,
-  Download, Upload, Reply, History, BookOpen, MailOpen
+  Bell, Check, Send, Trash, X,
+  Clock, User, Mail, AlertCircle,
+  Eye, EyeOff, Inbox, RefreshCw, Reply, History, MailOpen
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import API_BASE_URL from "../../services/api";
 
 type NotificationType = {
   id: number;
@@ -55,13 +55,13 @@ export default function UserNotifications() {
     setIsLoading(true);
     try {
       // Récupérer les notifications reçues
-      const resReceived = await authFetch("http://localhost:8000/api/notifications/");
+      const resReceived = await authFetch(`${API_BASE_URL}/api/notifications/`);
       const receivedData = await resReceived.json();
 
       // Récupérer les notifications envoyées
       let sentData = [];
       try {
-        const resSent = await authFetch("http://localhost:8000/api/sent-notifications/");
+        const resSent = await authFetch(`${API_BASE_URL}/api/sent-notifications/`);
         sentData = await resSent.json();
       } catch (sentErr) {
         console.log("API sent-notifications non disponible:", sentErr);
@@ -143,7 +143,7 @@ export default function UserNotifications() {
 
     setIsLoading(true);
     try {
-      const res = await authFetch("http://localhost:8000/api/send-notification-admin/", {
+      const res = await authFetch(`${API_BASE_URL}/api/send-notification-admin/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: newMessage }),
@@ -192,7 +192,7 @@ export default function UserNotifications() {
       // Si c'est une vraie notification (pas locale)
       if (selectedNotification.id < 1000000) {
         const res = await authFetch(
-          `http://localhost:8000/api/notifications/delete/${selectedNotification.id}/`,
+          `${API_BASE_URL}/api/notifications/delete/${selectedNotification.id}/`,
           { method: "POST" }
         );
         if (!res.ok) throw new Error("Erreur API");

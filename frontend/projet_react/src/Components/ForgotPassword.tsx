@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Mail, ArrowLeft, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import API_BASE_URL from "../services/api";
 
 export default function ForgotPassword() {
     const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ export default function ForgotPassword() {
         setIsLoading(true);
 
         try {
-            const res = await axios.post("http://127.0.0.1:8000/api/mot-de-passe-oublie/",
+            const res = await axios.post(`${API_BASE_URL}/api/mot-de-passe-oublie/`,
                 { email }
             );
             setMessage(res.data.message);

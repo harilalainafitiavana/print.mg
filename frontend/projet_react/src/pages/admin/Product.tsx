@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { authFetch } from "../../Components/Utils"
 import { useTranslation } from "react-i18next";
+import API_BASE_URL from "../../services/api";
 
 const isFeatured = (future: string | null | undefined): boolean => {
     if (!future) return false;
@@ -44,7 +45,7 @@ export default function ProductList() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const res = await fetch("http://localhost:8000/api/produits/");
+                const res = await fetch(`${API_BASE_URL}/api/produits/`);
                 const data = await res.json();
                 setProducts(data);
             } catch (error) {
@@ -137,7 +138,7 @@ export default function ProductList() {
         if (newProduct.imageFile) formData.append("image", newProduct.imageFile);
 
         try {
-            const res = await authFetch("http://localhost:8000/api/produits/", {
+            const res = await authFetch(`${API_BASE_URL}/api/produits/`, {
                 method: "POST",
                 body: formData,
             });
@@ -179,7 +180,7 @@ export default function ProductList() {
         }
 
         try {
-            const res = await authFetch(`http://localhost:8000/api/produits/${selectedProduct.id}/`, {
+            const res = await authFetch(`${API_BASE_URL}/api/produits/${selectedProduct.id}/`, {
                 method: "PUT",
                 body: formData,
             });
@@ -210,7 +211,7 @@ export default function ProductList() {
         if (!productToDelete) return;
 
         try {
-            const res = await authFetch(`http://localhost:8000/api/produits/${productToDelete.id}/`, {
+            const res = await authFetch(`${API_BASE_URL}/api/produits/${productToDelete.id}/`, {
                 method: "DELETE",
             });
 

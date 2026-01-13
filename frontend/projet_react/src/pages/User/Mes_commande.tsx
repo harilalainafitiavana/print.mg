@@ -3,7 +3,8 @@ import {
   Trash2, Eye, PlusCircle, X,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { strong } from "framer-motion/client";
+import API_BASE_URL from "../../services/api";
+// import { strong } from "framer-motion/client";
 
 type MesCommandeProps = {
   onMenuClick: (menu: string) => void;
@@ -40,7 +41,7 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
         const token = localStorage.getItem("token") || sessionStorage.getItem("token");
         if (!token) return;
 
-        const res = await fetch("http://127.0.0.1:8000/api/commandes/", {
+        const res = await fetch(`${API_BASE_URL}/api/commandes/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -80,7 +81,7 @@ export default function MesCommande({ onMenuClick, searchQuery }: MesCommandePro
         return;
       }
 
-      const response = await fetch(`http://localhost:8000/api/commandes/${selectedOrder.id}/soft_delete/`, {
+      const response = await fetch(`${API_BASE_URL}/api/commandes/${selectedOrder.id}/soft_delete/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

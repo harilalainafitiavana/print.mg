@@ -3,6 +3,7 @@ import { authFetch } from "./Utils";
 import { Eye, EyeOff, Camera, Lock, User, MapPin, Phone, Mail, Save, Key, X, Check, AlertCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { getAvatarUrl } from './avatarUtils';
+import API_BASE_URL from "../services/api";
 
 export default function Profils() {
     const { t } = useTranslation();
@@ -44,7 +45,7 @@ export default function Profils() {
     useEffect(() => {
         const fetchProfil = async () => {
             try {
-                const res = await authFetch("http://localhost:8000/api/profil/", {
+                const res = await authFetch(`${API_BASE_URL}/api/profil/`, {
                     method: "GET",
                     headers: { "Content-Type": "application/json" },
                 });
@@ -110,7 +111,7 @@ export default function Profils() {
         data.append("profils", formData.photo);
 
         try {
-            const res = await authFetch("http://localhost:8000/api/profil/photo/", {
+            const res = await authFetch(`${API_BASE_URL}/api/profil/photo/`, {
                 method: "PUT",
                 body: data,
             });
@@ -118,7 +119,7 @@ export default function Profils() {
             if (res.ok) {
                 const responseData = await res.json();
                 alert("Photo modifiée avec succès!");
-                const fullUrl = `http://localhost:8000${responseData.profils}`;
+                const fullUrl = `${API_BASE_URL}${responseData.profils}`;
                 setUserProfilUrl(fullUrl);
                 setFormData({ ...formData, photo: null });
             } else {
@@ -144,7 +145,7 @@ export default function Profils() {
         data.append("pays", formData.pays);
 
         try {
-            const res = await authFetch("http://localhost:8000/api/profil/", {
+            const res = await authFetch(`${API_BASE_URL}/api/profil/`, {
                 method: "PUT",
                 body: data,
             });
@@ -209,7 +210,7 @@ export default function Profils() {
         }
 
         try {
-            const res = await authFetch("http://localhost:8000/api/profil/change-password/", {
+            const res = await authFetch(`${API_BASE_URL}/api/profil/change-password/`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

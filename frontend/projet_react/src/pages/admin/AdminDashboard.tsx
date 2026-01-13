@@ -12,6 +12,7 @@ import AdminProfil from "../../assets/icone.png"
 import TableauDeBordAdmin from "./TableauDeBordAdmin";
 import { useTranslation } from "react-i18next";
 import Abouts from "../../Components/About";
+import API_BASE_URL from "../../services/api";
 
 export default function AdminDashboard() {
     const { t } = useTranslation();
@@ -22,7 +23,7 @@ export default function AdminDashboard() {
         const fetchUser = async () => {
             try {
                 const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-                const res = await fetch("http://localhost:8000/api/me/", {
+                const res = await fetch(`${API_BASE_URL}/api/me/`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 if (res.ok) {

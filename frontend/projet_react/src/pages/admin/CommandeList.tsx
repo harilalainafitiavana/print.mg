@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Eye, Bell, Trash, Download, X, Check, Printer, Wrench } from "lucide-react";
 import { authFetch } from "../../Components/Utils";
 import { useTranslation } from "react-i18next";
+import API_BASE_URL from "../../services/api";
 
 
 export default function AdminCommande() {
@@ -21,7 +22,7 @@ export default function AdminCommande() {
   useEffect(() => {
     async function loadOrders() {
       try {
-        const res = await authFetch("http://localhost:8000/api/admin/commandes/");
+        const res = await authFetch(`${API_BASE_URL}/api/admin/commandes/`);
         const data = await res.json();
         setOrders(data);
       } catch (err: any) {
@@ -54,7 +55,7 @@ export default function AdminCommande() {
   const confirmDelete = async () => {
     if (!selectedOrder) return;
     try {
-      const res = await authFetch(`http://localhost:8000/api/commandes/${selectedOrder.id}/soft_delete/`, {
+      const res = await authFetch(`${API_BASE_URL}/api/commandes/${selectedOrder.id}/soft_delete/`, {
         method: "POST"
       });
       if (res.ok) {
@@ -78,7 +79,7 @@ export default function AdminCommande() {
 
   const handleFinish = async (order: any) => {
     try {
-      const res = await authFetch(`http://localhost:8000/api/commandes/${order.id}/terminer/`, {
+      const res = await authFetch(`${API_BASE_URL}/api/commandes/${order.id}/terminer/`, {
         method: "POST",
       });
 
@@ -96,7 +97,7 @@ export default function AdminCommande() {
 
   const handleEncours = async (order: any) => {
     try {
-      const res = await authFetch(`http://localhost:8000/api/commandes/${order.id}/encours/`, {
+      const res = await authFetch(`${API_BASE_URL}/api/commandes/${order.id}/encours/`, {
         method: "POST",
       });
 
@@ -121,7 +122,7 @@ export default function AdminCommande() {
     console.log("selectedOrder:", selectedOrder);
 
     try {
-      const res = await authFetch("http://localhost:8000/api/send-notification/", {
+      const res = await authFetch(`${API_BASE_URL}/api/send-notification/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -152,7 +153,7 @@ export default function AdminCommande() {
 
   const handleChangeStatut = async (id: number, nouveauStatut: string) => {
     try {
-      const res = await authFetch(`http://127.0.0.1:8000/commandes/${id}/update_statut/`, {
+      const res = await authFetch(`${API_BASE_URL}/commandes/${id}/update_statut/`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

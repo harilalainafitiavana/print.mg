@@ -3,6 +3,7 @@ import { ArrowRight, ArrowLeft, Check, X } from "lucide-react";
 // import axios from "axios";
 import { authFetch } from "../../Components/Utils";
 import { useTranslation } from "react-i18next";
+import API_BASE_URL from "../../services/api";
 
 
 type Step = 1 | 2 | 3 | 4;
@@ -62,7 +63,7 @@ export default function PrintingOrderForm() {
   useEffect(() => {
     const fetchProduits = async () => {
       try {
-        const res = await authFetch("http://localhost:8000/api/produits/");
+        const res = await authFetch(`${API_BASE_URL}/api/produits/`);
         const data = await res.json();
         setProduits(data);
       } catch (err) {
@@ -407,7 +408,7 @@ export default function PrintingOrderForm() {
         options,
       });
 
-      const res = await authFetch("http://localhost:8000/api/commande/", {
+      const res = await authFetch(`${API_BASE_URL}/api/commande/`, {
         method: "POST",
         body: formData,
       });

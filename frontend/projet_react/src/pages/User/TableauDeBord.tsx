@@ -6,6 +6,7 @@ import {
   BarChart, Bar
 } from "recharts";
 import { useTranslation } from "react-i18next";
+import API_BASE_URL from "../../services/api";
 
 const TableauDeBord = () => {
   const { t } = useTranslation();
@@ -16,7 +17,7 @@ const TableauDeBord = () => {
 
   useEffect(() => {
     if (!token) return; // 🔹 si pas de token, ne rien faire
-    axios.get("http://localhost:8000/api/user/dashboard-stats/", {
+    axios.get(`${API_BASE_URL}/api/user/dashboard-stats/`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setStats(res.data))

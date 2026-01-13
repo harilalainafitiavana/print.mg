@@ -3,6 +3,7 @@ import { Mail, Phone, Lock, User, Printer, Truck, Shield, Eye, EyeOff } from "lu
 import { Link } from "react-router-dom";
 import Slide_show from "./Slide_show";
 import { useNavigate } from "react-router-dom";
+import API_BASE_URL from "../services/api";
 
 const RegisterPage = () => {
     const [step, setStep] = useState(1);
@@ -111,7 +112,7 @@ const RegisterPage = () => {
             }
 
             // Envoi vers Django REST API
-            const response = await fetch("http://127.0.0.1:8000/api/register/", {
+            const response = await fetch(`${API_BASE_URL}/api/register/`, {
                 method: "POST",
                 body: formDataToSend,
             });

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Eye, EyeOff, Lock } from "lucide-react";
 import { motion } from "framer-motion";
+import API_BASE_URL from "../services/api";
 
 export default function ResetPassword() {
     const { uidb64, token } = useParams();
@@ -25,7 +26,7 @@ export default function ResetPassword() {
 
         try {
             const res = await axios.post(
-                `http://127.0.0.1:8000/api/reinitialiser-mot-de-passe/${uidb64}/${token}/`,
+                `${API_BASE_URL}/api/reinitialiser-mot-de-passe/${uidb64}/${token}/`,
                 { password, confirm_password: confirmPassword }
             );
             setMessage(res.data.message);
